@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daqui Pra o Mundo</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+    <style>
+        /* Estilo para sombra no texto do Hero para melhor legibilidade sobre o background */
+        .text-shadow-hero {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="fixed top-0 w-full bg-black/50 text-white shadow-lg z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="#hero"
+                        class="text-2xl font-bold text-yellow-400 hover:text-yellow-400 transition-colors duration-300">
+                        Daqui Pra o Mundo
+                    </a>
+                </div>
+
+                <div class="hidden md:flex space-x-6">
+                    <div class="relative group">
+                        <a href="#hero" class="
+                                relative z-10 block px-4 py-2 rounded-lg
+                                bg-white/10 backdrop-blur-md border border-white/20
+                                text-purple-400 font-bold
+                                transition-all duration-300
+                                shadow-lg group-hover:shadow-xl group-hover:scale-110
+                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
+                            ">
+                            <i class="fas fa-home mr-2"></i>Início
+                        </a>
+                    </div>
+
+                    <div class="relative group">
+                        <a href="#about" class="
+                                relative z-10 block px-4 py-2 rounded-lg
+                                bg-white/10 backdrop-blur-md border border-white/20
+                                text-purple-400 font-bold
+                                transition-all duration-300
+                                shadow-lg group-hover:shadow-xl group-hover:scale-110
+                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
+                            ">
+                            <i class="fas fa-user mr-2"></i>Sobre
+                        </a>
+                    </div>
+
+                    <div class="relative group">
+                        <a href="#projects" class="
+                                relative z-10 block px-4 py-2 rounded-lg
+                                bg-white/10 backdrop-blur-md border border-white/20
+                                text-purple-400 font-bold
+                                transition-all duration-300
+                                shadow-lg group-hover:shadow-xl group-hover:scale-110
+                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
+                            ">
+                            <i class="fas fa-briefcase mr-2"></i>Recordações
+                        </a>
+                    </div>
+
+                    <div class="relative group">
+                        <a href="#experience" class="
+                                relative z-10 block px-4 py-2 rounded-lg
+                                bg-white/10 backdrop-blur-md border border-white/20
+                                text-purple-400 font-bold
+                                transition-all duration-300
+                                shadow-lg group-hover:shadow-xl group-hover:scale-110
+                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
+                            ">
+                            <i class="fas fa-clock mr-2"></i>Inscrições
+                        </a>
+                    </div>
+
+                    <div class="relative group">
+                        <a href="#contact" class="
+                                relative z-10 block px-4 py-2 rounded-lg
+                                bg-white/10 backdrop-blur-md border border-white/20
+                                text-purple-400 font-bold
+                                transition-all duration-300
+                                shadow-lg group-hover:shadow-xl group-hover:scale-110
+                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
+                            ">
+                            <i class="fas fa-envelope mr-2"></i>Contato
+                        </a>
+                    </div>
+                </div>
+
+                <div class="md:hidden">
+                    <button id="menu-toggle"
+                        class="text-white focus:outline-none hover:text-yellow-400 transition-colors duration-300">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero"
+        class="relative bg-black/30 bg-[url('dpmhero.jpeg')] bg-cover bg-center h-screen flex flex-col items-center justify-center text-center text-white">
+        <h1 class="text-6xl md:text-7xl font-extrabold mb-4 text-shadow-hero" data-aos="fade-up"
+            data-aos-duration="1000">
+            Daqui Pra o Mundo
+        </h1>
+        <p class="text-xl md:text-2xl font-light mb-8 max-w-2xl text-shadow-hero" data-aos="fade-up"
+            data-aos-delay="300" data-aos-duration="1000">
+            Venha conosco nesta viagem incrível.
+        </p>
+        <button
+            class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full transition duration-300"
+            data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
+            Explorar Agora
+        </button>
+
+        <button id="scroll-down-button"
+            class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400 transition-colors duration-300 animate-bounce">
+            <img src="aviao4.png" alt="Ícone de Avião"
+                class="w-20 h-20 transform rotate-118 transition-all duration-300 hover:brightness-50">
+        </button>
+    </section>
+
+    <section id="about" class="min-h-screen bg-gray-100 flex items-center justify-center p-8">
+        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-left">Sobre Nós</h2>
+    </section>
+
+    <section id="projects" class="min-h-screen bg-white flex items-center justify-center p-8">
+        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-right">Nossas Recordações</h2>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init(); // Inicializa a biblioteca AOS
+
+        // Script para rolagem suave ao clicar no botão de avião
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollDownButton = document.getElementById('scroll-down-button');
+            if (scrollDownButton) {
+                scrollDownButton.addEventListener('click', () => {
+                    // Rola suavemente para a próxima seção (neste caso, a seção 'about')
+                    document.getElementById('about').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Lógica para a navbar mudar de cor ao rolar
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) { // Mude 50 para o ponto de rolagem desejado
+                        navbar.classList.add('bg-black', 'shadow-xl'); // Mais opaca e com mais sombra
+                        navbar.classList.remove('bg-black/50', 'shadow-lg');
+                    } else {
+                        navbar.classList.remove('bg-black', 'shadow-xl');
+                        navbar.classList.add('bg-black/50', 'shadow-lg');
+                    }
+                });
+            }
+
+            // Lógica para o menu mobile (exemplo: para abrir/fechar um menu dropdown)
+            const mobileMenuButton = document.getElementById('menu-toggle');
+            // Se você tiver um div para o menu mobile (como no exemplo comentado acima na nav)
+            // const mobileMenu = document.getElementById('mobile-menu'); 
+
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    // Implemente a lógica para abrir/fechar seu menu mobile aqui.
+                    // Se você usou o exemplo de div mobile-menu:
+                    // mobileMenu.classList.toggle('hidden'); 
+                    // Outras ações como mudar ícone do hambúrguer, ajustar aria-expanded
+                    console.log('Botão do menu mobile clicado!');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
