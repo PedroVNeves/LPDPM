@@ -22,76 +22,106 @@
 
         /* Esconder slides do carrossel principal por padrão */
         .carousel-item {
-            position: absolute; /* Todos os slides são posicionados absolutamente */
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%; /* Cada slide ocupa 100% da largura do container flex */
-            height: 100%; /* Para que o carrossel se ajuste ao maior slide, se necessário */
-            opacity: 0;
-            pointer-events: none; /* Desabilita interações com slides invisíveis */
-            transition: opacity 1s ease-in-out, max-height 0.5s ease-out; /* Transições para Saber Mais e fade in/out */
-            max-height: 500px; /* Altura inicial do slide, ajuste conforme necessário */
-            overflow: hidden; /* Garante que o conteúdo extra não seja visível */
-        }
-
-        /* Mostrar o slide ativo do carrossel principal */
-        .carousel-item.active {
-            opacity: 1; /* Torna visível */
-            pointer-events: auto; /* Habilita interações para o slide ativo */
-        }
-        
-        /* O container do carrossel principal precisa ter altura e posição relativas */
-        #cities-carousel-container { /* Novo ID para o container que abraça #cities-carousel-slides */
-            position: relative;
-            height: 500px; /* Altura fixa para o container do carrossel de cidades, ajuste conforme necessário */
-            /* Isso permite que os slides absolutos tenham uma referência de altura */
-        }
-
-        /* O container flex que contém os slides */
-        #cities-carousel-slides {
-            position: relative; /* Para que os items absolutos se posicionem em relação a ele */
             width: 100%;
-            height: 100%; /* Ocupa 100% da altura do container pai */
-            display: flex; /* Mantém a estrutura flex para o transform */
-            transition: transform 0.5s ease-in-out; /* Transição de movimento entre as cidades */
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
+            max-height: 500px;
+            overflow: hidden;
+            /* Adicione padding aqui para criar espaço para as setas em mobile */
+            padding-left: 3.5rem;
+            padding-right: 3.5rem;
         }
 
-
-        /* Ajuste para as colunas internas do carousel-item */
-        .carousel-item-content {
-            display: flex; /* Adiciona flexbox para o layout das colunas */
-            flex-direction: column; /* Padrão em mobile: coluna */
-            gap: 2rem; /* Espaçamento entre as colunas */
-            align-items: center; /* Centraliza itens verticalmente */
-            justify-content: center;
-            width: 100%; /* Garante que o conteúdo ocupe a largura total dentro do item */
-            height: 100%; /* Garante que o conteúdo ocupe a altura total dentro do item */
-            padding: 2rem; /* Adiciona padding interno */
-        }
-
-        @media (min-width: 768px) { /* Para telas maiores que md */
-            .carousel-item-content {
-                flex-direction: row; /* Em desktop: linha */
+        /* Ajuste do padding do carousel-item para desktop */
+        @media (min-width: 768px) {
+            .carousel-item {
+                padding-left: 2rem;
+                /* Retorna ao padding normal em desktop */
+                padding-right: 2rem;
+                /* Retorna ao padding normal em desktop */
             }
         }
 
 
+        /* Mostrar o slide ativo do carrossel principal */
+        .carousel-item.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* O container do carrossel principal precisa ter altura e posição relativas */
+        #cities-carousel-container {
+            position: relative;
+            min-height: 500px;
+            /* Altura mínima para o container do carrossel de cidades */
+            transition: height 0.7s ease-in-out, min-height 0.7s ease-in-out;
+            overflow: hidden;
+        }
+
+        /* O container flex que contém os slides */
+        #cities-carousel-slides {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Ajuste para as colunas internas do carousel-item */
+        .carousel-item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            /* Removido align-items e justify-content para mobile para permitir que o conteúdo flua */
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            /* Mantenha o padding interno aqui */
+        }
+
+        @media (min-width: 768px) {
+            .carousel-item-content {
+                flex-direction: row;
+                align-items: flex-start;
+                /* Alinha os itens ao topo em linha */
+                justify-content: space-between;
+            }
+        }
+
         /* Estilo para a área expandida do Saber Mais */
         .carousel-item.expanded {
-            max-height: 1500px; /* Altura máxima quando expandido, ajuste conforme o conteúdo */
+            /* Definir um max-height bem generoso para garantir que todo o conteúdo apareça.
+               O JS calculará a scrollHeight real para o height do container. */
+            max-height: 2000px;
+            /* Aumentado para dar mais folga para o conteúdo */
         }
 
         /* Estilos para o slideshow de imagens da cidade */
         .city-images-slideshow {
             position: relative;
             width: 100%;
-            height: 250px;
-            /* Altura fixa para o slideshow, ajuste conforme necessário */
+            min-height: 250px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
             border-radius: 0.5rem;
-            /* rounded-lg */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            /* shadow-md */
+            /* Adicionado margin-top para separar do texto em mobile, se necessário */
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .city-images-slideshow {
+                margin-top: 0;
+                /* Remove a margem em desktop */
+            }
         }
 
         .city-images-slideshow img {
@@ -103,11 +133,61 @@
             object-fit: cover;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            /* Transição suave para o fade */
         }
 
         .city-images-slideshow img.active-image {
             opacity: 1;
+        }
+
+        /* Posição das setas do carrossel principal */
+        /* Para desktop, mantemos o posicionamento fora do card */
+        #prevBtn,
+        #nextBtn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            padding: 0.75rem; /* Padding padrão para desktop (equivalente a p-3) */
+        }
+
+        #prevBtn {
+            left: -5rem;
+        }
+
+        #nextBtn {
+            right: -5rem;
+        }
+
+        /* Ajustes específicos para mobile */
+        @media (max-width: 767px) {
+            #prevBtn {
+                left: 0.5rem;
+                /* Um pouco para dentro para ser mais visível */
+                padding: 0.35rem; /* <--- Padding menor para mobile (equivalente a p-1 ou p-1.5) */
+            }
+
+            #nextBtn {
+                right: 0.5rem;
+                /* Um pouco para dentro para ser mais visível */
+                padding: 0.35rem; /* <--- Padding menor para mobile (equivalente a p-1 ou p-1.5) */
+            }
+
+            /* Opcional: Ajustar o tamanho do ícone dentro do botão para que pareça melhor */
+            #prevBtn i,
+            #nextBtn i {
+                font-size: 1.1rem; /* Tamanho do ícone para mobile, ligeiramente menor */
+            }
+
+            /* Ajuste dos indicadores para não sobrepor a imagem */
+            #carousel-indicators {
+                bottom: 1rem;
+            }
+
+            /* Forçar o texto a se ajustar em telas pequenas */
+            .carousel-item-content .md\:w-1\/2 {
+                width: 100%;
+                /* Garante que o texto ocupe a largura total disponível */
+            }
         }
     </style>
 </head>
@@ -199,6 +279,37 @@
                 </div>
             </div>
         </div>
+
+        <div id="mobile-menu"
+            class="fixed inset-0 bg-purple-900/95 transform translate-x-full transition-transform duration-300 ease-in-out z-40">
+            <div class="flex justify-end p-4">
+                <button id="close-menu" class="text-white focus:outline-none hover:text-yellow-400">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <nav class="flex flex-col items-center justify-center h-full space-y-8">
+                <a href="#hero"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-home mr-4"></i>Início
+                </a>
+                <a href="#about"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-user mr-4"></i>Sobre Nós
+                </a>
+                <a href="#cities"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-city mr-4"></i>Cidades
+                </a>
+                <a href="#experience"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-clock mr-4"></i>Inscrições
+                </a>
+                <a href="#contact"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-envelope mr-4"></i>Contato
+                </a>
+            </nav>
+        </div>
     </nav>
 
     <section id="hero"
@@ -273,14 +384,14 @@
                 Nossos Destinos: O Mundo Espera Por Você!
             </h2>
 
-            <div id="cities-carousel-outer" class="relative w-full max-w-5xl mx-auto rounded-xl shadow-2xl" data-aos="fade-up"
-                data-aos-delay="200" data-aos-duration="1000">
-                <div id="cities-carousel-container" class="relative w-full overflow-hidden"> 
+            <div id="cities-carousel-outer" class="relative w-full max-w-5xl mx-auto rounded-xl shadow-2xl"
+                data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                <div id="cities-carousel-container" class="relative w-full overflow-hidden">
                     <div id="cities-carousel-slides" class="flex transition-transform duration-500 ease-in-out h-full">
                         <div
                             class="carousel-item flex-shrink-0 w-full p-8 bg-blue-100 items-center justify-center gap-8 text-left h-full">
                             <div class="carousel-item-content h-full">
-                                <div class="md:w-1/2">
+                                <div class="w-full md:w-1/2">
                                     <h3 class="text-4xl font-bold text-blue-800 mb-4">Brighton, Reino Unido</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed">
                                         Conhecida como "Londres à beira-mar", Brighton é uma cidade vibrante e moderna,
@@ -597,17 +708,17 @@
                 </div>
 
                 <button id="prevBtn"
-                    class="absolute top-1/2 -left-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-3 rounded-full shadow-lg transition-colors duration-300 z-10 md:-left-20">
+                    class="absolute top-1/2 -left-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white rounded-full shadow-lg transition-colors duration-300 z-10 md:-left-20">
                     <i class="fas fa-chevron-left text-xl"></i>
                 </button>
                 <button id="nextBtn"
-                    class="absolute top-1/2 -right-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-3 rounded-full shadow-lg transition-colors duration-300 z-10 md:-right-20">
+                    class="absolute top-1/2 -right-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white rounded-full shadow-lg transition-colors duration-300 z-10 md:-right-20">
                     <i class="fas fa-chevron-right text-xl"></i>
                 </button>
 
                 <div id="carousel-indicators"
                     class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -636,8 +747,7 @@
                 });
             }
 
-            // Seleciona todos os links da na
-            // vbar para rolagem suave
+            // Seleciona todos os links da navbar para rolagem suave (desktop)
             document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault(); // Previne o comportamento padrão de salto
@@ -669,15 +779,16 @@
             }
 
             // Lógica do Carrossel Principal (de Cidades)
-            const carouselOuter = document.getElementById('cities-carousel-outer'); // O container externo que tem overflow:hidden
-            const carouselContainer = document.getElementById('cities-carousel-slides'); // O container flex que move os slides
+            const carouselOuter = document.getElementById('cities-carousel-outer');
+            const carouselContainer = document.getElementById('cities-carousel-container'); // Agora referenciamos o container com ID
+            const carouselSlides = document.getElementById('cities-carousel-slides'); // O contêiner flex que contém os slides
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const indicatorsContainer = document.getElementById('carousel-indicators');
             const slides = document.querySelectorAll('.carousel-item');
             let currentSlide = 0;
             // SUA CHAVE API OPENWEATHERMAP AQUI:
-            const OPENWEATHER_API_KEY = '573fc6a6041cf7914368b00f0f5b4fb9'; 
+            const OPENWEATHER_API_KEY = '573fc6a6041cf7914368b00f0f5b4fb9';
 
             // Mapeamento de cidades para coordenadas (necessário para a API de clima)
             const cityCoordinates = {
@@ -693,7 +804,7 @@
 
             // Função para buscar dados do clima
             async function fetchWeather(cityName, element) {
-                if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === '') { 
+                if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === '') {
                     element.innerHTML = 'Previsão do tempo: Chave API não configurada.';
                     console.warn('AVISO: A chave da API OpenWeatherMap não está configurada ou está vazia. Obtenha uma em openweathermap.org e substitua no código.');
                     return;
@@ -777,7 +888,7 @@
                     citySlideshowData[slideElement.id].intervalId = null; // Reseta o ID do intervalo
                 }
             }
-            
+
             // showSlide para o carrossel PRINCIPAL
             function showSlide(index) {
                 slides.forEach((slide, i) => {
@@ -790,7 +901,7 @@
 
                     if (i === index) {
                         // O slide ativo é posicionado onde deve estar no container flex
-                        slide.style.left = `${i * 100}%`; 
+                        slide.style.left = `${i * 100}%`;
                         slide.style.display = 'block'; /* Para que o conteúdo interno utilize flexbox */
                         setTimeout(() => {
                             slide.classList.add('active'); /* Ativa a opacidade */
@@ -812,7 +923,9 @@
                 });
                 updateIndicators(index);
                 // Move o contêiner principal dos slides (que é flex)
-                carouselContainer.style.transform = `translateX(-${index * 100}%)`;
+                carouselSlides.style.transform = `translateX(-${index * 100}%)`;
+                // Ajusta a altura do container principal para o estado INICIAL (não expandido)
+                adjustCarouselContainerHeight(slides[index], false);
             }
 
             // Funções de navegação do carrossel principal
@@ -851,23 +964,47 @@
                 });
             }
 
-            // Lógica do botão "Saber Mais" (permanece a mesma)
+            // FUNÇÃO AJUSTADA para ajustar a altura do contêiner do carrossel
+            // Adicionado um parâmetro `isExpanding` para forçar a altura se estiver expandindo ou contraindo
+            function adjustCarouselContainerHeight(activeSlide, isExpanding = null) {
+                setTimeout(() => {
+                    let newHeight;
+                    if (isExpanding === true) {
+                        newHeight = activeSlide.scrollHeight;
+                    } else if (isExpanding === false) {
+                        newHeight = 500; // Altura mínima quando contraído
+                    } else { // Se isExpanding for null, verifica o estado atual
+                        const moreInfoDiv = activeSlide.querySelector('.more-info');
+                        const isCurrentlyExpanded = !moreInfoDiv.classList.contains('hidden');
+                        newHeight = isCurrentlyExpanded ? activeSlide.scrollHeight : 500;
+                    }
+
+                    carouselContainer.style.height = `${newHeight}px`;
+                    carouselContainer.style.minHeight = `${newHeight}px`; // Mantém o min-height sincronizado
+                }, 100); // Pequeno atraso para o DOM renderizar a expansão
+            }
+
+            // Lógica do botão "Saber Mais" (AJUSTADA)
             document.querySelectorAll('.toggle-info-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const parentSlide = this.closest('.carousel-item');
                     const moreInfoDiv = parentSlide.querySelector('.more-info');
 
-                    moreInfoDiv.classList.toggle('hidden');
-                    // A classe 'expanded' agora controla o max-height para a transição
-                    parentSlide.classList.toggle('expanded'); 
+                    const isCurrentlyHidden = moreInfoDiv.classList.contains('hidden');
 
-                    if (moreInfoDiv.classList.contains('hidden')) {
-                        this.textContent = 'Saber Mais';
-                    } else {
+                    moreInfoDiv.classList.toggle('hidden');
+                    parentSlide.classList.toggle('expanded'); // Adiciona/remove a classe 'expanded' do slide
+
+                    if (isCurrentlyHidden) { // Se estava escondido e agora vai mostrar
                         this.textContent = 'Ver Menos';
+                        adjustCarouselContainerHeight(parentSlide, true); // Força expansão
+                    } else { // Se estava mostrando e agora vai esconder
+                        this.textContent = 'Saber Mais';
+                        adjustCarouselContainerHeight(parentSlide, false); // Força contração
                     }
                 });
             });
+
 
             // Event Listeners para os botões do carrossel principal
             prevBtn.addEventListener('click', prevSlide);
@@ -877,15 +1014,56 @@
             createIndicators(); // Cria os IDs dos slides antes de showSlide
             showSlide(currentSlide); // Inicia o carrossel e o primeiro slideshow de imagem
 
-            // Lógica para o menu mobile (ainda não implementado visualmente)
+
+            // Lógica para o menu mobile (implementado visualmente)
+            const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuButton = document.getElementById('menu-toggle');
+            const closeMenuButton = document.getElementById('close-menu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            // Abrir menu mobile
             if (mobileMenuButton) {
                 mobileMenuButton.addEventListener('click', () => {
-                    console.log('Botão do menu mobile clicado! (Implemente aqui a exibição do menu)');
-                    // Exemplo: Se você tiver um elemento de menu mobile oculto, pode alternar sua visibilidade aqui:
-                    // document.getElementById('mobile-menu-content').classList.toggle('hidden');
+                    mobileMenu.classList.remove('translate-x-full');
+                    mobileMenu.classList.add('translate-x-0');
+                    // Opcional: Desativar scroll do body quando o menu está aberto
+                    document.body.style.overflow = 'hidden';
                 });
             }
+
+            // Fechar menu mobile (botão X)
+            if (closeMenuButton) {
+                closeMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.remove('translate-x-0');
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = ''; // Reativar scroll
+                });
+            }
+
+            // Fechar menu mobile ao clicar em um link
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // Previne o comportamento padrão para fazer a rolagem suave primeiro
+                    e.preventDefault();
+
+                    mobileMenu.classList.remove('translate-x-0');
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = ''; // Reativar scroll
+
+                    // Rolar suavemente para a seção
+                    const targetId = link.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        // Pequeno atraso para a animação do menu fechar antes de rolar
+                        setTimeout(() => {
+                            targetSection.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 300); // Duração da transição do menu
+                    }
+                });
+            });
         });
     </script>
 </body>
