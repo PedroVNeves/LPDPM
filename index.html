@@ -19,6 +19,96 @@
         .text-shadow-hero {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
+
+        /* Esconder slides do carrossel principal por padrão */
+        .carousel-item {
+            position: absolute; /* Todos os slides são posicionados absolutamente */
+            top: 0;
+            left: 0;
+            width: 100%; /* Cada slide ocupa 100% da largura do container flex */
+            height: 100%; /* Para que o carrossel se ajuste ao maior slide, se necessário */
+            opacity: 0;
+            pointer-events: none; /* Desabilita interações com slides invisíveis */
+            transition: opacity 1s ease-in-out, max-height 0.5s ease-out; /* Transições para Saber Mais e fade in/out */
+            max-height: 500px; /* Altura inicial do slide, ajuste conforme necessário */
+            overflow: hidden; /* Garante que o conteúdo extra não seja visível */
+        }
+
+        /* Mostrar o slide ativo do carrossel principal */
+        .carousel-item.active {
+            opacity: 1; /* Torna visível */
+            pointer-events: auto; /* Habilita interações para o slide ativo */
+        }
+        
+        /* O container do carrossel principal precisa ter altura e posição relativas */
+        #cities-carousel-container { /* Novo ID para o container que abraça #cities-carousel-slides */
+            position: relative;
+            height: 500px; /* Altura fixa para o container do carrossel de cidades, ajuste conforme necessário */
+            /* Isso permite que os slides absolutos tenham uma referência de altura */
+        }
+
+        /* O container flex que contém os slides */
+        #cities-carousel-slides {
+            position: relative; /* Para que os items absolutos se posicionem em relação a ele */
+            width: 100%;
+            height: 100%; /* Ocupa 100% da altura do container pai */
+            display: flex; /* Mantém a estrutura flex para o transform */
+            transition: transform 0.5s ease-in-out; /* Transição de movimento entre as cidades */
+        }
+
+
+        /* Ajuste para as colunas internas do carousel-item */
+        .carousel-item-content {
+            display: flex; /* Adiciona flexbox para o layout das colunas */
+            flex-direction: column; /* Padrão em mobile: coluna */
+            gap: 2rem; /* Espaçamento entre as colunas */
+            align-items: center; /* Centraliza itens verticalmente */
+            justify-content: center;
+            width: 100%; /* Garante que o conteúdo ocupe a largura total dentro do item */
+            height: 100%; /* Garante que o conteúdo ocupe a altura total dentro do item */
+            padding: 2rem; /* Adiciona padding interno */
+        }
+
+        @media (min-width: 768px) { /* Para telas maiores que md */
+            .carousel-item-content {
+                flex-direction: row; /* Em desktop: linha */
+            }
+        }
+
+
+        /* Estilo para a área expandida do Saber Mais */
+        .carousel-item.expanded {
+            max-height: 1500px; /* Altura máxima quando expandido, ajuste conforme o conteúdo */
+        }
+
+        /* Estilos para o slideshow de imagens da cidade */
+        .city-images-slideshow {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            /* Altura fixa para o slideshow, ajuste conforme necessário */
+            overflow: hidden;
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* shadow-md */
+        }
+
+        .city-images-slideshow img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            /* Transição suave para o fade */
+        }
+
+        .city-images-slideshow img.active-image {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -57,12 +147,12 @@
                                 shadow-lg group-hover:shadow-xl group-hover:scale-110
                                 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
                             ">
-                            <i class="fas fa-user mr-2"></i>Sobre
+                            <i class="fas fa-user mr-2"></i>Sobre Nós
                         </a>
                     </div>
 
                     <div class="relative group">
-                        <a href="#projects" class="
+                        <a href="#cities" class="
                                 relative z-10 block px-4 py-2 rounded-lg
                                 bg-white/10 backdrop-blur-md border border-white/20
                                 text-purple-400 font-bold
@@ -70,7 +160,7 @@
                                 shadow-lg group-hover:shadow-xl group-hover:scale-110
                                 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
                             ">
-                            <i class="fas fa-briefcase mr-2"></i>Recordações
+                            <i class="fas fa-city mr-2"></i>Cidades
                         </a>
                     </div>
 
@@ -126,64 +216,674 @@
             data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
             Explorar Agora
         </button>
-
         <button id="scroll-down-button"
-            class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400 transition-colors duration-300 animate-bounce">
-            <img src="aviao4.png" alt="Ícone de Avião"
-                class="w-20 h-20 transform rotate-118 transition-all duration-300 hover:brightness-50">
+            class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400">
+            <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
         </button>
     </section>
 
-    <section id="about" class="min-h-screen bg-gray-100 flex items-center justify-center p-8">
-        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-left">Sobre Nós</h2>
+    <section id="about"
+        class="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 py-16 flex items-center justify-center px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-5xl font-extrabold text-blue-800 mb-8" data-aos="fade-down" data-aos-duration="1000">
+                Daqui Pra o Mundo: Onde Alagoas Encontra o Mundo!
+            </h2>
+            <p class="text-xl text-gray-700 leading-relaxed mb-8" data-aos="fade-up" data-aos-delay="200"
+                data-aos-duration="1000">
+                Nascido em solo alagoano, o programa **Daqui Pra o Mundo** é a ponte que conecta o talento da nossa
+                rede pública de ensino com as maiores experiências globais. Mais que um intercâmbio, é a realização de
+                um sonho para jovens estudantes, abrindo portas para o conhecimento, a cultura e um futuro sem
+                fronteiras.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
+                    data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-globe-americas text-6xl text-purple-600 mb-4 animate-pulse"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Horizontes Ampliados</h3>
+                    <p class="text-gray-600">Oferecemos a chance de explorar novos países, culturas e formas de pensar,
+                        direto das escolas de Alagoas para o mundo.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
+                    data-aos="zoom-in" data-aos-delay="600">
+                    <i class="fas fa-book-reader text-6xl text-green-600 mb-4 animate-pulse"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Fluência Global</h3>
+                    <p class="text-gray-600">Imersão total em novos idiomas, preparando nossos estudantes para os
+                        desafios e as oportunidades do século XXI.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
+                    data-aos="zoom-in" data-aos-delay="800">
+                    <i class="fas fa-handshake text-6xl text-yellow-600 mb-4 animate-pulse"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Futuro Brilhante</h3>
+                    <p class="text-gray-600">Investimos no potencial de cada jovem, fomentando liderança, autonomia e
+                        cidadania global.</p>
+                </div>
+            </div>
+            <p class="text-xl text-gray-700 leading-relaxed font-medium" data-aos="fade-up" data-aos-delay="1000"
+                data-aos-duration="1000">
+                Se você é estudante da rede pública alagoana, prepare-se! O **Daqui Pra o Mundo** está aqui para
+                transformar seu sonho de conhecer o mundo em realidade. <br class="hidden md:inline">
+                **Sua jornada internacional começa aqui, em Alagoas!**
+            </p>
+        </div>
     </section>
 
-    <section id="projects" class="min-h-screen bg-white flex items-center justify-center p-8">
-        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-right">Nossas Recordações</h2>
+    <section id="cities" class="min-h-screen bg-white py-16 flex items-center justify-center px-4">
+        <div class="container mx-auto max-w-6xl text-center">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-12" data-aos="fade-down" data-aos-duration="1000">
+                Nossos Destinos: O Mundo Espera Por Você!
+            </h2>
+
+            <div id="cities-carousel-outer" class="relative w-full max-w-5xl mx-auto rounded-xl shadow-2xl" data-aos="fade-up"
+                data-aos-delay="200" data-aos-duration="1000">
+                <div id="cities-carousel-container" class="relative w-full overflow-hidden"> 
+                    <div id="cities-carousel-slides" class="flex transition-transform duration-500 ease-in-out h-full">
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-blue-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2">
+                                    <h3 class="text-4xl font-bold text-blue-800 mb-4">Brighton, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                        Conhecida como "Londres à beira-mar", Brighton é uma cidade vibrante e moderna,
+                                        famosa por sua atmosfera boêmia, vida noturna agitada e a icônica praia de
+                                        calhau. Ideal para quem busca um intercâmbio dinâmico e culturalmente rico, com
+                                        fácil acesso à capital.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                        <li>Vibrante cena artística e musical</li>
+                                        <li>The Royal Pavilion e Brighton Pier</li>
+                                        <li>Excelente para aprimorar o inglês britânico</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                        Carregando clima de Brighton...
+                                    </div>
+                                    <button
+                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Brighton oferece uma mistura única de história e modernidade. Seus cafés
+                                            independentes, boutiques vintage e a energia acolhedora a tornam um lugar
+                                            perfeito para estudantes internacionais. Há sempre algo acontecendo, desde
+                                            festivais de arte até mercados de rua. A cidade é compacta e fácil de
+                                            explorar a
+                                            pé, com ótimas conexões de trem para outras partes do Reino Unido.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A vida estudantil em Brighton é efervescente. Com duas universidades
+                                            renomadas,
+                                            a cidade está sempre cheia de jovens, o que contribui para a atmosfera
+                                            vibrante.
+                                            Há uma grande variedade de opções de lazer, desde pubs tradicionais a casas
+                                            de
+                                            shows, galerias de arte e mercados de pulgas. A proximidade com a praia
+                                            permite
+                                            atividades como paddleboarding e voleibol de praia. A culinária é
+                                            diversificada,
+                                            com muitas opções vegetarianas e veganas. Eventos culturais como o Brighton
+                                            Fringe Festival e o Brighton Pride atraem visitantes do mundo todo,
+                                            oferecendo
+                                            experiências únicas. O sistema de transporte público é eficiente,
+                                            facilitando o
+                                            acesso a todas as partes da cidade e arredores, incluindo excursões de um dia
+                                            para cidades históricas próximas e o Parque Nacional South Downs.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/brighton/brighton_foto1.jpg" alt="Brighton Vista 1">
+                                        <img src="assets/brighton/brighton_foto2.jpg" alt="Brighton Vista 2">
+                                        <img src="assets/brighton/brighton_foto3.jpg" alt="Brighton Vista 3">
+                                        <img src="assets/brighton/brighton_foto4.jpg" alt="Brighton Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-green-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2">
+                                    <h3 class="text-4xl font-bold text-green-800 mb-4">Worthing, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                        Uma charmosa cidade costeira no sul da Inglaterra, Worthing é ideal para quem
+                                        busca
+                                        um ambiente mais tranquilo e seguro para estudar, sem abrir mão das belezas
+                                        naturais. Com uma orla marítima deslumbrante e um calçadão extenso, é perfeita
+                                        para
+                                        relaxar e aproveitar a brisa do mar.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                        <li>Ambiente pacífico e seguro</li>
+                                        <li>Píer vitoriano e praias tranquilas</li>
+                                        <li>Comunidade acolhedora e familiar</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                        Carregando clima de Worthing...
+                                    </div>
+                                    <button
+                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Worthing oferece uma experiência de intercâmbio focada no estudo e na
+                                            qualidade
+                                            de
+                                            vida. Com menos distrações das grandes cidades, os estudantes podem se
+                                            concentrar
+                                            no aprendizado do inglês e desfrutar de um ritmo de vida mais calmo. A
+                                            cidade
+                                            tem
+                                            belos parques, museus locais e acesso fácil a cidades maiores como Brighton
+                                            para
+                                            passeios de fim de semana.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A vida em Worthing é marcada pela tranquilidade e pela segurança,
+                                            características ideais para um foco maior nos estudos. A cidade é perfeita
+                                            para
+                                            caminhadas e ciclismo ao longo da costa, com vistas panorâmicas que inspiram a
+                                            mente. Há uma comunidade estudantil crescente, oferecendo eventos e
+                                            atividades
+                                            mais intimistas. O mercado local, com produtos frescos e artesanato, é um
+                                            ponto
+                                            de encontro. A proximidade com o South Downs National Park permite que os
+                                            alunos explorem a natureza e pratiquem trilhas. A gastronomia local inclui
+                                            pubs
+                                            tradicionais e restaurantes charmosos. Embora seja mais calma que Brighton,
+                                            Worthing tem uma boa rede de transportes que facilita o acesso a outras
+                                            cidades
+                                            costeiras e a Londres, oferecendo um equilíbrio perfeito entre estudo e lazer.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/worthing/worthing_foto1.jpg" alt="Worthing Vista 1">
+                                        <img src="assets/worthing/worthing_foto2.jpg" alt="Worthing Vista 2">
+                                        <img src="assets/worthing/worthing_foto3.jpg" alt="Worthing Vista 3">
+                                        <img src="assets/worthing/worthing_foto4.jpg" alt="Worthing Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-yellow-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2">
+                                    <h3 class="text-4xl font-bold text-yellow-800 mb-4">Canterbury, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                        Uma cidade histórica e universitária, Canterbury é mundialmente famosa por sua
+                                        majestosa Catedral, Patrimônio Mundial da UNESCO. Oferece um ambiente acadêmico
+                                        inspirador e uma rica imersão na história inglesa, ideal para quem aprecia a
+                                        cultura e a tradição.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                        <li>Catedral de Canterbury e história medieval</li>
+                                        <li>Atmosfera universitária vibrante</li>
+                                        <li>Cidade compacta e fácil de explorar</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                        Carregando clima de Canterbury...
+                                    </div>
+                                    <button
+                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Estudar em Canterbury é como viver em um livro de história. As ruas de
+                                            paralelepípedos, edifícios antigos e a presença de estudantes de todo o mundo
+                                            criam uma atmosfera única. Além da Catedral, você pode visitar as Ruínas da
+                                            Abadia
+                                            de Santo Agostinho, fazer passeios de barco pelo Rio Stour e explorar os
+                                            diversos
+                                            museus e galerias.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A experiência acadêmica em Canterbury é enriquecedora, com a Universidade de
+                                            Kent e
+                                            a Canterbury Christ Church University contribuindo para uma atmosfera jovem e
+                                            internacional. A cidade oferece diversos eventos culturais, peças de teatro e
+                                            exposições de arte. Os pubs históricos e as casas de chá são perfeitos para
+                                            socializar. Para os amantes da natureza, os arredores de Canterbury são ideais
+                                            para
+                                            caminhadas e ciclismo. A localização estratégica de Canterbury também facilita
+                                            viagens de um dia a Londres e outras cidades históricas no sudeste da Inglaterra.
+                                            A
+                                            culinária local é variada, com opções que vão desde pratos tradicionais britânicos
+                                            até cozinha internacional.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/canterbury/canterbury_foto1.jpg" alt="Canterbury Vista 1">
+                                        <img src="assets/canterbury/canterbury_foto2.jpg" alt="Canterbury Vista 2">
+                                        <img src="assets/canterbury/canterbury_foto3.jpg" alt="Canterbury Vista 3">
+                                        <img src="assets/canterbury/canterbury_foto4.jpg" alt="Canterbury Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-red-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2">
+                                    <h3 class="text-4xl font-bold text-red-800 mb-4">Oxford, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                        Lar da mais antiga universidade de língua inglesa, Oxford é um centro de
+                                        excelência
+                                        acadêmica e uma cidade de beleza arquitetônica ímpar. Mergulhe em um ambiente
+                                        intelectual estimulante, com bibliotecas históricas, colégios impressionantes e
+                                        uma
+                                        atmosfera que respira conhecimento.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                        <li>Universidade de Oxford e legado acadêmico</li>
+                                        <li>Arquitetura gótica e jardins deslumbrantes</li>
+                                        <li>Museus e galerias de classe mundial</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                        Carregando clima de Oxford...
+                                    </div>
+                                    <button
+                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Para estudantes que buscam uma imersão profunda na cultura e no estudo, Oxford
+                                            é
+                                            incomparável. Passeie pelos campi históricos, explore a Bodleian Library e
+                                            desfrute de punting (passeio de barco) no rio Cherwell. A cidade também oferece
+                                            uma
+                                            vida cultural rica, com teatros, pubs tradicionais e eventos estudantis.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            Oxford é um paraíso para os amantes da história e do conhecimento, com seus
+                                            famosos
+                                            colégios, museus (como o Ashmolean Museum) e livrarias. A cidade é compacta e
+                                            pode
+                                            ser facilmente explorada a pé ou de bicicleta. A vida estudantil é central, com
+                                            inúmeras sociedades e clubes para participar, oferecendo oportunidades únicas de
+                                            networking e desenvolvimento pessoal. Há muitos parques e jardins para relaxar,
+                                            como
+                                            o University Parks e o Botanic Garden. Os pubs históricos, como o Eagle and
+                                            Child,
+                                            frequentado por C.S. Lewis e J.R.R. Tolkien, proporcionam uma experiência
+                                            autêntica.
+                                            Oxford também é um excelente ponto de partida para explorar a região de
+                                            Cotswolds e
+                                            outras cidades históricas.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/oxford/oxford_foto1.jpg" alt="Oxford Vista 1">
+                                        <img src="assets/oxford/oxford_foto2.jpg" alt="Oxford Vista 2">
+                                        <img src="assets/oxford/oxford_foto3.jpg" alt="Oxford Vista 3">
+                                        <img src="assets/oxford/oxford_foto4.jpg" alt="Oxford Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-purple-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2">
+                                    <h3 class="text-4xl font-bold text-purple-800 mb-4">Bournemouth, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                        Uma das cidades costeiras mais populares do Reino Unido, Bournemouth é famosa por
+                                        suas
+                                        praias de areia dourada e seus exuberantes jardins. Oferece uma combinação perfeita
+                                        de
+                                        vida acadêmica ativa e um estilo de vida descontraído à beira-mar.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                        <li>Sete milhas de praias premiadas</li>
+                                        <li>Parques e jardins vitorianos</li>
+                                        <li>Atividades aquáticas e vida noturna</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                        Carregando clima de Bournemouth...
+                                    </div>
+                                    <button
+                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Bournemouth é um destino vibrante para estudantes, combinando excelentes
+                                            escolas de
+                                            inglês com uma atmosfera de férias. Além das praias, você pode explorar o
+                                            Oceanário, passear pelo píer e desfrutar de uma vasta gama de restaurantes e
+                                            lojas. A vida noturna é animada, com muitos pubs e clubes.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A cidade de Bournemouth é perfeita para estudantes que adoram atividades ao ar
+                                            livre
+                                            e um estilo de vida descontraído. Suas praias são ideais para esportes aquáticos
+                                            como surfe, paddleboarding e caiaque. Os extensos jardins e parques oferecem
+                                            espaços
+                                            verdes para relaxar e estudar. Bournemouth tem uma vida noturna animada, com
+                                            muitos
+                                            bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
+                                            cinemas. A
+                                            University of Bournemouth atrai uma grande população estudantil, criando um
+                                            ambiente dinâmico e multicultural. A localização de Bournemouth na costa sul da
+                                            Inglaterra também permite fácil acesso a atrações naturais como a Costa Jurássica,
+                                            Patrimônio Mundial da UNESCO, e outras cidades costeiras charmosas.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/bournemouth/bournemouth_foto1.jpg" alt="Bournemouth Vista 1">
+                                        <img src="assets/bournemouth/bournemouth_foto2.jpg" alt="Bournemouth Vista 2">
+                                        <img src="assets/bournemouth/bournemouth_foto3.jpg" alt="Bournemouth Vista 3">
+                                        <img src="assets/bournemouth/bournemouth_foto4.jpg" alt="Bournemouth Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="prevBtn"
+                    class="absolute top-1/2 -left-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-3 rounded-full shadow-lg transition-colors duration-300 z-10 md:-left-20">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <button id="nextBtn"
+                    class="absolute top-1/2 -right-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-3 rounded-full shadow-lg transition-colors duration-300 z-10 md:-right-20">
+                    <i class="fas fa-chevron-right text-xl"></i>
+                </button>
+
+                <div id="carousel-indicators"
+                    class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    </div>
+            </div>
+        </div>
     </section>
+
+    <section id="experience" class="min-h-screen bg-gray-100 flex items-center justify-center p-8">
+        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-left">Inscrições</h2>
+    </section>
+
+    <section id="contact" class="min-h-screen bg-white flex items-center justify-center p-8">
+        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-right">Contato</h2>
+    </section>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         AOS.init(); // Inicializa a biblioteca AOS
 
-        // Script para rolagem suave ao clicar no botão de avião
+        // Script para rolagem suave para QUALQUER link da navbar e o botão de scroll-down
         document.addEventListener('DOMContentLoaded', () => {
             const scrollDownButton = document.getElementById('scroll-down-button');
             if (scrollDownButton) {
                 scrollDownButton.addEventListener('click', () => {
-                    // Rola suavemente para a próxima seção (neste caso, a seção 'about')
                     document.getElementById('about').scrollIntoView({
                         behavior: 'smooth'
                     });
                 });
             }
 
+            // Seleciona todos os links da na
+            // vbar para rolagem suave
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault(); // Previne o comportamento padrão de salto
+
+                    const targetId = this.getAttribute('href'); // Pega o ID da seção do atributo href
+                    const targetSection = document.querySelector(targetId); // Encontra a seção
+
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth', // Rola suavemente
+                            block: 'start' // Garante que o topo da seção fique visível
+                        });
+                    }
+                });
+            });
+
             // Lógica para a navbar mudar de cor ao rolar
             const navbar = document.getElementById('navbar');
             if (navbar) {
                 window.addEventListener('scroll', () => {
                     if (window.scrollY > 50) { // Mude 50 para o ponto de rolagem desejado
-                        navbar.classList.add('bg-black', 'shadow-xl'); // Mais opaca e com mais sombra
+                        navbar.classList.add('bg-purple-800', 'shadow-xl'); // Mais opaca e com mais sombra
                         navbar.classList.remove('bg-black/50', 'shadow-lg');
                     } else {
-                        navbar.classList.remove('bg-black', 'shadow-xl');
+                        navbar.classList.remove('bg-purple-800', 'shadow-xl');
                         navbar.classList.add('bg-black/50', 'shadow-lg');
                     }
                 });
             }
 
-            // Lógica para o menu mobile (exemplo: para abrir/fechar um menu dropdown)
-            const mobileMenuButton = document.getElementById('menu-toggle');
-            // Se você tiver um div para o menu mobile (como no exemplo comentado acima na nav)
-            // const mobileMenu = document.getElementById('mobile-menu'); 
+            // Lógica do Carrossel Principal (de Cidades)
+            const carouselOuter = document.getElementById('cities-carousel-outer'); // O container externo que tem overflow:hidden
+            const carouselContainer = document.getElementById('cities-carousel-slides'); // O container flex que move os slides
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const indicatorsContainer = document.getElementById('carousel-indicators');
+            const slides = document.querySelectorAll('.carousel-item');
+            let currentSlide = 0;
+            // SUA CHAVE API OPENWEATHERMAP AQUI:
+            const OPENWEATHER_API_KEY = '573fc6a6041cf7914368b00f0f5b4fb9'; 
 
+            // Mapeamento de cidades para coordenadas (necessário para a API de clima)
+            const cityCoordinates = {
+                'Brighton': { lat: 50.8225, lon: -0.1372 },
+                'Worthing': { lat: 50.8143, lon: -0.3703 },
+                'Canterbury': { lat: 51.2798, lon: 1.0776 },
+                'Oxford': { lat: 51.7520, lon: -1.2577 },
+                'Bournemouth': { lat: 50.7192, lon: -1.8797 }
+            };
+
+            // Armazenar os IDs dos setIntervals e currentImageIndex para cada slideshow de cidade
+            const citySlideshowData = {}; // Objeto para guardar {intervalId: null, currentImageIndex: 0} por slide
+
+            // Função para buscar dados do clima
+            async function fetchWeather(cityName, element) {
+                if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === '') { 
+                    element.innerHTML = 'Previsão do tempo: Chave API não configurada.';
+                    console.warn('AVISO: A chave da API OpenWeatherMap não está configurada ou está vazia. Obtenha uma em openweathermap.org e substitua no código.');
+                    return;
+                }
+
+                const coords = cityCoordinates[cityName];
+                if (!coords) {
+                    element.innerHTML = 'Coordenadas da cidade não encontradas.';
+                    return;
+                }
+
+                const url = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=pt_br`;
+
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    const temp = data.main.temp.toFixed(0);
+                    const description = data.weather[0].description;
+                    const iconCode = data.weather[0].icon;
+                    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+                    element.innerHTML = `
+                        Previsão do tempo: ${temp}°C, ${description} <img src="${iconUrl}" alt="${description}" class="inline-block w-8 h-8 -mt-2">
+                    `;
+                } catch (error) {
+                    console.error('Erro ao buscar previsão do tempo:', error);
+                    element.innerHTML = 'Previsão do tempo indisponível.';
+                }
+            }
+
+            // Função para iniciar o slideshow de imagens de UMA CIDADE específica
+            function startCitySlideshow(slideElement) {
+                const slideshowContainer = slideElement.querySelector('.city-images-slideshow');
+                if (!slideshowContainer) return;
+
+                const images = slideshowContainer.querySelectorAll('img');
+                if (images.length === 0) return;
+
+                // Inicializa os dados do slideshow para este slide se ainda não existirem
+                if (!citySlideshowData[slideElement.id]) {
+                    citySlideshowData[slideElement.id] = {
+                        intervalId: null,
+                        currentImageIndex: 0
+                    };
+                }
+
+                let data = citySlideshowData[slideElement.id];
+
+                // Função interna para mostrar a imagem atual e esconder as outras
+                function showImage(index) {
+                    images.forEach((img, i) => {
+                        img.classList.remove('active-image');
+                        if (i === index) {
+                            img.classList.add('active-image');
+                        }
+                    });
+                }
+
+                // Exibe a imagem atual (ou a primeira, se estiver começando)
+                showImage(data.currentImageIndex);
+
+                // Limpa qualquer intervalo anterior para este slide
+                if (data.intervalId) {
+                    clearInterval(data.intervalId);
+                }
+
+                // Inicia o intervalo para trocar as imagens automaticamente
+                data.intervalId = setInterval(() => {
+                    data.currentImageIndex = (data.currentImageIndex + 1) % images.length;
+                    showImage(data.currentImageIndex);
+                }, 4000); // Troca de imagem a cada 4 segundos
+            }
+
+            // Função para parar o slideshow de imagens de UMA CIDADE específica
+            function stopCitySlideshow(slideElement) {
+                if (citySlideshowData[slideElement.id] && citySlideshowData[slideElement.id].intervalId) {
+                    clearInterval(citySlideshowData[slideElement.id].intervalId);
+                    citySlideshowData[slideElement.id].intervalId = null; // Reseta o ID do intervalo
+                }
+            }
+            
+            // showSlide para o carrossel PRINCIPAL
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    // Para o slideshow da cidade anterior antes de remover a classe 'active'
+                    stopCitySlideshow(slide);
+
+                    slide.classList.remove('active', 'expanded'); // Remove 'expanded' ao mudar de slide
+                    slide.querySelector('.more-info').classList.add('hidden'); // Esconde o 'Saber Mais'
+                    slide.querySelector('.toggle-info-btn').textContent = 'Saber Mais'; // Reseta o texto do botão
+
+                    if (i === index) {
+                        // O slide ativo é posicionado onde deve estar no container flex
+                        slide.style.left = `${i * 100}%`; 
+                        slide.style.display = 'block'; /* Para que o conteúdo interno utilize flexbox */
+                        setTimeout(() => {
+                            slide.classList.add('active'); /* Ativa a opacidade */
+                        }, 10); /* Pequeno delay para renderizar display:block */
+
+                        // Busca o clima para o slide ativo
+                        const cityName = slide.querySelector('h3').textContent.split(',')[0].trim();
+                        const weatherElement = slide.querySelector('.weather-info');
+                        fetchWeather(cityName, weatherElement);
+
+                        // Inicia o slideshow para a nova cidade ativa
+                        startCitySlideshow(slide);
+                    } else {
+                        slide.classList.remove('active'); /* Desativa a opacidade */
+                        setTimeout(() => {
+                            slide.style.display = 'none'; /* Esconde o slide após a transição */
+                        }, 1000); /* Duração da transição de opacidade */
+                    }
+                });
+                updateIndicators(index);
+                // Move o contêiner principal dos slides (que é flex)
+                carouselContainer.style.transform = `translateX(-${index * 100}%)`;
+            }
+
+            // Funções de navegação do carrossel principal
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            function createIndicators() {
+                indicatorsContainer.innerHTML = '';
+                slides.forEach((slide, i) => {
+                    slide.id = `city-slide-${i}`; // Dá um ID único para cada slide para controle do slideshow interno
+                    const indicator = document.createElement('button');
+                    indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'hover:bg-gray-200', 'transition-colors', 'duration-300');
+                    if (i === currentSlide) {
+                        indicator.classList.add('bg-yellow-400', 'hover:bg-yellow-400');
+                    }
+                    indicator.addEventListener('click', () => showSlide(i));
+                    indicatorsContainer.appendChild(indicator);
+                });
+            }
+
+            function updateIndicators(activeIndex) {
+                const indicators = indicatorsContainer.querySelectorAll('button');
+                indicators.forEach((indicator, i) => {
+                    indicator.classList.remove('bg-yellow-400', 'hover:bg-yellow-400');
+                    indicator.classList.add('bg-gray-400', 'hover:bg-gray-200');
+                    if (i === activeIndex) {
+                        indicator.classList.add('bg-yellow-400', 'hover:bg-yellow-400');
+                    }
+                });
+            }
+
+            // Lógica do botão "Saber Mais" (permanece a mesma)
+            document.querySelectorAll('.toggle-info-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const parentSlide = this.closest('.carousel-item');
+                    const moreInfoDiv = parentSlide.querySelector('.more-info');
+
+                    moreInfoDiv.classList.toggle('hidden');
+                    // A classe 'expanded' agora controla o max-height para a transição
+                    parentSlide.classList.toggle('expanded'); 
+
+                    if (moreInfoDiv.classList.contains('hidden')) {
+                        this.textContent = 'Saber Mais';
+                    } else {
+                        this.textContent = 'Ver Menos';
+                    }
+                });
+            });
+
+            // Event Listeners para os botões do carrossel principal
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            // Inicializa o carrossel e o slideshow da primeira cidade ao carregar a página
+            createIndicators(); // Cria os IDs dos slides antes de showSlide
+            showSlide(currentSlide); // Inicia o carrossel e o primeiro slideshow de imagem
+
+            // Lógica para o menu mobile (ainda não implementado visualmente)
+            const mobileMenuButton = document.getElementById('menu-toggle');
             if (mobileMenuButton) {
                 mobileMenuButton.addEventListener('click', () => {
-                    // Implemente a lógica para abrir/fechar seu menu mobile aqui.
-                    // Se você usou o exemplo de div mobile-menu:
-                    // mobileMenu.classList.toggle('hidden'); 
-                    // Outras ações como mudar ícone do hambúrguer, ajustar aria-expanded
-                    console.log('Botão do menu mobile clicado!');
+                    console.log('Botão do menu mobile clicado! (Implemente aqui a exibição do menu)');
+                    // Exemplo: Se você tiver um elemento de menu mobile oculto, pode alternar sua visibilidade aqui:
+                    // document.getElementById('mobile-menu-content').classList.toggle('hidden');
                 });
             }
         });
