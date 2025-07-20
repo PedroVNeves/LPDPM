@@ -15,130 +15,329 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
     <style>
-        .text-shadow-hero { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); }
+        .text-shadow-hero {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
 
         .carousel-item {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;
-            pointer-events: none; transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
-            max-height: 500px; overflow: hidden; padding: 2rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
+            max-height: 500px;
+            overflow: hidden;
+            padding: 2rem;
         }
+
         @media (max-width: 767px) {
-            .carousel-item { padding: 1.5rem 0.5rem; max-height: none; height: auto; min-height: 500px;
-                display: flex; flex-direction: column; }
+            .carousel-item {
+                padding: 1.5rem 0.5rem;
+                max-height: none;
+                height: auto;
+                min-height: 500px;
+                display: flex;
+                flex-direction: column;
+            }
         }
-        @media (min-width: 768px) { .carousel-item { padding: 2rem; } }
+
+        @media (min-width: 768px) {
+            .carousel-item {
+                padding: 2rem;
+            }
+        }
 
         .fade-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
             background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-            pointer-events: none; transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
         }
-        .carousel-item.expanded .fade-overlay { opacity: 0; }
-        .carousel-item.active { opacity: 1; pointer-events: auto; }
+
+        .carousel-item.expanded .fade-overlay {
+            opacity: 0;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         #cities-carousel-container {
-            position: relative; height: 500px; transition: height 0.7s ease-in-out; overflow: hidden;
+            position: relative;
+            height: 500px;
+            transition: height 0.7s ease-in-out;
+            overflow: hidden;
         }
+
         #cities-carousel-slides {
-            position: relative; width: 100%; height: 100%; display: flex;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
             transition: transform 0.5s ease-in-out;
         }
 
         .carousel-item-content {
-            display: flex; flex-direction: column; gap: 2rem; align-items: center; justify-content: center;
-            width: 100%; height: 100%; padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 0;
         }
+
         @media (max-width: 767px) {
             .carousel-item-content {
-                padding: 0.5rem; padding-top: 1.5rem; padding-bottom: 1.5rem;
-                justify-content: flex-start; align-items: flex-start; height: auto;
+                padding: 0.5rem;
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+                justify-content: flex-start;
+                align-items: flex-start;
+                height: auto;
             }
-            .carousel-item-content > div { width: 100%; }
-        }
-        @media (min-width: 768px) {
-            .carousel-item-content { flex-direction: row; align-items: flex-start; justify-content: space-between; }
+
+            .carousel-item-content>div {
+                width: 100%;
+            }
         }
 
-        .carousel-item.expanded { max-height: 2000px; overflow-y: auto; }
+        @media (min-width: 768px) {
+            .carousel-item-content {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        .carousel-item.expanded {
+            max-height: 2000px;
+            overflow-y: auto;
+        }
 
         .city-images-slideshow {
-            position: relative; width: 100%; height: 250px; overflow: hidden;
-            border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-top: 1rem;
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
         }
-        @media (min-width: 768px) { .city-images-slideshow { margin-top: 0; } }
+
+        @media (min-width: 768px) {
+            .city-images-slideshow {
+                margin-top: 0;
+            }
+        }
 
         .city-images-slideshow img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
-        .city-images-slideshow img.active-image { opacity: 1; }
 
-        #prevBtn, #nextBtn {
-            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
-            background-color: rgba(0, 0, 0, 0.5); color: white; border-radius: 9999px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s, transform 0.3s;
-            padding: 0.75rem; /* Default for desktop */
+        .city-images-slideshow img.active-image {
+            opacity: 1;
         }
-        #prevBtn:hover, #nextBtn:hover { background-color: rgba(0, 0, 0, 0.75); }
-        #prevBtn { left: -5rem; }
-        #nextBtn { right: -5rem; }
+
+        #prevBtn,
+        #nextBtn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+            padding: 0.75rem;
+            /* Default for desktop */
+        }
+
+        #prevBtn:hover,
+        #nextBtn:hover {
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+
+        #prevBtn {
+            left: -5rem;
+        }
+
+        #nextBtn {
+            right: -5rem;
+        }
 
         @media (max-width: 767px) {
-            #prevBtn { left: 0.5rem; padding: 0.3rem; }
-            #nextBtn { right: 0.5rem; padding: 0.3rem; }
-            #prevBtn i, #nextBtn i { font-size: 1.1rem; }
-            #carousel-indicators { bottom: 1rem; }
+            #prevBtn {
+                left: 0.5rem;
+                padding: 0.3rem;
+            }
+
+            #nextBtn {
+                right: 0.5rem;
+                padding: 0.3rem;
+            }
+
+            #prevBtn i,
+            #nextBtn i {
+                font-size: 1.1rem;
+            }
+
+            #carousel-indicators {
+                bottom: 1rem;
+            }
         }
 
         .toggle-info-btn {
-            background-color: #8B5CF6; color: white; font-weight: bold; padding: 0.5rem 1.5rem;
-            border-radius: 9999px; transition: background-color 0.3s; margin-top: 1rem;
+            background-color: #8B5CF6;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
         }
-        .toggle-info-btn:hover { background-color: #7C3AED; }
+
+        .toggle-info-btn:hover {
+            background-color: #7C3AED;
+        }
 
         .initial-more-info-btn {
-            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5;
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
         }
-        .carousel-item.expanded .initial-more-info-btn { display: none; }
 
-        .expanded-less-info-btn { margin-top: 2rem; display: none; }
-        .carousel-item.expanded .expanded-less-info-btn { display: block; margin-left: auto; margin-right: auto; }
+        .carousel-item.expanded .initial-more-info-btn {
+            display: none;
+        }
+
+        .expanded-less-info-btn {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .carousel-item.expanded .expanded-less-info-btn {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         /* Album Carousel Styles */
         #album-carousel-container {
-            position: relative; width: 100%; max-width: 800px; height: 400px; overflow: hidden;
-            border-radius: 0.75rem; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); margin: 0 auto 3rem;
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 auto 3rem;
             background-color: #f0f0f0;
         }
+
         #album-carousel-slides {
-            display: flex; width: 100%; height: 100%; transition: transform 0.8s ease-in-out;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s ease-in-out;
         }
-        .album-slide { flex-shrink: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .album-slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.75rem; }
+
+        .album-slide {
+            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .album-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.75rem;
+        }
 
         .album-nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.5);
-            color: white; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; z-index: 20;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            z-index: 20;
             transition: background-color 0.3s;
         }
-        .album-nav-btn:hover { background-color: rgba(0, 0, 0, 0.8); }
-        #album-prev-btn { left: 1rem; }
-        #album-next-btn { right: 1rem; }
+
+        .album-nav-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        #album-prev-btn {
+            left: 1rem;
+        }
+
+        #album-next-btn {
+            right: 1rem;
+        }
 
         #album-indicators {
-            position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 0.5rem; z-index: 20;
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 20;
         }
+
         .album-indicator {
-            width: 0.75rem; height: 0.75rem; background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 9999px; cursor: pointer; transition: background-color 0.3s;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .album-indicator.active { background-color: #FACC15; }
+
+        .album-indicator.active {
+            background-color: #FACC15;
+        }
 
         @media (max-width: 767px) {
-            #album-carousel-container { height: 300px; }
-            .album-nav-btn { padding: 0.5rem 0.3rem; font-size: 0.9rem; }
-            .album-nav-btn i { font-size: 0.9rem; }
+            #album-carousel-container {
+                height: 300px;
+            }
+
+            .album-nav-btn {
+                padding: 0.5rem 0.3rem;
+                font-size: 0.9rem;
+            }
+
+            .album-nav-btn i {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -157,27 +356,32 @@
 
                 <div class="hidden md:flex space-x-6">
                     <div class="relative group">
-                        <a href="#hero" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                        <a href="#hero"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-home mr-2"></i>Início
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#about" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                        <a href="#about"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-user mr-2"></i>Sobre Nós
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#cities" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                        <a href="#cities"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-city mr-2"></i>Cidades
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#enrollment" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                        <a href="#enrollment"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-clock mr-2"></i>Inscrições
                         </a>
                     </div>
                     <div class="relative group">
-                        <a href="#contact" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                        <a href="#contact"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-envelope mr-2"></i>Contato
                         </a>
                     </div>
@@ -230,8 +434,8 @@
             data-aos-duration="1000">
             Daqui Pra o Mundo
         </h1>
-        <p class="text-xl md:text-2xl font-light mb-8 max-w-2xl text-shadow-hero" data-aos="fade-up"
-            data-aos-delay="300" data-aos-duration="1000">
+        <p class="text-xl md:text-2xl font-bold mb-8 max-w-2xl text-shadow-hero" data-aos="fade-up" data-aos-delay="300"
+            data-aos-duration="1000">
             Venha conosco nesta viagem incrível.
         </p>
         <button
@@ -239,6 +443,10 @@
             data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
             Explorar Agora
         </button>
+        <a class="text-xl font-bold text-yellow-400 text-shadow-hero" data-aos="fade-up" data-aos-delay="600"
+            data-aos-duration="1000" target="_blank" href="https://www.instagram.com/daquipromundo25/">
+            Clique aqui e venha conhecer mais sobre nossas aventuras em nosso instagram.
+        </a>
         <button id="scroll-down-button"
             class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400">
             <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
@@ -349,9 +557,14 @@
                                             oferecendo
                                             experiências únicas. O sistema de transporte público é eficiente,
                                             facilitando o
-                                            acesso a todas as partes da cidade e arredores, incluindo excursões de um dia
+                                            acesso a todas as partes da cidade e arredores, incluindo excursões de um
+                                            dia
                                             para cidades históricas próximas e o Parque Nacional South Downs.
                                         </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/brightonsquad/">
+                                            Clique aqui e conheça nossos intercambistas que irão para Brighton
+                                        </a>
                                         <button
                                             class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
@@ -413,7 +626,8 @@
                                             A vida em Worthing é marcada pela tranquilidade e pela segurança,
                                             características ideais para um foco maior nos estudos. A cidade é perfeita
                                             para
-                                            caminhadas e ciclismo ao longo da costa, com vistas panorâmicas que inspiram a
+                                            caminhadas e ciclismo ao longo da costa, com vistas panorâmicas que inspiram
+                                            a
                                             mente. Há uma comunidade estudantil crescente, oferecendo eventos e
                                             atividades
                                             mais intimistas. O mercado local, com produtos frescos e artesanato, é um
@@ -424,8 +638,13 @@
                                             tradicionais e restaurantes charmosos. Embora seja mais calma que Brighton,
                                             Worthing tem uma boa rede de transportes que facilita o acesso a outras
                                             cidades
-                                            costeiras e a Londres, oferecendo um equilíbrio perfeito entre estudo e lazer.
+                                            costeiras e a Londres, oferecendo um equilíbrio perfeito entre estudo e
+                                            lazer.
                                         </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/dearworthing?igsh=MXN2OHRmcG41YmNxMA==">
+                                            Clique aqui e conheça nossos intercambistas que irão para Worthing
+                                        </a>
                                         <button
                                             class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
@@ -470,7 +689,8 @@
                                     <div class="more-info mt-4 hidden">
                                         <p class="text-md text-gray-600">
                                             Estudar em Canterbury é como viver em um livro de história. As ruas de
-                                            paralelepípedos, edifícios antigos e a presença de estudantes de todo o mundo
+                                            paralelepípedos, edifícios antigos e a presença de estudantes de todo o
+                                            mundo
                                             criam uma atmosfera única. Além da Catedral, você pode visitar as Ruínas da
                                             Abadia
                                             de Santo Agostinho, fazer passeios de barco pelo Rio Stour e explorar os
@@ -480,17 +700,27 @@
                                         <p class="text-md text-gray-600 mt-2">
                                             A experiência acadêmica em Canterbury é enriquecedora, com a Universidade de
                                             Kent e
-                                            a Canterbury Christ Church University contribuindo para uma atmosfera jovem e
-                                            internacional. A cidade oferece diversos eventos culturais, peças de teatro e
+                                            a Canterbury Christ Church University contribuindo para uma atmosfera jovem
+                                            e
+                                            internacional. A cidade oferece diversos eventos culturais, peças de teatro
+                                            e
                                             exposições de arte. Os pubs históricos e as casas de chá são perfeitos para
-                                            socializar. Para os amantes da natureza, os arredores de Canterbury são ideais
+                                            socializar. Para os amantes da natureza, os arredores de Canterbury são
+                                            ideais
                                             para
-                                            caminhadas e ciclismo. A localização estratégica de Canterbury também facilita
-                                            viagens de um dia a Londres e outras cidades históricas no sudeste da Inglaterra.
+                                            caminhadas e ciclismo. A localização estratégica de Canterbury também
+                                            facilita
+                                            viagens de um dia a Londres e outras cidades históricas no sudeste da
+                                            Inglaterra.
                                             A
-                                            culinária local é variada, com opções que vão desde pratos tradicionais britânicos
+                                            culinária local é variada, com opções que vão desde pratos tradicionais
+                                            britânicos
                                             até cozinha internacional.
                                         </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/cantercrew.uk?igsh=MXF4dXdtazk4eTB5Nw==">
+                                            Clique aqui e conheça nossos intercambistas que irão para Canterburry
+                                        </a>
                                         <button
                                             class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
@@ -536,21 +766,27 @@
                                     </button>
                                     <div class="more-info mt-4 hidden">
                                         <p class="text-md text-gray-600">
-                                            Para estudantes que buscam uma imersão profunda na cultura e no estudo, Oxford
+                                            Para estudantes que buscam uma imersão profunda na cultura e no estudo,
+                                            Oxford
                                             é
                                             incomparável. Passeie pelos campi históricos, explore a Bodleian Library e
-                                            desfrute de punting (passeio de barco) no rio Cherwell. A cidade também oferece
+                                            desfrute de punting (passeio de barco) no rio Cherwell. A cidade também
+                                            oferece
                                             uma
                                             vida cultural rica, com teatros, pubs tradicionais e eventos estudantis.
                                         </p>
                                         <p class="text-md text-gray-600 mt-2">
                                             Oxford é um paraíso para os amantes da história e do conhecimento, com seus
                                             famosos
-                                            colégios, museus (como o Ashmolean Museum) e livrarias. A cidade é compacta e
+                                            colégios, museus (como o Ashmolean Museum) e livrarias. A cidade é compacta
+                                            e
                                             pode
-                                            ser facilmente explorada a pé ou de bicicleta. A vida estudantil é central, com
-                                            inúmeras sociedades e clubes para participar, oferecendo oportunidades únicas de
-                                            networking e desenvolvimento pessoal. Há muitos parques e jardins para relaxar,
+                                            ser facilmente explorada a pé ou de bicicleta. A vida estudantil é central,
+                                            com
+                                            inúmeras sociedades e clubes para participar, oferecendo oportunidades
+                                            únicas de
+                                            networking e desenvolvimento pessoal. Há muitos parques e jardins para
+                                            relaxar,
                                             como
                                             o University Parks e o Botanic Garden. Os pubs históricos, como o Eagle and
                                             Child,
@@ -560,6 +796,10 @@
                                             Cotswolds e
                                             outras cidades históricas.
                                         </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/oxford.owls?igsh=dTEydmN0ZHB4OGds">
+                                            Clique aqui e conheça nossos intercambistas que irão para Oxford
+                                        </a>
                                         <button
                                             class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
@@ -583,9 +823,11 @@
                                 <div class="md:w-1/2 relative">
                                     <h3 class="text-4xl font-bold text-purple-800 mb-4">Bournemouth, Reino Unido</h3>
                                     <p class="text-lg text-gray-700 leading-relaxed text-content">
-                                        Uma das cidades costeiras mais populares do Reino Unido, Bournemouth é famosa por
+                                        Uma das cidades costeiras mais populares do Reino Unido, Bournemouth é famosa
+                                        por
                                         suas
-                                        praias de areia dourada e seus exuberantes jardins. Oferece uma combinação perfeita
+                                        praias de areia dourada e seus exuberantes jardins. Oferece uma combinação
+                                        perfeita
                                         de
                                         vida acadêmica ativa e um estilo de vida descontraído à beira-mar.
                                     </p>
@@ -611,9 +853,11 @@
                                             lojas. A vida noturna é animada, com muitos pubs e clubes.
                                         </p>
                                         <p class="text-md text-gray-600 mt-2">
-                                            A cidade de Bournemouth é perfeita para estudantes que adoram atividades ao ar
+                                            A cidade de Bournemouth é perfeita para estudantes que adoram atividades ao
+                                            ar
                                             livre
-                                            e um estilo de vida descontraído. Suas praias são ideais para esportes aquáticos
+                                            e um estilo de vida descontraído. Suas praias são ideais para esportes
+                                            aquáticos
                                             como surfe, paddleboarding e caiaque. Os extensos jardins e parques oferecem
                                             espaços
                                             verdes para relaxar e estudar. Bournemouth tem uma vida noturna animada, com
@@ -621,10 +865,16 @@
                                             bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
                                             cinemas. A
                                             University of Bournemouth atrai uma grande população estudantil, criando um
-                                            ambiente dinâmico e multicultural. A localização de Bournemouth na costa sul da
-                                            Inglaterra também permite fácil acesso a atrações naturais como a Costa Jurássica,
+                                            ambiente dinâmico e multicultural. A localização de Bournemouth na costa sul
+                                            da
+                                            Inglaterra também permite fácil acesso a atrações naturais como a Costa
+                                            Jurássica,
                                             Patrimônio Mundial da UNESCO, e outras cidades costeiras charmosas.
                                         </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/bournemouthg5/">
+                                            Clique aqui e conheça nossos intercambistas que irão para Bournemouth
+                                        </a>
                                         <button
                                             class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
@@ -668,7 +918,7 @@
 
             <div id="album-carousel-container" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="1000">
                 <div id="album-carousel-slides">
-                    </div>
+                </div>
                 <button id="album-prev-btn" class="album-nav-btn">
                     <i class="fas fa-chevron-left text-xl"></i>
                 </button>
@@ -682,14 +932,122 @@
                 class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-10 rounded-full text-2xl transition duration-300 transform hover:scale-105 shadow-lg"
                 data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
                 <a href="https://selecao.educacao.al.gov.br/edital-seduc-n-0192024-daqui-pra-o-mundo">
-                Inscreva-se e faça parte dessa jornada!</a>
+                    Inscreva-se e faça parte dessa jornada!</a>
             </button>
         </div>
     </section>
 
-    <section id="contact" class="min-h-screen bg-white flex items-center justify-center p-8">
-        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-right">Contato</h2>
+    <section id="contact" class="bg-gradient-to-b from-white to-blue-50 py-16 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-12" data-aos="fade-down" data-aos-duration="1000">
+                Fale Conosco e Siga a Jornada!
+            </h2>
+            <p class="text-xl text-gray-700 leading-relaxed mb-10" data-aos="fade-up" data-aos-delay="200"
+                data-aos-duration="1000">
+                Conecte-se com o programa **Daqui Pra o Mundo** e com as comunidades de intercambistas!
+                Estamos aqui para tirar suas dúvidas e compartilhar as aventuras.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <a href="https://www.instagram.com/daquipromundo25/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-purple-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="300" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-purple-600 mb-4 group-hover:text-purple-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Instagram Oficial</h3>
+                    <p class="text-gray-600">@daquipromundo25</p>
+                </a>
+
+                <a href="https://www.instagram.com/educacaoal/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-blue-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-blue-600 mb-4 group-hover:text-blue-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Educação AL</h3>
+                    <p class="text-gray-600">@educacaoal</p>
+                </a>
+
+                <a href="https://www.instagram.com/governodealagoas/"
+                    class="block p-6 bg-green-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="500" data-aos-duration="1000">
+                    <i
+                        class="fas fa-envelope text-5xl text-green-600 mb-4 group-hover:text-yellow-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Govendo de Alagoas</h3>
+                    <p class="text-gray-600">@governodealagoas</p>
+                </a>
+
+                <a href="https://www.instagram.com/brightonsquad/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="600" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Brighton Squad</h3>
+                    <p class="text-gray-600">@brightonsquad</p>
+                </a>
+
+                <a href="mailto:daquipraomundo@educ.al.gov.br" target="_blank"
+                    class="block p-6 bg-yellow-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="700" data-aos-duration="1000">
+                    <i
+                        class="fas fa-envelope text-5xl text-yellow-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Email Daqui pra o Mundo</h3>
+                    <p class="text-gray-600">daquipraomundo@educ.al.gov.br</p>
+                </a>
+
+                <a href="https://www.instagram.com/dearworthing?igsh=MXN2OHRmcG41YmNxMA==" target="_blank"
+                    rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="700" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Dear Worthing</h3>
+                    <p class="text-gray-600">@dearworthing</p>
+                </a>
+
+                <a href="https://www.instagram.com/cantercrew.uk?igsh=MXF4dXdtazk4eTB5Nw==" target="_blank"
+                    rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="800" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Canter Crew UK</h3>
+                    <p class="text-gray-600">@cantercrew.uk</p>
+                </a>
+
+                <a href="https://www.instagram.com/oxford.owls?igsh=dTEydmN0ZHB4OGds" target="_blank"
+                    rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="900" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Oxford Owls</h3>
+                    <p class="text-gray-600">@oxford.owls</p>
+                </a>
+
+                <a href="https://www.instagram.com/bournemouthg5/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                    data-aos="zoom-in" data-aos-delay="1000" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Bournemouth G5</h3>
+                    <p class="text-gray-600">@bournemouthg5</p>
+                </a>
+            </div>
+        </div>
     </section>
+
+    <footer class="bg-gray-800 text-white py-8 px-4 text-center">
+        <div class="container mx-auto max-w-6xl">
+            <p class="text-lg mb-4">&copy; 2025 Daqui Pra o Mundo. Todos os direitos reservados.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#hero" class="hover:text-yellow-400 transition-colors duration-300">Início</a>
+                <a href="#about" class="hover:text-yellow-400 transition-colors duration-300">Sobre Nós</a>
+                <a href="#cities" class="hover:text-yellow-400 transition-colors duration-300">Cidades</a>
+                <a href="#enrollment" class="hover:text-yellow-400 transition-colors duration-300">Inscrições</a>
+                <a href="#contact" class="hover:text-yellow-400 transition-colors duration-300">Contato</a>
+            </div>
+        </div>
+    </footer>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
@@ -951,7 +1309,7 @@
                         const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
                         const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
                         visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
-                        
+
                         newHeight = Math.max(initialMinHeight, visibleContentHeight);
 
                     } else { // Estado atual (null)
@@ -960,21 +1318,21 @@
                         if (isCurrentlyExpanded) {
                             newHeight = activeSlide.scrollHeight;
                         } else {
-                             let visibleContentHeight = 0;
+                            let visibleContentHeight = 0;
                             const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
                             mainContentElements.forEach(el => {
                                 if (el.offsetParent !== null) {
                                     visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0);
                                 }
                             });
-                             const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
+                            const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
                             if (initialBtn && initialBtn.offsetParent !== null) {
                                 visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop || 0);
                             }
                             const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
                             const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
                             visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
-                            
+
                             newHeight = Math.max(initialMinHeight, visibleContentHeight);
                         }
                     }
@@ -1080,10 +1438,11 @@
             const albumIndicatorsContainer = document.getElementById('album-indicators');
 
             const albumImages = [
-                'assets/album/album_foto1.jpg',
-                'assets/album/album_foto2.jpg',
-                'assets/album/album_foto3.jpg',
-                'assets/album/album_foto4.jpg'
+                'assets/album/Album_foto1.jpg',
+                'assets/album/Album_foto2.jpg',
+                'assets/album/Album_foto3.jpg',
+                'assets/album/Album_foto4.jpg',
+                'assets/album/Album_foto5.jpg'
             ];
 
             let currentAlbumSlide = 0;
