@@ -30,23 +30,28 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
-            max-height: 500px;
+            max-height: 500px; /* Altura inicial do slide */
             overflow: hidden;
-            /* Adicione padding aqui para criar espaço para as setas em mobile */
-            padding-left: 3.5rem;
-            padding-right: 3.5rem;
+            /* Padding para o conteúdo do slide para não encostar nas bordas */
+            padding: 2rem; /* Mantido padrão para a maioria das telas */
         }
 
-        /* Ajuste do padding do carousel-item para desktop */
-        @media (min-width: 768px) {
-            .carousel-item {
-                padding-left: 2rem;
-                /* Retorna ao padding normal em desktop */
-                padding-right: 2rem;
-                /* Retorna ao padding normal em desktop */
-            }
+        /* Oculta o scrollbar mas permite rolagem (para o fade-out do botão Saber Mais) */
+        .fade-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px; /* Altura do gradiente de fade */
+            background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+            pointer-events: none; /* Permite cliques através dele */
+            transition: opacity 0.5s ease-in-out;
         }
 
+        /* Esconde o overlay quando o item está expandido */
+        .carousel-item.expanded .fade-overlay {
+            opacity: 0;
+        }
 
         /* Mostrar o slide ativo do carrossel principal */
         .carousel-item.active {
@@ -57,17 +62,17 @@
         /* O container do carrossel principal precisa ter altura e posição relativas */
         #cities-carousel-container {
             position: relative;
-            min-height: 500px;
-            /* Altura mínima para o container do carrossel de cidades */
-            transition: height 0.7s ease-in-out, min-height 0.7s ease-in-out;
-            overflow: hidden;
+            height: 500px; /* Altura fixa para o container do carrossel de cidades quando não expandido */
+            transition: height 0.7s ease-in-out; /* Transição de altura suave */
+            overflow: hidden; /* Garante que o conteúdo que transborda seja escondido */
         }
+
 
         /* O container flex que contém os slides */
         #cities-carousel-slides {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: 100%; /* Ocupa 100% da altura do container pai */
             display: flex;
             transition: transform 0.5s ease-in-out;
         }
@@ -75,53 +80,39 @@
         /* Ajuste para as colunas internas do carousel-item */
         .carousel-item-content {
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Padrão em mobile: coluna */
             gap: 2rem;
-            /* Removido align-items e justify-content para mobile para permitir que o conteúdo flua */
+            align-items: center; /* Centraliza itens horizontalmente em coluna */
+            justify-content: center; /* Centraliza itens verticalmente em coluna */
             width: 100%;
-            height: 100%;
-            padding: 2rem;
-            /* Mantenha o padding interno aqui */
+            height: 100%; /* Conteúdo ocupa 100% da altura do item do carrossel */
+            padding: 0rem; /* Removido padding direto aqui, o carousel-item já tem */
         }
 
         @media (min-width: 768px) {
             .carousel-item-content {
-                flex-direction: row;
-                align-items: flex-start;
-                /* Alinha os itens ao topo em linha */
+                flex-direction: row; /* Em desktop: linha */
+                align-items: flex-start; /* Alinha os itens ao topo em linha */
                 justify-content: space-between;
+                padding: 0rem; /* Mantido sem padding direto */
             }
         }
 
+
         /* Estilo para a área expandida do Saber Mais */
         .carousel-item.expanded {
-            /* Definir um max-height bem generoso para garantir que todo o conteúdo apareça.
-               O JS calculará a scrollHeight real para o height do container. */
-            max-height: 2000px;
-            /* Aumentado para dar mais folga para o conteúdo */
+            max-height: 1500px; /* Altura máxima quando expandido, ajuste conforme o conteúdo */
+            overflow-y: auto; /* Adiciona scroll se o conteúdo for maior que max-height */
         }
 
         /* Estilos para o slideshow de imagens da cidade */
         .city-images-slideshow {
             position: relative;
             width: 100%;
-            min-height: 250px;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 250px; /* Altura fixa para o slideshow, ajuste conforme necessário */
             overflow: hidden;
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            /* Adicionado margin-top para separar do texto em mobile, se necessário */
-            margin-top: 1rem;
-        }
-
-        @media (min-width: 768px) {
-            .city-images-slideshow {
-                margin-top: 0;
-                /* Remove a margem em desktop */
-            }
         }
 
         .city-images-slideshow img {
@@ -139,56 +130,126 @@
             opacity: 1;
         }
 
-        /* Posição das setas do carrossel principal */
-        /* Para desktop, mantemos o posicionamento fora do card */
+        /* Posição das setas do carrossel principal fora do container do carrossel */
         #prevBtn,
         #nextBtn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
-            padding: 0.75rem; /* Padding padrão para desktop (equivalente a p-3) */
+            background-color: rgba(0, 0, 0, 0.5); /* Cor original */
+            color: white;
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #prevBtn:hover,
+        #nextBtn:hover {
+            background-color: rgba(0, 0, 0, 0.75); /* hover:bg-black/75 */
+        }
+
+        /* Tamanho padrão para desktop e telas maiores */
+        #prevBtn, #nextBtn {
+            padding: 0.75rem; /* Equivalente a Tailwind p-3 */
         }
 
         #prevBtn {
-            left: -5rem;
+            left: -5rem; /* Posição fora do carrossel em desktop */
         }
 
         #nextBtn {
-            right: -5rem;
+            right: -5rem; /* Posição fora do carrossel em desktop */
         }
 
         /* Ajustes específicos para mobile */
         @media (max-width: 767px) {
+            /* Ajuste o padding do carousel-item para dar espaço ao conteúdo e às setas */
+            .carousel-item {
+                padding: 1.5rem 0.5rem; /* Top/bottom 1.5rem, left/right 0.5rem */
+                max-height: none; /* Permite que o slide inicial cresça se o conteúdo for maior que 500px */
+                height: auto; /* A altura do slide se ajusta ao conteúdo */
+                min-height: 500px; /* Garante uma altura mínima para o card */
+            }
+            
+            /* Ajuste o padding do carousel-item-content para não cortar texto */
+            .carousel-item-content {
+                padding: 0.5rem; /* Padding interno para o conteúdo em mobile */
+                align-items: flex-start; /* Alinha o texto à esquerda */
+                justify-content: flex-start; /* Conteúdo começa no topo */
+                height: auto; /* Permite que o conteúdo interno defina sua altura */
+            }
+
+            /* Colunas de texto e imagem em mobile sempre com largura total */
+            .carousel-item-content > div {
+                width: 100%;
+            }
+
+            /* Posicionamento das setas para mobile */
             #prevBtn {
-                left: 0.5rem;
-                /* Um pouco para dentro para ser mais visível */
-                padding: 0.35rem; /* <--- Padding menor para mobile (equivalente a p-1 ou p-1.5) */
+                left: 0.5rem; /* Mais próximo da borda */
+                padding: 0.3rem; /* Padding reduzido para botão menor */
             }
 
             #nextBtn {
-                right: 0.5rem;
-                /* Um pouco para dentro para ser mais visível */
-                padding: 0.35rem; /* <--- Padding menor para mobile (equivalente a p-1 ou p-1.5) */
+                right: 0.5rem; /* Mais próximo da borda */
+                padding: 0.3rem; /* Padding reduzido para botão menor */
             }
 
-            /* Opcional: Ajustar o tamanho do ícone dentro do botão para que pareça melhor */
+            /* Tamanho do ícone nos botões de navegação mobile */
             #prevBtn i,
             #nextBtn i {
-                font-size: 1.1rem; /* Tamanho do ícone para mobile, ligeiramente menor */
+                font-size: 1.1rem; /* Tamanho do ícone para mobile */
             }
 
-            /* Ajuste dos indicadores para não sobrepor a imagem */
+            /* Indicadores do carrossel mobile */
             #carousel-indicators {
-                bottom: 1rem;
-            }
-
-            /* Forçar o texto a se ajustar em telas pequenas */
-            .carousel-item-content .md\:w-1\/2 {
-                width: 100%;
-                /* Garante que o texto ocupe a largura total disponível */
+                bottom: 1rem; /* Posiciona os indicadores mais acima da base do card */
             }
         }
+
+        /* Estilo para o botão "Saber Mais" / "Ver Menos" */
+        .toggle-info-btn {
+            /* Classes base do botão */
+            background-color: #8B5CF6; /* bg-purple-600 */
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1.5rem; /* py-2 px-6 */
+            border-radius: 9999px; /* rounded-full */
+            transition: background-color 0.3s;
+            margin-top: 1rem; /* Espaçamento do conteúdo acima */
+        }
+
+        .toggle-info-btn:hover {
+            background-color: #7C3AED; /* hover:bg-purple-700 */
+        }
+
+        /* Posicionamento do botão "Saber Mais" no estado inicial */
+        .initial-more-info-btn {
+            position: absolute;
+            bottom: 2rem; /* Distância do fundo do card */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5; /* Acima do conteúdo e overlay */
+        }
+
+        /* Quando o card é expandido, o botão inicial some */
+        .carousel-item.expanded .initial-more-info-btn {
+            display: none;
+        }
+
+        /* Botão "Ver Menos" que aparece no final do conteúdo expandido */
+        .expanded-less-info-btn {
+            margin-top: 2rem; /* Espaçamento do conteúdo acima */
+            display: none; /* Escondido por padrão */
+        }
+
+        .carousel-item.expanded .expanded-less-info-btn {
+            display: block; /* Visível quando o card está expandido */
+            margin-left: auto; /* Alinha o botão para a direita se estiver em um flexbox */
+            margin-right: auto; /* Alinha o botão para a esquerda se estiver em um flexbox */
+        }
+
     </style>
 </head>
 
@@ -389,26 +450,27 @@
                 <div id="cities-carousel-container" class="relative w-full overflow-hidden">
                     <div id="cities-carousel-slides" class="flex transition-transform duration-500 ease-in-out h-full">
                         <div
-                            class="carousel-item flex-shrink-0 w-full p-8 bg-blue-100 items-center justify-center gap-8 text-left h-full">
+                            class="carousel-item flex-shrink-0 w-full bg-blue-100 items-center justify-center gap-8 text-left h-full">
                             <div class="carousel-item-content h-full">
-                                <div class="w-full md:w-1/2">
+                                <div class="w-full md:w-1/2 relative">
                                     <h3 class="text-4xl font-bold text-blue-800 mb-4">Brighton, Reino Unido</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
                                         Conhecida como "Londres à beira-mar", Brighton é uma cidade vibrante e moderna,
                                         famosa por sua atmosfera boêmia, vida noturna agitada e a icônica praia de
                                         calhau. Ideal para quem busca um intercâmbio dinâmico e culturalmente rico, com
                                         fácil acesso à capital.
                                     </p>
-                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
                                         <li>Vibrante cena artística e musical</li>
                                         <li>The Royal Pavilion e Brighton Pier</li>
                                         <li>Excelente para aprimorar o inglês britânico</li>
                                     </ul>
-                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
                                         Carregando clima de Brighton...
                                     </div>
+                                    <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -439,6 +501,10 @@
                                             acesso a todas as partes da cidade e arredores, incluindo excursões de um dia
                                             para cidades históricas próximas e o Parque Nacional South Downs.
                                         </p>
+                                        <button
+                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="w-full md:w-1/2">
@@ -453,11 +519,11 @@
                         </div>
 
                         <div
-                            class="carousel-item flex-shrink-0 w-full p-8 bg-green-100 items-center justify-center gap-8 text-left h-full">
+                            class="carousel-item flex-shrink-0 w-full bg-green-100 items-center justify-center gap-8 text-left h-full">
                             <div class="carousel-item-content h-full">
-                                <div class="md:w-1/2">
+                                <div class="md:w-1/2 relative">
                                     <h3 class="text-4xl font-bold text-green-800 mb-4">Worthing, Reino Unido</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
                                         Uma charmosa cidade costeira no sul da Inglaterra, Worthing é ideal para quem
                                         busca
                                         um ambiente mais tranquilo e seguro para estudar, sem abrir mão das belezas
@@ -465,16 +531,17 @@
                                         para
                                         relaxar e aproveitar a brisa do mar.
                                     </p>
-                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
                                         <li>Ambiente pacífico e seguro</li>
                                         <li>Píer vitoriano e praias tranquilas</li>
                                         <li>Comunidade acolhedora e familiar</li>
                                     </ul>
-                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
                                         Carregando clima de Worthing...
                                     </div>
+                                    <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -508,6 +575,10 @@
                                             cidades
                                             costeiras e a Londres, oferecendo um equilíbrio perfeito entre estudo e lazer.
                                         </p>
+                                        <button
+                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="w-full md:w-1/2">
@@ -522,26 +593,27 @@
                         </div>
 
                         <div
-                            class="carousel-item flex-shrink-0 w-full p-8 bg-yellow-100 items-center justify-center gap-8 text-left h-full">
+                            class="carousel-item flex-shrink-0 w-full bg-yellow-100 items-center justify-center gap-8 text-left h-full">
                             <div class="carousel-item-content h-full">
-                                <div class="md:w-1/2">
+                                <div class="md:w-1/2 relative">
                                     <h3 class="text-4xl font-bold text-yellow-800 mb-4">Canterbury, Reino Unido</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
                                         Uma cidade histórica e universitária, Canterbury é mundialmente famosa por sua
                                         majestosa Catedral, Patrimônio Mundial da UNESCO. Oferece um ambiente acadêmico
                                         inspirador e uma rica imersão na história inglesa, ideal para quem aprecia a
                                         cultura e a tradição.
                                     </p>
-                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
                                         <li>Catedral de Canterbury e história medieval</li>
                                         <li>Atmosfera universitária vibrante</li>
                                         <li>Cidade compacta e fácil de explorar</li>
                                     </ul>
-                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
                                         Carregando clima de Canterbury...
                                     </div>
+                                    <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -568,6 +640,10 @@
                                             culinária local é variada, com opções que vão desde pratos tradicionais britânicos
                                             até cozinha internacional.
                                         </p>
+                                        <button
+                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="w-full md:w-1/2">
@@ -584,9 +660,9 @@
                         <div
                             class="carousel-item flex-shrink-0 w-full p-8 bg-red-100 items-center justify-center gap-8 text-left h-full">
                             <div class="carousel-item-content h-full">
-                                <div class="md:w-1/2">
+                                <div class="md:w-1/2 relative">
                                     <h3 class="text-4xl font-bold text-red-800 mb-4">Oxford, Reino Unido</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
                                         Lar da mais antiga universidade de língua inglesa, Oxford é um centro de
                                         excelência
                                         acadêmica e uma cidade de beleza arquitetônica ímpar. Mergulhe em um ambiente
@@ -594,16 +670,17 @@
                                         uma
                                         atmosfera que respira conhecimento.
                                     </p>
-                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
                                         <li>Universidade de Oxford e legado acadêmico</li>
                                         <li>Arquitetura gótica e jardins deslumbrantes</li>
                                         <li>Museus e galerias de classe mundial</li>
                                     </ul>
-                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
                                         Carregando clima de Oxford...
                                     </div>
+                                    <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -632,6 +709,10 @@
                                             Cotswolds e
                                             outras cidades históricas.
                                         </p>
+                                        <button
+                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="w-full md:w-1/2">
@@ -648,25 +729,26 @@
                         <div
                             class="carousel-item flex-shrink-0 w-full p-8 bg-purple-100 items-center justify-center gap-8 text-left h-full">
                             <div class="carousel-item-content h-full">
-                                <div class="md:w-1/2">
+                                <div class="md:w-1/2 relative">
                                     <h3 class="text-4xl font-bold text-purple-800 mb-4">Bournemouth, Reino Unido</h3>
-                                    <p class="text-lg text-gray-700 leading-relaxed">
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
                                         Uma das cidades costeiras mais populares do Reino Unido, Bournemouth é famosa por
                                         suas
                                         praias de areia dourada e seus exuberantes jardins. Oferece uma combinação perfeita
                                         de
                                         vida acadêmica ativa e um estilo de vida descontraído à beira-mar.
                                     </p>
-                                    <ul class="text-gray-600 mt-4 list-disc list-inside">
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
                                         <li>Sete milhas de praias premiadas</li>
                                         <li>Parques e jardins vitorianos</li>
                                         <li>Atividades aquáticas e vida noturna</li>
                                     </ul>
-                                    <div class="weather-info mt-4 text-gray-800 font-semibold">
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
                                         Carregando clima de Bournemouth...
                                     </div>
+                                    <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -685,13 +767,17 @@
                                             espaços
                                             verdes para relaxar e estudar. Bournemouth tem uma vida noturna animada, com
                                             muitos
-                                            bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
+                                            Bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
                                             cinemas. A
                                             University of Bournemouth atrai uma grande população estudantil, criando um
                                             ambiente dinâmico e multicultural. A localização de Bournemouth na costa sul da
                                             Inglaterra também permite fácil acesso a atrações naturais como a Costa Jurássica,
                                             Patrimônio Mundial da UNESCO, e outras cidades costeiras charmosas.
                                         </p>
+                                        <button
+                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="w-full md:w-1/2">
@@ -895,34 +981,36 @@
                     // Para o slideshow da cidade anterior antes de remover a classe 'active'
                     stopCitySlideshow(slide);
 
-                    slide.classList.remove('active', 'expanded'); // Remove 'expanded' ao mudar de slide
-                    slide.querySelector('.more-info').classList.add('hidden'); // Esconde o 'Saber Mais'
-                    slide.querySelector('.toggle-info-btn').textContent = 'Saber Mais'; // Reseta o texto do botão
+                    // Garante que o botão inicial esteja visível e o de ver menos escondido
+                    const initialBtn = slide.querySelector('.initial-more-info-btn');
+                    const expandedBtn = slide.querySelector('.expanded-less-info-btn');
+                    const moreInfoDiv = slide.querySelector('.more-info');
+
+                    if (initialBtn) initialBtn.style.display = 'block';
+                    if (expandedBtn) expandedBtn.style.display = 'none';
+                    if (moreInfoDiv) moreInfoDiv.classList.add('hidden'); // Esconde o 'Saber Mais'
+                    slide.classList.remove('expanded'); // Garante que a classe expanded seja removida
 
                     if (i === index) {
-                        // O slide ativo é posicionado onde deve estar no container flex
                         slide.style.left = `${i * 100}%`;
-                        slide.style.display = 'block'; /* Para que o conteúdo interno utilize flexbox */
+                        slide.style.display = 'flex'; /* Usamos flex para alinhar o conteúdo interno em mobile também */
                         setTimeout(() => {
-                            slide.classList.add('active'); /* Ativa a opacidade */
-                        }, 10); /* Pequeno delay para renderizar display:block */
+                            slide.classList.add('active');
+                        }, 10);
 
-                        // Busca o clima para o slide ativo
                         const cityName = slide.querySelector('h3').textContent.split(',')[0].trim();
                         const weatherElement = slide.querySelector('.weather-info');
                         fetchWeather(cityName, weatherElement);
 
-                        // Inicia o slideshow para a nova cidade ativa
                         startCitySlideshow(slide);
                     } else {
-                        slide.classList.remove('active'); /* Desativa a opacidade */
+                        slide.classList.remove('active');
                         setTimeout(() => {
-                            slide.style.display = 'none'; /* Esconde o slide após a transição */
-                        }, 1000); /* Duração da transição de opacidade */
+                            slide.style.display = 'none';
+                        }, 1000);
                     }
                 });
                 updateIndicators(index);
-                // Move o contêiner principal dos slides (que é flex)
                 carouselSlides.style.transform = `translateX(-${index * 100}%)`;
                 // Ajusta a altura do container principal para o estado INICIAL (não expandido)
                 adjustCarouselContainerHeight(slides[index], false);
@@ -942,7 +1030,7 @@
             function createIndicators() {
                 indicatorsContainer.innerHTML = '';
                 slides.forEach((slide, i) => {
-                    slide.id = `city-slide-${i}`; // Dá um ID único para cada slide para controle do slideshow interno
+                    slide.id = `city-slide-${i}`;
                     const indicator = document.createElement('button');
                     indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'hover:bg-gray-200', 'transition-colors', 'duration-300');
                     if (i === currentSlide) {
@@ -965,44 +1053,94 @@
             }
 
             // FUNÇÃO AJUSTADA para ajustar a altura do contêiner do carrossel
-            // Adicionado um parâmetro `isExpanding` para forçar a altura se estiver expandindo ou contraindo
             function adjustCarouselContainerHeight(activeSlide, isExpanding = null) {
                 setTimeout(() => {
                     let newHeight;
+                    const contentDiv = activeSlide.querySelector('.carousel-item-content');
+                    const initialMinHeight = 500; // Altura mínima padrão
+
                     if (isExpanding === true) {
+                        // Ao expandir, a altura é a scrollHeight do slide (conteúdo total)
                         newHeight = activeSlide.scrollHeight;
                     } else if (isExpanding === false) {
-                        newHeight = 500; // Altura mínima quando contraído
-                    } else { // Se isExpanding for null, verifica o estado atual
+                        // Ao contrair ou carregar, a altura é a altura do conteúdo visível antes do "Saber Mais"
+                        // ou a altura mínima, o que for maior.
+                        // Calculamos a altura do conteúdo visível (excluindo a parte oculta pelo more-info)
+                        let visibleContentHeight = 0;
+                        const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
+                        mainContentElements.forEach(el => {
+                            visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom);
+                        });
+                        // Adiciona a altura do botão "Saber Mais" se estiver visível
+                        const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
+                        if (initialBtn && initialBtn.style.display !== 'none') {
+                            visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop);
+                        }
+                        // Adiciona padding do carousel-item
+                        const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop);
+                        const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom);
+                        visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
+                        
+                        newHeight = Math.max(initialMinHeight, visibleContentHeight);
+
+                    } else { // Estado atual (null)
                         const moreInfoDiv = activeSlide.querySelector('.more-info');
                         const isCurrentlyExpanded = !moreInfoDiv.classList.contains('hidden');
-                        newHeight = isCurrentlyExpanded ? activeSlide.scrollHeight : 500;
+                        if (isCurrentlyExpanded) {
+                            newHeight = activeSlide.scrollHeight;
+                        } else {
+                            let visibleContentHeight = 0;
+                            const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
+                            mainContentElements.forEach(el => {
+                                visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom);
+                            });
+                             const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
+                            if (initialBtn && initialBtn.style.display !== 'none') {
+                                visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop);
+                            }
+                            const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop);
+                            const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom);
+                            visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
+                            
+                            newHeight = Math.max(initialMinHeight, visibleContentHeight);
+                        }
                     }
 
                     carouselContainer.style.height = `${newHeight}px`;
-                    carouselContainer.style.minHeight = `${newHeight}px`; // Mantém o min-height sincronizado
                 }, 100); // Pequeno atraso para o DOM renderizar a expansão
             }
 
-            // Lógica do botão "Saber Mais" (AJUSTADA)
-            document.querySelectorAll('.toggle-info-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const parentSlide = this.closest('.carousel-item');
-                    const moreInfoDiv = parentSlide.querySelector('.more-info');
 
-                    const isCurrentlyHidden = moreInfoDiv.classList.contains('hidden');
+            // Lógica do botão "Saber Mais" / "Ver Menos" (NOVA ABORDAGEM)
+            document.querySelectorAll('.carousel-item').forEach(slide => {
+                const initialMoreBtn = slide.querySelector('.initial-more-info-btn');
+                const expandedLessBtn = slide.querySelector('.expanded-less-info-btn');
+                const moreInfoDiv = slide.querySelector('.more-info'); // O conteúdo extra
+                const fadeOverlay = slide.querySelector('.fade-overlay'); // O overlay de fade
 
-                    moreInfoDiv.classList.toggle('hidden');
-                    parentSlide.classList.toggle('expanded'); // Adiciona/remove a classe 'expanded' do slide
+                // Listener para o botão "Saber Mais" inicial
+                if (initialMoreBtn) {
+                    initialMoreBtn.addEventListener('click', () => {
+                        slide.classList.add('expanded');
+                        moreInfoDiv.classList.remove('hidden');
+                        initialMoreBtn.style.display = 'none'; // Esconde o botão inicial
+                        if (expandedLessBtn) expandedLessBtn.style.display = 'block'; // Mostra o botão "Ver Menos"
+                        if (fadeOverlay) fadeOverlay.style.opacity = '0'; // Esconde o overlay de fade
+                        adjustCarouselContainerHeight(slide, true); // Ajusta a altura para expandir
+                    });
+                }
 
-                    if (isCurrentlyHidden) { // Se estava escondido e agora vai mostrar
-                        this.textContent = 'Ver Menos';
-                        adjustCarouselContainerHeight(parentSlide, true); // Força expansão
-                    } else { // Se estava mostrando e agora vai esconder
-                        this.textContent = 'Saber Mais';
-                        adjustCarouselContainerHeight(parentSlide, false); // Força contração
-                    }
-                });
+                // Listener para o botão "Ver Menos"
+                if (expandedLessBtn) {
+                    expandedLessBtn.addEventListener('click', () => {
+                        slide.classList.remove('expanded');
+                        moreInfoDiv.classList.add('hidden');
+                        if (initialMoreBtn) initialMoreBtn.style.display = 'block'; // Mostra o botão inicial
+                        expandedLessBtn.style.display = 'none'; // Esconde o botão "Ver Menos"
+                        if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Mostra o overlay de fade
+                        adjustCarouselContainerHeight(slide, false); // Ajusta a altura para contrair
+                    });
+                }
             });
 
 
@@ -1026,7 +1164,6 @@
                 mobileMenuButton.addEventListener('click', () => {
                     mobileMenu.classList.remove('translate-x-full');
                     mobileMenu.classList.add('translate-x-0');
-                    // Opcional: Desativar scroll do body quando o menu está aberto
                     document.body.style.overflow = 'hidden';
                 });
             }
@@ -1043,24 +1180,21 @@
             // Fechar menu mobile ao clicar em um link
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    // Previne o comportamento padrão para fazer a rolagem suave primeiro
                     e.preventDefault();
 
                     mobileMenu.classList.remove('translate-x-0');
                     mobileMenu.classList.add('translate-x-full');
-                    document.body.style.overflow = ''; // Reativar scroll
+                    document.body.style.overflow = '';
 
-                    // Rolar suavemente para a seção
                     const targetId = link.getAttribute('href');
                     const targetSection = document.querySelector(targetId);
                     if (targetSection) {
-                        // Pequeno atraso para a animação do menu fechar antes de rolar
                         setTimeout(() => {
                             targetSection.scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'start'
                             });
-                        }, 300); // Duração da transição do menu
+                        }, 300);
                     }
                 });
             });
