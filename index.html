@@ -15,241 +15,131 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
     <style>
-        /* Estilo para sombra no texto do Hero para melhor legibilidade sobre o background */
-        .text-shadow-hero {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+        .text-shadow-hero { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); }
 
-        /* Esconder slides do carrossel principal por padrão */
         .carousel-item {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
-            max-height: 500px; /* Altura inicial do slide */
-            overflow: hidden;
-            /* Padding para o conteúdo do slide para não encostar nas bordas */
-            padding: 2rem; /* Mantido padrão para a maioria das telas */
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;
+            pointer-events: none; transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
+            max-height: 500px; overflow: hidden; padding: 2rem;
         }
+        @media (max-width: 767px) {
+            .carousel-item { padding: 1.5rem 0.5rem; max-height: none; height: auto; min-height: 500px;
+                display: flex; flex-direction: column; }
+        }
+        @media (min-width: 768px) { .carousel-item { padding: 2rem; } }
 
-        /* Oculta o scrollbar mas permite rolagem (para o fade-out do botão Saber Mais) */
         .fade-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px; /* Altura do gradiente de fade */
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
             background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-            pointer-events: none; /* Permite cliques através dele */
-            transition: opacity 0.5s ease-in-out;
+            pointer-events: none; transition: opacity 0.5s ease-in-out;
         }
+        .carousel-item.expanded .fade-overlay { opacity: 0; }
+        .carousel-item.active { opacity: 1; pointer-events: auto; }
 
-        /* Esconde o overlay quando o item está expandido */
-        .carousel-item.expanded .fade-overlay {
-            opacity: 0;
-        }
-
-        /* Mostrar o slide ativo do carrossel principal */
-        .carousel-item.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* O container do carrossel principal precisa ter altura e posição relativas */
         #cities-carousel-container {
-            position: relative;
-            height: 500px; /* Altura fixa para o container do carrossel de cidades quando não expandido */
-            transition: height 0.7s ease-in-out; /* Transição de altura suave */
-            overflow: hidden; /* Garante que o conteúdo que transborda seja escondido */
+            position: relative; height: 500px; transition: height 0.7s ease-in-out; overflow: hidden;
         }
-
-
-        /* O container flex que contém os slides */
         #cities-carousel-slides {
-            position: relative;
-            width: 100%;
-            height: 100%; /* Ocupa 100% da altura do container pai */
-            display: flex;
+            position: relative; width: 100%; height: 100%; display: flex;
             transition: transform 0.5s ease-in-out;
         }
 
-        /* Ajuste para as colunas internas do carousel-item */
         .carousel-item-content {
-            display: flex;
-            flex-direction: column; /* Padrão em mobile: coluna */
-            gap: 2rem;
-            align-items: center; /* Centraliza itens horizontalmente em coluna */
-            justify-content: center; /* Centraliza itens verticalmente em coluna */
-            width: 100%;
-            height: 100%; /* Conteúdo ocupa 100% da altura do item do carrossel */
-            padding: 0rem; /* Removido padding direto aqui, o carousel-item já tem */
+            display: flex; flex-direction: column; gap: 2rem; align-items: center; justify-content: center;
+            width: 100%; height: 100%; padding: 0;
         }
-
-        @media (min-width: 768px) {
+        @media (max-width: 767px) {
             .carousel-item-content {
-                flex-direction: row; /* Em desktop: linha */
-                align-items: flex-start; /* Alinha os itens ao topo em linha */
-                justify-content: space-between;
-                padding: 0rem; /* Mantido sem padding direto */
+                padding: 0.5rem; padding-top: 1.5rem; padding-bottom: 1.5rem;
+                justify-content: flex-start; align-items: flex-start; height: auto;
             }
+            .carousel-item-content > div { width: 100%; }
+        }
+        @media (min-width: 768px) {
+            .carousel-item-content { flex-direction: row; align-items: flex-start; justify-content: space-between; }
         }
 
+        .carousel-item.expanded { max-height: 2000px; overflow-y: auto; }
 
-        /* Estilo para a área expandida do Saber Mais */
-        .carousel-item.expanded {
-            max-height: 1500px; /* Altura máxima quando expandido, ajuste conforme o conteúdo */
-            overflow-y: auto; /* Adiciona scroll se o conteúdo for maior que max-height */
-        }
-
-        /* Estilos para o slideshow de imagens da cidade */
         .city-images-slideshow {
-            position: relative;
-            width: 100%;
-            height: 250px; /* Altura fixa para o slideshow, ajuste conforme necessário */
-            overflow: hidden;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative; width: 100%; height: 250px; overflow: hidden;
+            border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-top: 1rem;
         }
+        @media (min-width: 768px) { .city-images-slideshow { margin-top: 0; } }
 
         .city-images-slideshow img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;
         }
+        .city-images-slideshow img.active-image { opacity: 1; }
 
-        .city-images-slideshow img.active-image {
-            opacity: 1;
-        }
-
-        /* Posição das setas do carrossel principal fora do container do carrossel */
-        #prevBtn,
-        #nextBtn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            background-color: rgba(0, 0, 0, 0.5); /* Cor original */
-            color: white;
-            border-radius: 9999px; /* rounded-full */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        #prevBtn:hover,
-        #nextBtn:hover {
-            background-color: rgba(0, 0, 0, 0.75); /* hover:bg-black/75 */
-        }
-
-        /* Tamanho padrão para desktop e telas maiores */
         #prevBtn, #nextBtn {
-            padding: 0.75rem; /* Equivalente a Tailwind p-3 */
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5); color: white; border-radius: 9999px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s, transform 0.3s;
+            padding: 0.75rem; /* Default for desktop */
         }
+        #prevBtn:hover, #nextBtn:hover { background-color: rgba(0, 0, 0, 0.75); }
+        #prevBtn { left: -5rem; }
+        #nextBtn { right: -5rem; }
 
-        #prevBtn {
-            left: -5rem; /* Posição fora do carrossel em desktop */
-        }
-
-        #nextBtn {
-            right: -5rem; /* Posição fora do carrossel em desktop */
-        }
-
-        /* Ajustes específicos para mobile */
         @media (max-width: 767px) {
-            /* Ajuste o padding do carousel-item para dar espaço ao conteúdo e às setas */
-            .carousel-item {
-                padding: 1.5rem 0.5rem; /* Top/bottom 1.5rem, left/right 0.5rem */
-                max-height: none; /* Permite que o slide inicial cresça se o conteúdo for maior que 500px */
-                height: auto; /* A altura do slide se ajusta ao conteúdo */
-                min-height: 500px; /* Garante uma altura mínima para o card */
-            }
-            
-            /* Ajuste o padding do carousel-item-content para não cortar texto */
-            .carousel-item-content {
-                padding: 0.5rem; /* Padding interno para o conteúdo em mobile */
-                align-items: flex-start; /* Alinha o texto à esquerda */
-                justify-content: flex-start; /* Conteúdo começa no topo */
-                height: auto; /* Permite que o conteúdo interno defina sua altura */
-            }
-
-            /* Colunas de texto e imagem em mobile sempre com largura total */
-            .carousel-item-content > div {
-                width: 100%;
-            }
-
-            /* Posicionamento das setas para mobile */
-            #prevBtn {
-                left: 0.5rem; /* Mais próximo da borda */
-                padding: 0.3rem; /* Padding reduzido para botão menor */
-            }
-
-            #nextBtn {
-                right: 0.5rem; /* Mais próximo da borda */
-                padding: 0.3rem; /* Padding reduzido para botão menor */
-            }
-
-            /* Tamanho do ícone nos botões de navegação mobile */
-            #prevBtn i,
-            #nextBtn i {
-                font-size: 1.1rem; /* Tamanho do ícone para mobile */
-            }
-
-            /* Indicadores do carrossel mobile */
-            #carousel-indicators {
-                bottom: 1rem; /* Posiciona os indicadores mais acima da base do card */
-            }
+            #prevBtn { left: 0.5rem; padding: 0.3rem; }
+            #nextBtn { right: 0.5rem; padding: 0.3rem; }
+            #prevBtn i, #nextBtn i { font-size: 1.1rem; }
+            #carousel-indicators { bottom: 1rem; }
         }
 
-        /* Estilo para o botão "Saber Mais" / "Ver Menos" */
         .toggle-info-btn {
-            /* Classes base do botão */
-            background-color: #8B5CF6; /* bg-purple-600 */
-            color: white;
-            font-weight: bold;
-            padding: 0.5rem 1.5rem; /* py-2 px-6 */
-            border-radius: 9999px; /* rounded-full */
-            transition: background-color 0.3s;
-            margin-top: 1rem; /* Espaçamento do conteúdo acima */
+            background-color: #8B5CF6; color: white; font-weight: bold; padding: 0.5rem 1.5rem;
+            border-radius: 9999px; transition: background-color 0.3s; margin-top: 1rem;
         }
+        .toggle-info-btn:hover { background-color: #7C3AED; }
 
-        .toggle-info-btn:hover {
-            background-color: #7C3AED; /* hover:bg-purple-700 */
-        }
-
-        /* Posicionamento do botão "Saber Mais" no estado inicial */
         .initial-more-info-btn {
-            position: absolute;
-            bottom: 2rem; /* Distância do fundo do card */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5; /* Acima do conteúdo e overlay */
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5;
         }
+        .carousel-item.expanded .initial-more-info-btn { display: none; }
 
-        /* Quando o card é expandido, o botão inicial some */
-        .carousel-item.expanded .initial-more-info-btn {
-            display: none;
+        .expanded-less-info-btn { margin-top: 2rem; display: none; }
+        .carousel-item.expanded .expanded-less-info-btn { display: block; margin-left: auto; margin-right: auto; }
+
+        /* Album Carousel Styles */
+        #album-carousel-container {
+            position: relative; width: 100%; max-width: 800px; height: 400px; overflow: hidden;
+            border-radius: 0.75rem; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); margin: 0 auto 3rem;
+            background-color: #f0f0f0;
         }
-
-        /* Botão "Ver Menos" que aparece no final do conteúdo expandido */
-        .expanded-less-info-btn {
-            margin-top: 2rem; /* Espaçamento do conteúdo acima */
-            display: none; /* Escondido por padrão */
+        #album-carousel-slides {
+            display: flex; width: 100%; height: 100%; transition: transform 0.8s ease-in-out;
         }
+        .album-slide { flex-shrink: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .album-slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.75rem; }
 
-        .carousel-item.expanded .expanded-less-info-btn {
-            display: block; /* Visível quando o card está expandido */
-            margin-left: auto; /* Alinha o botão para a direita se estiver em um flexbox */
-            margin-right: auto; /* Alinha o botão para a esquerda se estiver em um flexbox */
+        .album-nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.5);
+            color: white; padding: 0.75rem 0.5rem; border-radius: 0.5rem; cursor: pointer; z-index: 20;
+            transition: background-color 0.3s;
         }
+        .album-nav-btn:hover { background-color: rgba(0, 0, 0, 0.8); }
+        #album-prev-btn { left: 1rem; }
+        #album-next-btn { right: 1rem; }
 
+        #album-indicators {
+            position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 0.5rem; z-index: 20;
+        }
+        .album-indicator {
+            width: 0.75rem; height: 0.75rem; background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px; cursor: pointer; transition: background-color 0.3s;
+        }
+        .album-indicator.active { background-color: #FACC15; }
+
+        @media (max-width: 767px) {
+            #album-carousel-container { height: 300px; }
+            .album-nav-btn { padding: 0.5rem 0.3rem; font-size: 0.9rem; }
+            .album-nav-btn i { font-size: 0.9rem; }
+        }
     </style>
 </head>
 
@@ -267,66 +157,27 @@
 
                 <div class="hidden md:flex space-x-6">
                     <div class="relative group">
-                        <a href="#hero" class="
-                                relative z-10 block px-4 py-2 rounded-lg
-                                bg-white/10 backdrop-blur-md border border-white/20
-                                text-purple-400 font-bold
-                                transition-all duration-300
-                                shadow-lg group-hover:shadow-xl group-hover:scale-110
-                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
-                            ">
+                        <a href="#hero" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-home mr-2"></i>Início
                         </a>
                     </div>
-
                     <div class="relative group">
-                        <a href="#about" class="
-                                relative z-10 block px-4 py-2 rounded-lg
-                                bg-white/10 backdrop-blur-md border border-white/20
-                                text-purple-400 font-bold
-                                transition-all duration-300
-                                shadow-lg group-hover:shadow-xl group-hover:scale-110
-                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
-                            ">
+                        <a href="#about" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-user mr-2"></i>Sobre Nós
                         </a>
                     </div>
-
                     <div class="relative group">
-                        <a href="#cities" class="
-                                relative z-10 block px-4 py-2 rounded-lg
-                                bg-white/10 backdrop-blur-md border border-white/20
-                                text-purple-400 font-bold
-                                transition-all duration-300
-                                shadow-lg group-hover:shadow-xl group-hover:scale-110
-                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
-                            ">
+                        <a href="#cities" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-city mr-2"></i>Cidades
                         </a>
                     </div>
-
                     <div class="relative group">
-                        <a href="#experience" class="
-                                relative z-10 block px-4 py-2 rounded-lg
-                                bg-white/10 backdrop-blur-md border border-white/20
-                                text-purple-400 font-bold
-                                transition-all duration-300
-                                shadow-lg group-hover:shadow-xl group-hover:scale-110
-                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
-                            ">
+                        <a href="#enrollment" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-clock mr-2"></i>Inscrições
                         </a>
                     </div>
-
                     <div class="relative group">
-                        <a href="#contact" class="
-                                relative z-10 block px-4 py-2 rounded-lg
-                                bg-white/10 backdrop-blur-md border border-white/20
-                                text-purple-400 font-bold
-                                transition-all duration-300
-                                shadow-lg group-hover:shadow-xl group-hover:scale-110
-                                focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75
-                            ">
+                        <a href="#contact" class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
                             <i class="fas fa-envelope mr-2"></i>Contato
                         </a>
                     </div>
@@ -361,7 +212,7 @@
                     class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
                     <i class="fas fa-city mr-4"></i>Cidades
                 </a>
-                <a href="#experience"
+                <a href="#enrollment"
                     class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
                     <i class="fas fa-clock mr-4"></i>Inscrições
                 </a>
@@ -372,8 +223,6 @@
             </nav>
         </div>
     </nav>
-
-<!-- Hero Section-->
 
     <section id="hero"
         class="relative bg-black/30 bg-[url('dpmhero.jpeg')] bg-cover bg-center h-screen flex flex-col items-center justify-center text-center text-white">
@@ -390,11 +239,6 @@
             data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
             Explorar Agora
         </button>
-        <a class="mt-4 text-xl font-bold text-yellow-400 "
-            data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000"
-            target="_blank" 
-            href="https://www.instagram.com/daquipromundo25/">Clique aqui e nos acompanhe em nossas redes Sociais
-        </a>
         <button id="scroll-down-button"
             class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400">
             <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
@@ -508,7 +352,6 @@
                                             acesso a todas as partes da cidade e arredores, incluindo excursões de um dia
                                             para cidades históricas próximas e o Parque Nacional South Downs.
                                         </p>
-                                        <a class="text-lg text-purple-400" target="_blank" href="https://www.instagram.com/brightonsquad/">Clique aqui e conheça Nossos Jovens que irão para Brighton</a>
                                         <button
                                             class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
@@ -762,7 +605,7 @@
                                     <div class="more-info mt-4 hidden">
                                         <p class="text-md text-gray-600">
                                             Bournemouth é um destino vibrante para estudantes, combinando excelentes
-                                            escolas de
+                                            escolhas de
                                             inglês com uma atmosfera de férias. Além das praias, você pode explorar o
                                             Oceanário, passear pelo píer e desfrutar de uma vasta gama de restaurantes e
                                             lojas. A vida noturna é animada, com muitos pubs e clubes.
@@ -775,7 +618,7 @@
                                             espaços
                                             verdes para relaxar e estudar. Bournemouth tem uma vida noturna animada, com
                                             muitos
-                                            Bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
+                                            bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
                                             cinemas. A
                                             University of Bournemouth atrai uma grande população estudantil, criando um
                                             ambiente dinâmico e multicultural. A localização de Bournemouth na costa sul da
@@ -817,8 +660,31 @@
         </div>
     </section>
 
-    <section id="experience" class="min-h-screen bg-gray-100 flex items-center justify-center p-8">
-        <h2 class="text-4xl font-bold text-gray-800" data-aos="fade-left">Inscrições</h2>
+    <section id="enrollment" class="bg-gray-100 py-16 px-4 text-center">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-12" data-aos="fade-down" data-aos-duration="1000">
+                Sua Jornada Começa Agora!
+            </h2>
+
+            <div id="album-carousel-container" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="1000">
+                <div id="album-carousel-slides">
+                    </div>
+                <button id="album-prev-btn" class="album-nav-btn">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <button id="album-next-btn" class="album-nav-btn">
+                    <i class="fas fa-chevron-right text-xl"></i>
+                </button>
+                <div id="album-indicators"></div>
+            </div>
+
+            <button
+                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-10 rounded-full text-2xl transition duration-300 transform hover:scale-105 shadow-lg"
+                data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+                <a href="https://selecao.educacao.al.gov.br/edital-seduc-n-0192024-daqui-pra-o-mundo">
+                Inscreva-se e faça parte dessa jornada!</a>
+            </button>
+        </div>
     </section>
 
     <section id="contact" class="min-h-screen bg-white flex items-center justify-center p-8">
@@ -993,15 +859,17 @@
                     const initialBtn = slide.querySelector('.initial-more-info-btn');
                     const expandedBtn = slide.querySelector('.expanded-less-info-btn');
                     const moreInfoDiv = slide.querySelector('.more-info');
+                    const fadeOverlay = slide.querySelector('.fade-overlay');
 
                     if (initialBtn) initialBtn.style.display = 'block';
                     if (expandedBtn) expandedBtn.style.display = 'none';
                     if (moreInfoDiv) moreInfoDiv.classList.add('hidden'); // Esconde o 'Saber Mais'
+                    if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Garante que o overlay esteja visível
                     slide.classList.remove('expanded'); // Garante que a classe expanded seja removida
 
                     if (i === index) {
                         slide.style.left = `${i * 100}%`;
-                        slide.style.display = 'flex'; /* Usamos flex para alinhar o conteúdo interno em mobile também */
+                        slide.style.display = 'flex';
                         setTimeout(() => {
                             slide.classList.add('active');
                         }, 10);
@@ -1020,8 +888,7 @@
                 });
                 updateIndicators(index);
                 carouselSlides.style.transform = `translateX(-${index * 100}%)`;
-                // Ajusta a altura do container principal para o estado INICIAL (não expandido)
-                adjustCarouselContainerHeight(slides[index], false);
+                adjustCarouselContainerHeight(slides[index], false); // Ajusta a altura do container principal para o estado inicial
             }
 
             // Funções de navegação do carrossel principal
@@ -1068,25 +935,21 @@
                     const initialMinHeight = 500; // Altura mínima padrão
 
                     if (isExpanding === true) {
-                        // Ao expandir, a altura é a scrollHeight do slide (conteúdo total)
                         newHeight = activeSlide.scrollHeight;
                     } else if (isExpanding === false) {
-                        // Ao contrair ou carregar, a altura é a altura do conteúdo visível antes do "Saber Mais"
-                        // ou a altura mínima, o que for maior.
-                        // Calculamos a altura do conteúdo visível (excluindo a parte oculta pelo more-info)
                         let visibleContentHeight = 0;
                         const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
                         mainContentElements.forEach(el => {
-                            visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom);
+                            if (el.offsetParent !== null) {
+                                visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0);
+                            }
                         });
-                        // Adiciona a altura do botão "Saber Mais" se estiver visível
                         const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
-                        if (initialBtn && initialBtn.style.display !== 'none') {
-                            visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop);
+                        if (initialBtn && initialBtn.offsetParent !== null) {
+                            visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop || 0);
                         }
-                        // Adiciona padding do carousel-item
-                        const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop);
-                        const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom);
+                        const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
+                        const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
                         visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
                         
                         newHeight = Math.max(initialMinHeight, visibleContentHeight);
@@ -1097,17 +960,19 @@
                         if (isCurrentlyExpanded) {
                             newHeight = activeSlide.scrollHeight;
                         } else {
-                            let visibleContentHeight = 0;
+                             let visibleContentHeight = 0;
                             const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
                             mainContentElements.forEach(el => {
-                                visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom);
+                                if (el.offsetParent !== null) {
+                                    visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0);
+                                }
                             });
                              const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
-                            if (initialBtn && initialBtn.style.display !== 'none') {
-                                visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop);
+                            if (initialBtn && initialBtn.offsetParent !== null) {
+                                visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop || 0);
                             }
-                            const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop);
-                            const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom);
+                            const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
+                            const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
                             visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
                             
                             newHeight = Math.max(initialMinHeight, visibleContentHeight);
@@ -1115,11 +980,12 @@
                     }
 
                     carouselContainer.style.height = `${newHeight}px`;
-                }, 100); // Pequeno atraso para o DOM renderizar a expansão
+                    carouselContainer.style.minHeight = `${newHeight}px`; // Sincroniza min-height
+                }, 100);
             }
 
 
-            // Lógica do botão "Saber Mais" / "Ver Menos" (NOVA ABORDAGEM)
+            // Lógica do botão "Saber Mais" / "Ver Menos"
             document.querySelectorAll('.carousel-item').forEach(slide => {
                 const initialMoreBtn = slide.querySelector('.initial-more-info-btn');
                 const expandedLessBtn = slide.querySelector('.expanded-less-info-btn');
@@ -1206,6 +1072,92 @@
                     }
                 });
             });
+
+            /* --- Lógica para o Carrossel de Imagens do Álbum (Nova Seção Inscrições) --- */
+            const albumCarouselSlidesContainer = document.getElementById('album-carousel-slides');
+            const albumPrevBtn = document.getElementById('album-prev-btn');
+            const albumNextBtn = document.getElementById('album-next-btn');
+            const albumIndicatorsContainer = document.getElementById('album-indicators');
+
+            const albumImages = [
+                'assets/album/album_foto1.jpg',
+                'assets/album/album_foto2.jpg',
+                'assets/album/album_foto3.jpg',
+                'assets/album/album_foto4.jpg'
+            ];
+
+            let currentAlbumSlide = 0;
+            let albumInterval;
+
+            function createAlbumSlides() {
+                albumCarouselSlidesContainer.innerHTML = '';
+                albumIndicatorsContainer.innerHTML = '';
+
+                albumImages.forEach((src, index) => {
+                    const slideDiv = document.createElement('div');
+                    slideDiv.classList.add('album-slide');
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = `Momento do Intercâmbio ${index + 1}`;
+                    slideDiv.appendChild(img);
+                    albumCarouselSlidesContainer.appendChild(slideDiv);
+
+                    const indicatorBtn = document.createElement('button');
+                    indicatorBtn.classList.add('album-indicator');
+                    indicatorBtn.addEventListener('click', () => showAlbumSlide(index));
+                    albumIndicatorsContainer.appendChild(indicatorBtn);
+                });
+            }
+
+            function showAlbumSlide(index) {
+                if (index >= albumImages.length) {
+                    index = 0;
+                } else if (index < 0) {
+                    index = albumImages.length - 1;
+                }
+                currentAlbumSlide = index;
+                albumCarouselSlidesContainer.style.transform = `translateX(-${currentAlbumSlide * 100}%)`;
+                updateAlbumIndicators();
+            }
+
+            function updateAlbumIndicators() {
+                const indicators = albumIndicatorsContainer.querySelectorAll('.album-indicator');
+                indicators.forEach((indicator, index) => {
+                    if (index === currentAlbumSlide) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+
+            function nextAlbumSlide() {
+                showAlbumSlide(currentAlbumSlide + 1);
+            }
+
+            function prevAlbumSlide() {
+                showAlbumSlide(currentAlbumSlide - 1);
+            }
+
+            function startAlbumSlideshow() {
+                if (albumInterval) {
+                    clearInterval(albumInterval);
+                }
+                albumInterval = setInterval(nextAlbumSlide, 3000);
+            }
+
+            if (albumPrevBtn) albumPrevBtn.addEventListener('click', () => {
+                prevAlbumSlide();
+                startAlbumSlideshow();
+            });
+            if (albumNextBtn) albumNextBtn.addEventListener('click', () => {
+                nextAlbumSlide();
+                startAlbumSlideshow();
+            });
+
+            createAlbumSlides();
+            showAlbumSlide(0);
+            startAlbumSlideshow();
         });
     </script>
 </body>
