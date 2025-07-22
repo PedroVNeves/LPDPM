@@ -14,332 +14,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
-    <style>
-        .text-shadow-hero {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
-
-        .carousel-item {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
-            max-height: 500px;
-            overflow: hidden;
-            padding: 2rem;
-        }
-
-        @media (max-width: 767px) {
-            .carousel-item {
-                padding: 1.5rem 0.5rem;
-                max-height: none;
-                height: auto;
-                min-height: 500px;
-                display: flex;
-                flex-direction: column;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .carousel-item {
-                padding: 2rem;
-            }
-        }
-
-        .fade-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-            pointer-events: none;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .carousel-item.expanded .fade-overlay {
-            opacity: 0;
-        }
-
-        .carousel-item.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        #cities-carousel-container {
-            position: relative;
-            height: 500px;
-            transition: height 0.7s ease-in-out;
-            overflow: hidden;
-        }
-
-        #cities-carousel-slides {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .carousel-item-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-        }
-
-        @media (max-width: 767px) {
-            .carousel-item-content {
-                padding: 0.5rem;
-                padding-top: 1.5rem;
-                padding-bottom: 1.5rem;
-                justify-content: flex-start;
-                align-items: flex-start;
-                height: auto;
-            }
-
-            .carousel-item-content>div {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .carousel-item-content {
-                flex-direction: row;
-                align-items: flex-start;
-                justify-content: space-between;
-            }
-        }
-
-        .carousel-item.expanded {
-            max-height: 2000px;
-            overflow-y: auto;
-        }
-
-        .city-images-slideshow {
-            position: relative;
-            width: 100%;
-            height: 250px;
-            overflow: hidden;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 1rem;
-        }
-
-        @media (min-width: 768px) {
-            .city-images-slideshow {
-                margin-top: 0;
-            }
-        }
-
-        .city-images-slideshow img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .city-images-slideshow img.active-image {
-            opacity: 1;
-        }
-
-        #prevBtn,
-        #nextBtn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border-radius: 9999px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, transform 0.3s;
-            padding: 0.75rem;
-            /* Default for desktop */
-        }
-
-        #prevBtn:hover,
-        #nextBtn:hover {
-            background-color: rgba(0, 0, 0, 0.75);
-        }
-
-        #prevBtn {
-            left: -5rem;
-        }
-
-        #nextBtn {
-            right: -5rem;
-        }
-
-        @media (max-width: 767px) {
-            #prevBtn {
-                left: 0.5rem;
-                padding: 0.3rem;
-            }
-
-            #nextBtn {
-                right: 0.5rem;
-                padding: 0.3rem;
-            }
-
-            #prevBtn i,
-            #nextBtn i {
-                font-size: 1.1rem;
-            }
-
-            #carousel-indicators {
-                bottom: 1rem;
-            }
-        }
-
-        .toggle-info-btn {
-            background-color: #8B5CF6;
-            color: white;
-            font-weight: bold;
-            padding: 0.5rem 1.5rem;
-            border-radius: 9999px;
-            transition: background-color 0.3s;
-            margin-top: 1rem;
-        }
-
-        .toggle-info-btn:hover {
-            background-color: #7C3AED;
-        }
-
-        .initial-more-info-btn {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-        }
-
-        .carousel-item.expanded .initial-more-info-btn {
-            display: none;
-        }
-
-        .expanded-less-info-btn {
-            margin-top: 2rem;
-            display: none;
-        }
-
-        .carousel-item.expanded .expanded-less-info-btn {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Album Carousel Styles */
-        #album-carousel-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            overflow: hidden;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            margin: 0 auto 3rem;
-            background-color: #f0f0f0;
-        }
-
-        #album-carousel-slides {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s ease-in-out;
-        }
-
-        .album-slide {
-            flex-shrink: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .album-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 0.75rem;
-        }
-
-        .album-nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 0.75rem 0.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            z-index: 20;
-            transition: background-color 0.3s;
-        }
-
-        .album-nav-btn:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        #album-prev-btn {
-            left: 1rem;
-        }
-
-        #album-next-btn {
-            right: 1rem;
-        }
-
-        #album-indicators {
-            position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 0.5rem;
-            z-index: 20;
-        }
-
-        .album-indicator {
-            width: 0.75rem;
-            height: 0.75rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .album-indicator.active {
-            background-color: #FACC15;
-        }
-
-        @media (max-width: 767px) {
-            #album-carousel-container {
-                height: 300px;
-            }
-
-            .album-nav-btn {
-                padding: 0.5rem 0.3rem;
-                font-size: 0.9rem;
-            }
-
-            .album-nav-btn i {
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -348,10 +23,22 @@
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
                 <div class="flex items-center">
-                    <a href="#hero"
-                        class="text-2xl font-bold text-yellow-400 hover:text-yellow-400 transition-colors duration-300">
-                        Daqui Pra o Mundo
+                    <a href="#hero" class="flex items-center">
+                        <img src="assets/wolrd-icon.png" alt="Logo Daqui Pra o Mundo"
+                            class="w-12 h-12 rounded-full mr-2">
                     </a>
+                    <div class="flex flex-row justify-center items-center space-x-2">
+                        <a href="#hero" class="text-2xl text-cyan-300 font-bold transition-colors duration-300">
+                            Daqui
+                        </a>
+                        <a href="#hero" class="text-2xl text-orange-500 font-bold transition-colors duration-300">
+                            Pra o
+                        </a>
+                        <a href="#hero" class="text-2xl text-green-400 font-bold transition-colors duration-300">
+                            Mundo
+                        </a>
+                    </div>
+
                 </div>
 
                 <div class="hidden md:flex space-x-6">
@@ -388,7 +75,7 @@
                 </div>
 
                 <div class="md:hidden">
-                    <button id="menu-toggle"
+                    <button id="menu-toggle" aria-label="Abrir menu de navegação"
                         class="text-white focus:outline-none hover:text-yellow-400 transition-colors duration-300">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
@@ -396,10 +83,11 @@
             </div>
         </div>
 
-        <div id="mobile-menu"
+        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu Principal"
             class="fixed inset-0 bg-purple-900/95 transform translate-x-full transition-transform duration-300 ease-in-out z-40">
             <div class="flex justify-end p-4">
-                <button id="close-menu" class="text-white focus:outline-none hover:text-yellow-400">
+                <button id="close-menu" aria-label="Fechar menu de navegação"
+                    class="text-white focus:outline-none hover:text-yellow-400">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
@@ -429,7 +117,7 @@
     </nav>
 
     <section id="hero"
-        class="relative bg-black/30 bg-[url('dpmhero.jpeg')] bg-cover bg-center h-screen flex flex-col items-center justify-center text-center text-white">
+        class="relative bg-black/30 bg-[url('assets/dpmhero.jpeg')] bg-cover bg-center h-screen flex flex-col items-center justify-center text-center text-white">
         <h1 class="text-6xl md:text-7xl font-extrabold mb-4 text-shadow-hero" data-aos="fade-up"
             data-aos-duration="1000">
             Daqui Pra o Mundo
@@ -438,17 +126,16 @@
             data-aos-duration="1000">
             Venha conosco nesta viagem incrível.
         </p>
-        <button
-            class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full transition duration-300"
+        <a href="#enrollment"
+            class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full transition duration-300 inline-block mb-4"
             data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
-            <a href="#enrollment">Inscreva-se</a>
-            
-        </button>
+            Inscreva-se
+        </a>
         <a class="text-xl font-bold text-yellow-400 text-shadow-hero" data-aos="fade-up" data-aos-delay="600"
             data-aos-duration="1000" target="_blank" href="https://www.instagram.com/daquipromundo25/">
             Clique aqui e venha conhecer mais sobre nossas aventuras em nosso instagram.
         </a>
-        <button id="scroll-down-button"
+        <button id="scroll-down-button" aria-label="Rolar para baixo"
             class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400">
             <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
         </button>
@@ -462,25 +149,23 @@
             </h2>
             <p class="text-xl text-gray-700 leading-relaxed mb-8" data-aos="fade-up" data-aos-delay="200"
                 data-aos-duration="1000">
-                Nascido em solo alagoano, o programa **Daqui Pra o Mundo** é a ponte que conecta o talento da nossa
-                rede pública de ensino com as maiores experiências globais. Mais que um intercâmbio, é a realização de
-                um sonho para jovens estudantes, abrindo portas para o conhecimento, a cultura e um futuro sem
-                fronteiras.
+                O Daqui Pra o Mundo é um programa de intercâmbio internacional oferecido pelo Governo de Alagoas, que leva estudantes da rede
+                estadual para experiências culturais e educacionais no exterior, com foco no aprimoramento do inglês
             </p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
                     data-aos="zoom-in" data-aos-delay="400">
                     <i class="fas fa-globe-americas text-6xl text-purple-600 mb-4 animate-pulse"></i>
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Horizontes Ampliados</h3>
-                    <p class="text-gray-600">Oferecemos a chance de explorar novos países, culturas e formas de pensar,
-                        direto das escolas de Alagoas para o mundo.</p>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Fluência Global</h3>
+                    <p class="text-gray-600">Imersão total em novos idiomas, preparando nossos estudantes para os
+                        desafios e as oportunidades do século XXI.</p>
                 </div>
                 <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
                     data-aos="zoom-in" data-aos-delay="600">
                     <i class="fas fa-book-reader text-6xl text-green-600 mb-4 animate-pulse"></i>
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Fluência Global</h3>
-                    <p class="text-gray-600">Imersão total em novos idiomas, preparando nossos estudantes para os
-                        desafios e as oportunidades do século XXI.</p>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Protagonismo Juvenil</h3>
+                    <p class="text-gray-600">Oferecemos a chance de explorar novos países, culturas e formas de pensar,
+                        direto das escolas de Alagoas para o mundo</p>
                 </div>
                 <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
                     data-aos="zoom-in" data-aos-delay="800">
@@ -492,9 +177,9 @@
             </div>
             <p class="text-xl text-gray-700 leading-relaxed font-medium" data-aos="fade-up" data-aos-delay="1000"
                 data-aos-duration="1000">
-                Se você é estudante da rede pública alagoana, prepare-se! O **Daqui Pra o Mundo** está aqui para
+                Se você é estudante da rede pública alagoana, prepare-se! O Daqui Pra o Mundo está aqui para
                 transformar seu sonho de conhecer o mundo em realidade. <br class="hidden md:inline">
-                **Sua jornada internacional começa aqui, em Alagoas!**
+                Sua jornada internacional começa aqui, em Alagoas!
             </p>
         </div>
     </section>
@@ -530,7 +215,7 @@
                                     </div>
                                     <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -567,7 +252,7 @@
                                             Clique aqui e conheça nossos intercambistas que irão para Brighton
                                         </a>
                                         <button
-                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
                                         </button>
                                     </div>
@@ -606,7 +291,7 @@
                                     </div>
                                     <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -647,7 +332,7 @@
                                             Clique aqui e conheça nossos intercambistas que irão para Worthing
                                         </a>
                                         <button
-                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
                                         </button>
                                     </div>
@@ -684,7 +369,7 @@
                                     </div>
                                     <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -723,7 +408,7 @@
                                             Clique aqui e conheça nossos intercambistas que irão para Canterburry
                                         </a>
                                         <button
-                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
                                         </button>
                                     </div>
@@ -762,7 +447,7 @@
                                     </div>
                                     <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -802,7 +487,7 @@
                                             Clique aqui e conheça nossos intercambistas que irão para Oxford
                                         </a>
                                         <button
-                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
                                         </button>
                                     </div>
@@ -842,7 +527,7 @@
                                     </div>
                                     <div class="fade-overlay"></div>
                                     <button
-                                        class="toggle-info-btn initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                         Saber Mais
                                     </button>
                                     <div class="more-info mt-4 hidden">
@@ -877,7 +562,7 @@
                                             Clique aqui e conheça nossos intercambistas que irão para Bournemouth
                                         </a>
                                         <button
-                                            class="toggle-info-btn expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
                                             Ver Menos
                                         </button>
                                     </div>
@@ -895,12 +580,12 @@
                     </div>
                 </div>
 
-                <button id="prevBtn"
-                    class="absolute top-1/2 -left-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white rounded-full shadow-lg transition-colors duration-300 z-10 md:-left-20">
+                <button id="prevBtn" aria-label="Slide anterior"
+                    class="carousel-nav-btn-base p-3 -left-16 md:-left-20">
                     <i class="fas fa-chevron-left text-xl"></i>
                 </button>
-                <button id="nextBtn"
-                    class="absolute top-1/2 -right-16 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white rounded-full shadow-lg transition-colors duration-300 z-10 md:-right-20">
+                <button id="nextBtn" aria-label="Próximo slide"
+                    class="carousel-nav-btn-base p-3 -right-16 md:-right-20">
                     <i class="fas fa-chevron-right text-xl"></i>
                 </button>
 
@@ -920,21 +605,20 @@
             <div id="album-carousel-container" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="1000">
                 <div id="album-carousel-slides">
                 </div>
-                <button id="album-prev-btn" class="album-nav-btn">
+                <button id="album-prev-btn" aria-label="Slide anterior do álbum" class="album-nav-btn">
                     <i class="fas fa-chevron-left text-xl"></i>
                 </button>
-                <button id="album-next-btn" class="album-nav-btn">
+                <button id="album-next-btn" aria-label="Próximo slide do álbum" class="album-nav-btn">
                     <i class="fas fa-chevron-right text-xl"></i>
                 </button>
                 <div id="album-indicators"></div>
             </div>
 
-            <button
-                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-10 rounded-full text-2xl transition duration-300 transform hover:scale-105 shadow-lg"
+            <a href="https://selecao.educacao.al.gov.br/edital-seduc-n-0192024-daqui-pra-o-mundo"
+                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-10 rounded-full text-2xl transition duration-300 transform hover:scale-105 shadow-lg inline-block"
                 data-aos="fade-up" data-aos-duration="1000">
-                <a href="https://selecao.educacao.al.gov.br/edital-seduc-n-0192024-daqui-pra-o-mundo">
-                    Inscreva-se e faça parte dessa jornada!</a>
-            </button>
+                Inscreva-se e faça parte dessa jornada!
+            </a>
         </div>
     </section>
 
@@ -945,11 +629,11 @@
             </h2>
             <p class="text-xl text-gray-700 leading-relaxed mb-10" data-aos="fade-up" data-aos-delay="200"
                 data-aos-duration="1000">
-                Conecte-se com o programa **Daqui Pra o Mundo** e com as comunidades de intercambistas!
+                Conecte-se com o programa Daqui Pra o Mundo e com as comunidades de intercambistas!
                 Estamos aqui para tirar suas dúvidas e compartilhar as aventuras.
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
                 <a href="https://www.instagram.com/daquipromundo25/" target="_blank" rel="noopener noreferrer"
                     class="block p-6 bg-purple-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
                     data-aos="zoom-in" data-aos-delay="300" data-aos-duration="1000">
@@ -968,12 +652,12 @@
                     <p class="text-gray-600">@educacaoal</p>
                 </a>
 
-                <a href="https://www.instagram.com/governodealagoas/"
+                <a href="https://www.instagram.com/governodealagoas/" target="_blank" rel="noopener noreferrer"
                     class="block p-6 bg-green-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
                     data-aos="zoom-in" data-aos-delay="500" data-aos-duration="1000">
                     <i
-                        class="fas fa-envelope text-5xl text-green-600 mb-4 group-hover:text-yellow-700 transition-colors"></i>
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Govendo de Alagoas</h3>
+                        class="fab fa-instagram text-5xl text-green-600 mb-4 group-hover:text-green-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Governo de Alagoas</h3>
                     <p class="text-gray-600">@governodealagoas</p>
                 </a>
 
@@ -991,7 +675,7 @@
                     data-aos="zoom-in" data-aos-delay="700" data-aos-duration="1000">
                     <i
                         class="fas fa-envelope text-5xl text-yellow-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Email Daqui pra o Mundo</h3>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Email do Programa</h3>
                     <p class="text-gray-600">daquipraomundo@educ.al.gov.br</p>
                 </a>
 
@@ -1050,66 +734,72 @@
         </div>
     </footer>
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        AOS.init(); // Inicializa a biblioteca AOS
+        AOS.init(); // Inicializa a biblioteca AOS para que as animações baseadas em 'data-aos' funcionem.
 
-        // Script para rolagem suave para QUALQUER link da navbar e o botão de scroll-down
+        // Event listener para garantir que o script só execute após o DOM estar completamente carregado.
         document.addEventListener('DOMContentLoaded', () => {
+            // Lógica para o botão de rolagem para baixo na seção Hero.
             const scrollDownButton = document.getElementById('scroll-down-button');
-            if (scrollDownButton) {
+            if (scrollDownButton) { // Verifica se o botão existe no DOM.
                 scrollDownButton.addEventListener('click', () => {
+                    // Rola a página suavemente até a seção 'about'.
                     document.getElementById('about').scrollIntoView({
-                        behavior: 'smooth'
+                        behavior: 'smooth' // Habilita a rolagem suave.
                     });
                 });
             }
 
-            // Seleciona todos os links da navbar para rolagem suave (desktop)
+            // Lógica para rolagem suave em todos os links da barra de navegação (desktop e mobile).
             document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    e.preventDefault(); // Previne o comportamento padrão de salto
-
-                    const targetId = this.getAttribute('href'); // Pega o ID da seção do atributo href
-                    const targetSection = document.querySelector(targetId); // Encontra a seção
-
-                    if (targetSection) {
+                    e.preventDefault(); // Previne o comportamento padrão de salto do link.
+                    const targetId = this.getAttribute('href'); // Obtém o 'href' do link, que é o ID da seção alvo.
+                    const targetSection = document.querySelector(targetId); // Seleciona o elemento da seção alvo.
+                    if (targetSection) { // Verifica se a seção alvo existe.
+                        // Rola a página suavemente para a seção alvo.
                         targetSection.scrollIntoView({
-                            behavior: 'smooth', // Rola suavemente
-                            block: 'start' // Garante que o topo da seção fique visível
+                            behavior: 'smooth', // Habilita a rolagem suave.
+                            block: 'start' // Alinha o topo da seção com o topo da viewport.
                         });
                     }
                 });
             });
 
-            // Lógica para a navbar mudar de cor ao rolar
+            // Lógica para mudar a cor da barra de navegação (navbar) ao rolar a página.
             const navbar = document.getElementById('navbar');
-            if (navbar) {
+            if (navbar) { // Verifica se a navbar existe no DOM.
                 window.addEventListener('scroll', () => {
-                    if (window.scrollY > 50) { // Mude 50 para o ponto de rolagem desejado
-                        navbar.classList.add('bg-purple-800', 'shadow-xl'); // Mais opaca e com mais sombra
+                    if (window.scrollY > 50) { // Se a rolagem vertical for maior que 50 pixels...
+                        // Adiciona classes para tornar a navbar roxa e com sombra forte.
+                        navbar.classList.add('bg-purple-800', 'shadow-xl');
+                        // Remove as classes originais de cor e sombra.
                         navbar.classList.remove('bg-black/50', 'shadow-lg');
                     } else {
+                        // Se a rolagem estiver no topo, remove as classes roxas.
                         navbar.classList.remove('bg-purple-800', 'shadow-xl');
+                        // Restaura as classes originais de cor preta transparente e sombra padrão.
                         navbar.classList.add('bg-black/50', 'shadow-lg');
                     }
                 });
             }
 
-            // Lógica do Carrossel Principal (de Cidades)
+            // Lógica para o Carrossel de Cidades (seção "Nossos Destinos").
             const carouselOuter = document.getElementById('cities-carousel-outer');
-            const carouselContainer = document.getElementById('cities-carousel-container'); // Agora referenciamos o container com ID
-            const carouselSlides = document.getElementById('cities-carousel-slides'); // O contêiner flex que contém os slides
+            const carouselContainer = document.getElementById('cities-carousel-container');
+            const carouselSlides = document.getElementById('cities-carousel-slides');
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const indicatorsContainer = document.getElementById('carousel-indicators');
             const slides = document.querySelectorAll('.carousel-item');
-            let currentSlide = 0;
-            // SUA CHAVE API OPENWEATHERMAP AQUI:
+            let currentSlide = 0; // Variável para rastrear o índice do slide atualmente visível.
+
+            // Chave da API OpenWeatherMap. **MUITO IMPORTANTE:** Substitua '573fc6a6041cf7914368b00f0f5b4fb9' pela sua chave real da API.
+            // Para obter uma chave gratuita, visite openweathermap.org.
             const OPENWEATHER_API_KEY = '573fc6a6041cf7914368b00f0f5b4fb9';
 
-            // Mapeamento de cidades para coordenadas (necessário para a API de clima)
+            // Objeto contendo as coordenadas geográficas (latitude e longitude) para cada cidade, usadas para a requisição da API do tempo.
             const cityCoordinates = {
                 'Brighton': { lat: 50.8225, lon: -0.1372 },
                 'Worthing': { lat: 50.8143, lon: -0.3703 },
@@ -1118,207 +808,191 @@
                 'Bournemouth': { lat: 50.7192, lon: -1.8797 }
             };
 
-            // Armazenar os IDs dos setIntervals e currentImageIndex para cada slideshow de cidade
-            const citySlideshowData = {}; // Objeto para guardar {intervalId: null, currentImageIndex: 0} por slide
+            // Objeto para armazenar dados de estado (como o ID do intervalo) para o slideshow de imagens de cada cidade,
+            // permitindo parar e iniciar os slideshows individualmente.
+            const citySlideshowData = {};
 
-            // Função para buscar dados do clima
+            // Função assíncrona para buscar a previsão do tempo de uma cidade usando a API OpenWeatherMap.
             async function fetchWeather(cityName, element) {
-                if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === '') {
+                // Verifica se a chave da API está configurada.
+                if (!OPENWEATHER_API_KEY) {
                     element.innerHTML = 'Previsão do tempo: Chave API não configurada.';
                     console.warn('AVISO: A chave da API OpenWeatherMap não está configurada ou está vazia. Obtenha uma em openweathermap.org e substitua no código.');
                     return;
                 }
-
-                const coords = cityCoordinates[cityName];
-                if (!coords) {
+                const coords = cityCoordinates[cityName]; // Obtém as coordenadas da cidade.
+                if (!coords) { // Verifica se as coordenadas foram encontradas.
                     element.innerHTML = 'Coordenadas da cidade não encontradas.';
                     return;
                 }
-
+                // Constrói a URL da API com as coordenadas, chave e unidades/idioma desejados.
                 const url = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=pt_br`;
-
                 try {
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`Erro HTTP: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    const temp = data.main.temp.toFixed(0);
-                    const description = data.weather[0].description;
-                    const iconCode = data.weather[0].icon;
-                    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-
-                    element.innerHTML = `
-                        Previsão do tempo: ${temp}°C, ${description} <img src="${iconUrl}" alt="${description}" class="inline-block w-8 h-8 -mt-2">
-                    `;
+                    const response = await fetch(url); // Faz a requisição HTTP.
+                    // Lança um erro se a resposta não for bem-sucedida (status HTTP 2xx).
+                    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                    const data = await response.json(); // Converte a resposta para JSON.
+                    const { temp } = data.main; // Extrai a temperatura.
+                    const { description, icon: iconCode } = data.weather[0]; // Extrai a descrição do clima e o código do ícone.
+                    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Constrói a URL do ícone do clima.
+                    // Atualiza o elemento HTML com a temperatura, descrição e o ícone.
+                    element.innerHTML = `Previsão do tempo: ${temp.toFixed(0)}°C, ${description} <img src="${iconUrl}" alt="${description}" class="inline-block w-8 h-8 -mt-2">`;
                 } catch (error) {
-                    console.error('Erro ao buscar previsão do tempo:', error);
-                    element.innerHTML = 'Previsão do tempo indisponível.';
+                    console.error('Erro ao buscar previsão do tempo:', error); // Registra o erro no console.
+                    element.innerHTML = 'Previsão do tempo indisponível.'; // Exibe mensagem de erro na página.
                 }
             }
 
-            // Função para iniciar o slideshow de imagens de UMA CIDADE específica
+            // Função para iniciar o slideshow de imagens de uma cidade específica dentro de um slide do carrossel.
             function startCitySlideshow(slideElement) {
                 const slideshowContainer = slideElement.querySelector('.city-images-slideshow');
-                if (!slideshowContainer) return;
-
+                if (!slideshowContainer) return; // Sai se o contêiner do slideshow não for encontrado.
                 const images = slideshowContainer.querySelectorAll('img');
-                if (images.length === 0) return;
+                if (images.length === 0) return; // Sai se não houver imagens.
+                // Obtém ou inicializa os dados do slideshow para o slide atual.
+                const data = citySlideshowData[slideElement.id] || { intervalId: null, currentImageIndex: 0 };
+                citySlideshowData[slideElement.id] = data;
 
-                // Inicializa os dados do slideshow para este slide se ainda não existirem
-                if (!citySlideshowData[slideElement.id]) {
-                    citySlideshowData[slideElement.id] = {
-                        intervalId: null,
-                        currentImageIndex: 0
-                    };
-                }
-
-                let data = citySlideshowData[slideElement.id];
-
-                // Função interna para mostrar a imagem atual e esconder as outras
+                // Função interna para mostrar uma imagem específica do slideshow.
                 function showImage(index) {
                     images.forEach((img, i) => {
-                        img.classList.remove('active-image');
-                        if (i === index) {
-                            img.classList.add('active-image');
-                        }
+                        img.classList.toggle('active-image', i === index); // Adiciona/remove a classe 'active-image'.
                     });
                 }
-
-                // Exibe a imagem atual (ou a primeira, se estiver começando)
-                showImage(data.currentImageIndex);
-
-                // Limpa qualquer intervalo anterior para este slide
-                if (data.intervalId) {
-                    clearInterval(data.intervalId);
-                }
-
-                // Inicia o intervalo para trocar as imagens automaticamente
+                showImage(data.currentImageIndex); // Exibe a imagem atual.
+                if (data.intervalId) clearInterval(data.intervalId); // Limpa qualquer intervalo anterior para evitar duplicação.
+                // Inicia um novo intervalo para trocar as imagens.
                 data.intervalId = setInterval(() => {
-                    data.currentImageIndex = (data.currentImageIndex + 1) % images.length;
-                    showImage(data.currentImageIndex);
-                }, 4000); // Troca de imagem a cada 4 segundos
+                    data.currentImageIndex = (data.currentImageIndex + 1) % images.length; // Avança para a próxima imagem (loop).
+                    showImage(data.currentImageIndex); // Exibe a nova imagem.
+                }, 4000); // Troca de imagem a cada 4 segundos.
             }
 
-            // Função para parar o slideshow de imagens de UMA CIDADE específica
+            // Função para parar o slideshow de imagens de uma cidade.
             function stopCitySlideshow(slideElement) {
-                if (citySlideshowData[slideElement.id] && citySlideshowData[slideElement.id].intervalId) {
+                // Verifica se há um intervalo ativo para o slide e o limpa.
+                if (citySlideshowData[slideElement.id]?.intervalId) {
                     clearInterval(citySlideshowData[slideElement.id].intervalId);
-                    citySlideshowData[slideElement.id].intervalId = null; // Reseta o ID do intervalo
+                    citySlideshowData[slideElement.id].intervalId = null; // Reseta o ID do intervalo.
                 }
             }
 
-            // showSlide para o carrossel PRINCIPAL
+            // Função principal para exibir um slide específico do carrossel de cidades.
             function showSlide(index) {
                 slides.forEach((slide, i) => {
-                    // Para o slideshow da cidade anterior antes de remover a classe 'active'
-                    stopCitySlideshow(slide);
-
-                    // Garante que o botão inicial esteja visível e o de ver menos escondido
+                    stopCitySlideshow(slide); // Para o slideshow de imagens do slide que está sendo ocultado.
+                    // Reseta o estado "expandido" e os botões "Saber Mais"/"Ver Menos" para todos os slides.
                     const initialBtn = slide.querySelector('.initial-more-info-btn');
                     const expandedBtn = slide.querySelector('.expanded-less-info-btn');
                     const moreInfoDiv = slide.querySelector('.more-info');
                     const fadeOverlay = slide.querySelector('.fade-overlay');
 
-                    if (initialBtn) initialBtn.style.display = 'block';
-                    if (expandedBtn) expandedBtn.style.display = 'none';
-                    if (moreInfoDiv) moreInfoDiv.classList.add('hidden'); // Esconde o 'Saber Mais'
-                    if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Garante que o overlay esteja visível
-                    slide.classList.remove('expanded'); // Garante que a classe expanded seja removida
+                    if (initialBtn) initialBtn.style.display = 'block'; // Garante que o botão inicial esteja visível.
+                    if (expandedBtn) expandedBtn.style.display = 'none'; // Garante que o botão expandido esteja oculto.
+                    if (moreInfoDiv) moreInfoDiv.classList.add('hidden'); // Oculta o conteúdo adicional.
+                    if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Restaura a opacidade do overlay.
+                    slide.classList.remove('expanded'); // Remove a classe 'expanded'.
 
-                    if (i === index) {
-                        slide.style.left = `${i * 100}%`;
-                        slide.style.display = 'flex';
-                        setTimeout(() => {
-                            slide.classList.add('active');
-                        }, 10);
+                    if (i === index) { // Se o slide atual for o slide que deve ser exibido.
+                        slide.style.left = `${i * 100}%`; // Define a posição horizontal (redundante com transform do pai, mas mantido).
+                        slide.style.display = 'flex'; // Garante que o slide ativo seja exibido com flexbox.
+                        // Pequeno atraso para aplicar a classe 'active' para transições de opacidade.
+                        setTimeout(() => { slide.classList.add('active'); }, 10);
 
+                        // Busca e exibe o clima da cidade correspondente ao slide.
                         const cityName = slide.querySelector('h3').textContent.split(',')[0].trim();
                         const weatherElement = slide.querySelector('.weather-info');
                         fetchWeather(cityName, weatherElement);
-
-                        startCitySlideshow(slide);
-                    } else {
-                        slide.classList.remove('active');
-                        setTimeout(() => {
-                            slide.style.display = 'none';
-                        }, 1000);
+                        startCitySlideshow(slide); // Inicia o slideshow de imagens para o slide ativo.
+                    } else { // Para os slides que não são o slide ativo.
+                        slide.classList.remove('active'); // Remove a classe 'active'.
+                        // Oculta o slide após a transição de opacidade (1 segundo).
+                        setTimeout(() => { slide.style.display = 'none'; }, 1000);
                     }
                 });
-                updateIndicators(index);
-                carouselSlides.style.transform = `translateX(-${index * 100}%)`;
-                adjustCarouselContainerHeight(slides[index], false); // Ajusta a altura do container principal para o estado inicial
+                updateIndicators(index); // Atualiza a aparência dos indicadores de navegação.
+                carouselSlides.style.transform = `translateX(-${index * 100}%)`; // Move o contêiner de slides horizontalmente.
+                adjustCarouselContainerHeight(slides[index], false); // Ajusta a altura do contêiner do carrossel.
             }
 
-            // Funções de navegação do carrossel principal
+            // Função para navegar para o próximo slide no carrossel de cidades.
             function nextSlide() {
-                currentSlide = (currentSlide + 1) % slides.length;
-                showSlide(currentSlide);
+                currentSlide = (currentSlide + 1) % slides.length; // Incrementa o índice do slide, voltando ao início se chegar ao fim.
+                showSlide(currentSlide); // Exibe o próximo slide.
             }
 
+            // Função para navegar para o slide anterior no carrossel de cidades.
             function prevSlide() {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                showSlide(currentSlide);
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length; // Decrementa o índice, voltando ao fim se for menor que 0.
+                showSlide(currentSlide); // Exibe o slide anterior.
             }
 
+            // Função para criar dinamicamente os indicadores (pontos) de navegação do carrossel de cidades.
             function createIndicators() {
-                indicatorsContainer.innerHTML = '';
+                indicatorsContainer.innerHTML = ''; // Limpa quaisquer indicadores existentes.
                 slides.forEach((slide, i) => {
-                    slide.id = `city-slide-${i}`;
-                    const indicator = document.createElement('button');
+                    slide.id = `city-slide-${i}`; // Atribui um ID único a cada slide para referência.
+                    const indicator = document.createElement('button'); // Cria um novo botão para o indicador.
+                    // Adiciona classes Tailwind para estilizar o indicador (tamanho, forma, cor padrão, transição).
                     indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'hover:bg-gray-200', 'transition-colors', 'duration-300');
-                    if (i === currentSlide) {
-                        indicator.classList.add('bg-yellow-400', 'hover:bg-yellow-400');
-                    }
+                    // Ativa o indicador correspondente ao slide inicial.
+                    indicator.classList.toggle('bg-yellow-400', i === currentSlide);
+                    indicator.classList.toggle('hover:bg-yellow-400', i === currentSlide);
+                    // Adiciona um event listener para mudar para o slide correspondente ao clicar no indicador.
                     indicator.addEventListener('click', () => showSlide(i));
-                    indicatorsContainer.appendChild(indicator);
+                    indicatorsContainer.appendChild(indicator); // Adiciona o indicador ao contêiner de indicadores.
                 });
             }
 
+            // Função para atualizar a aparência dos indicadores, destacando o slide ativo.
             function updateIndicators(activeIndex) {
-                const indicators = indicatorsContainer.querySelectorAll('button');
+                const indicators = indicatorsContainer.querySelectorAll('button'); // Seleciona todos os botões indicadores.
                 indicators.forEach((indicator, i) => {
+                    // Remove as classes de ativo dos indicadores anteriores.
                     indicator.classList.remove('bg-yellow-400', 'hover:bg-yellow-400');
+                    // Adiciona as classes de cor padrão.
                     indicator.classList.add('bg-gray-400', 'hover:bg-gray-200');
-                    if (i === activeIndex) {
-                        indicator.classList.add('bg-yellow-400', 'hover:bg-yellow-400');
-                    }
+                    // Adiciona as classes de ativo ao indicador do slide atualmente visível.
+                    indicator.classList.toggle('bg-yellow-400', i === activeIndex);
+                    indicator.classList.toggle('hover:bg-yellow-400', i === activeIndex);
                 });
             }
 
-            // FUNÇÃO AJUSTADA para ajustar a altura do contêiner do carrossel
+            // Função para ajustar dinamicamente a altura do contêiner do carrossel de cidades com base no conteúdo do slide ativo.
+            // Isso é importante para evitar barras de rolagem desnecessárias e ajustar a visualização ao expandir/contrair conteúdo.
             function adjustCarouselContainerHeight(activeSlide, isExpanding = null) {
+                // Pequeno atraso para garantir que o DOM esteja renderizado e os cálculos de altura sejam precisos.
                 setTimeout(() => {
                     let newHeight;
-                    const contentDiv = activeSlide.querySelector('.carousel-item-content');
-                    const initialMinHeight = 500; // Altura mínima padrão
+                    const contentDiv = activeSlide.querySelector('.carousel-item-content'); // Obtém o div de conteúdo do slide.
+                    const initialMinHeight = 500; // Define uma altura mínima padrão para o carrossel.
 
-                    if (isExpanding === true) {
-                        newHeight = activeSlide.scrollHeight;
-                    } else if (isExpanding === false) {
+                    if (isExpanding === true) { // Se a função foi chamada para expandir o conteúdo (botão "Saber Mais" clicado).
+                        newHeight = activeSlide.scrollHeight; // Define a nova altura como a altura total do conteúdo do slide.
+                    } else if (isExpanding === false) { // Se a função foi chamada para contrair o conteúdo (botão "Ver Menos" clicado).
                         let visibleContentHeight = 0;
+                        // Calcula a altura dos elementos que devem estar visíveis no estado não expandido.
                         const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
                         mainContentElements.forEach(el => {
-                            if (el.offsetParent !== null) {
-                                visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0);
+                            if (el.offsetParent !== null) { // Verifica se o elemento está visível (não oculto por 'display: none').
+                                visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0); // Soma a altura e a margem inferior.
                             }
                         });
                         const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
                         if (initialBtn && initialBtn.offsetParent !== null) {
                             visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop || 0);
                         }
+                        // Adiciona o padding vertical do 'carousel-item' ao cálculo da altura.
                         const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
                         const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
                         visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
-
-                        newHeight = Math.max(initialMinHeight, visibleContentHeight);
-
-                    } else { // Estado atual (null)
+                        newHeight = Math.max(initialMinHeight, visibleContentHeight); // Garante que a altura não seja menor que a mínima.
+                    } else { // Se 'isExpanding' for nulo, a função é chamada no estado atual (e.g., após navegação de slide).
                         const moreInfoDiv = activeSlide.querySelector('.more-info');
-                        const isCurrentlyExpanded = !moreInfoDiv.classList.contains('hidden');
-                        if (isCurrentlyExpanded) {
+                        const isCurrentlyExpanded = !moreInfoDiv.classList.contains('hidden'); // Verifica se o slide está atualmente expandido.
+                        if (isCurrentlyExpanded) { // Se já estiver expandido, mantém a altura total do conteúdo.
                             newHeight = activeSlide.scrollHeight;
-                        } else {
+                        } else { // Se não estiver expandido, calcula a altura apenas do conteúdo visível inicial.
                             let visibleContentHeight = 0;
                             const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
                             mainContentElements.forEach(el => {
@@ -1333,95 +1007,83 @@
                             const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
                             const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
                             visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
-
                             newHeight = Math.max(initialMinHeight, visibleContentHeight);
                         }
                     }
-
+                    // Aplica a nova altura ao contêiner do carrossel e à sua altura mínima.
                     carouselContainer.style.height = `${newHeight}px`;
-                    carouselContainer.style.minHeight = `${newHeight}px`; // Sincroniza min-height
-                }, 100);
+                    carouselContainer.style.minHeight = `${newHeight}px`;
+                }, 100); // Um pequeno atraso para permitir que o navegador recalcule o layout.
             }
 
-
-            // Lógica do botão "Saber Mais" / "Ver Menos"
+            // Lógica para alternar a exibição do conteúdo adicional e dos botões "Saber Mais" / "Ver Menos".
             document.querySelectorAll('.carousel-item').forEach(slide => {
-                const initialMoreBtn = slide.querySelector('.initial-more-info-btn');
-                const expandedLessBtn = slide.querySelector('.expanded-less-info-btn');
-                const moreInfoDiv = slide.querySelector('.more-info'); // O conteúdo extra
-                const fadeOverlay = slide.querySelector('.fade-overlay'); // O overlay de fade
+                const initialMoreBtn = slide.querySelector('.initial-more-info-btn'); // Botão "Saber Mais".
+                const expandedLessBtn = slide.querySelector('.expanded-less-info-btn'); // Botão "Ver Menos".
+                const moreInfoDiv = slide.querySelector('.more-info'); // Div com o conteúdo adicional.
+                const fadeOverlay = slide.querySelector('.fade-overlay'); // Overlay de fade.
 
-                // Listener para o botão "Saber Mais" inicial
-                if (initialMoreBtn) {
+                if (initialMoreBtn) { // Se o botão "Saber Mais" existe.
                     initialMoreBtn.addEventListener('click', () => {
-                        slide.classList.add('expanded');
-                        moreInfoDiv.classList.remove('hidden');
-                        initialMoreBtn.style.display = 'none'; // Esconde o botão inicial
-                        if (expandedLessBtn) expandedLessBtn.style.display = 'block'; // Mostra o botão "Ver Menos"
-                        if (fadeOverlay) fadeOverlay.style.opacity = '0'; // Esconde o overlay de fade
-                        adjustCarouselContainerHeight(slide, true); // Ajusta a altura para expandir
+                        slide.classList.add('expanded'); // Adiciona a classe 'expanded' ao slide.
+                        moreInfoDiv.classList.remove('hidden'); // Remove a classe 'hidden' para mostrar o conteúdo adicional.
+                        initialMoreBtn.style.display = 'none'; // Oculta o botão "Saber Mais".
+                        if (expandedLessBtn) expandedLessBtn.style.display = 'block'; // Mostra o botão "Ver Menos".
+                        if (fadeOverlay) fadeOverlay.style.opacity = '0'; // Faz o overlay de fade desaparecer.
+                        adjustCarouselContainerHeight(slide, true); // Ajusta a altura do contêiner, indicando que está expandindo.
                     });
                 }
-
-                // Listener para o botão "Ver Menos"
-                if (expandedLessBtn) {
+                if (expandedLessBtn) { // Se o botão "Ver Menos" existe.
                     expandedLessBtn.addEventListener('click', () => {
-                        slide.classList.remove('expanded');
-                        moreInfoDiv.classList.add('hidden');
-                        if (initialMoreBtn) initialMoreBtn.style.display = 'block'; // Mostra o botão inicial
-                        expandedLessBtn.style.display = 'none'; // Esconde o botão "Ver Menos"
-                        if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Mostra o overlay de fade
-                        adjustCarouselContainerHeight(slide, false); // Ajusta a altura para contrair
+                        slide.classList.remove('expanded'); // Remove a classe 'expanded' do slide.
+                        moreInfoDiv.classList.add('hidden'); // Adiciona a classe 'hidden' para ocultar o conteúdo adicional.
+                        if (initialMoreBtn) initialMoreBtn.style.display = 'block'; // Mostra o botão "Saber Mais".
+                        expandedLessBtn.style.display = 'none'; // Oculta o botão "Ver Menos".
+                        if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Restaura o overlay de fade.
+                        adjustCarouselContainerHeight(slide, false); // Ajusta a altura do contêiner, indicando que está contraindo.
                     });
                 }
             });
 
-
-            // Event Listeners para os botões do carrossel principal
+            // Adiciona event listeners aos botões de navegação do carrossel de cidades para chamar as funções de navegação.
             prevBtn.addEventListener('click', prevSlide);
             nextBtn.addEventListener('click', nextSlide);
 
-            // Inicializa o carrossel e o slideshow da primeira cidade ao carregar a página
-            createIndicators(); // Cria os IDs dos slides antes de showSlide
-            showSlide(currentSlide); // Inicia o carrossel e o primeiro slideshow de imagem
+            // Chamadas iniciais para configurar o carrossel de cidades ao carregar a página.
+            createIndicators(); // Cria os indicadores.
+            showSlide(currentSlide); // Exibe o primeiro slide.
 
-
-            // Lógica para o menu mobile (implementado visualmente)
+            // Lógica para o Menu Mobile (Hamburguer).
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuButton = document.getElementById('menu-toggle');
             const closeMenuButton = document.getElementById('close-menu');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-            // Abrir menu mobile
-            if (mobileMenuButton) {
+            if (mobileMenuButton) { // Se o botão de menu mobile existe.
                 mobileMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.remove('translate-x-full');
-                    mobileMenu.classList.add('translate-x-0');
-                    document.body.style.overflow = 'hidden';
+                    mobileMenu.classList.remove('translate-x-full'); // Remove a classe que mantém o menu fora da tela.
+                    mobileMenu.classList.add('translate-x-0'); // Adiciona a classe que move o menu para dentro da tela.
+                    document.body.style.overflow = 'hidden'; // Impede a rolagem do corpo da página quando o menu está aberto.
                 });
             }
-
-            // Fechar menu mobile (botão X)
-            if (closeMenuButton) {
+            if (closeMenuButton) { // Se o botão de fechar menu existe.
                 closeMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.remove('translate-x-0');
-                    mobileMenu.classList.add('translate-x-full');
-                    document.body.style.overflow = ''; // Reativar scroll
+                    mobileMenu.classList.remove('translate-x-0'); // Remove a classe que mantém o menu na tela.
+                    mobileMenu.classList.add('translate-x-full'); // Move o menu para fora da tela.
+                    document.body.style.overflow = ''; // Restaura a rolagem do corpo da página.
                 });
             }
-
-            // Fechar menu mobile ao clicar em um link
+            // Adiciona event listeners para fechar o menu mobile ao clicar em um de seus links.
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    e.preventDefault();
-
-                    mobileMenu.classList.remove('translate-x-0');
+                    e.preventDefault(); // Previne o comportamento padrão do link.
+                    mobileMenu.classList.remove('translate-x-0'); // Inicia a animação de fechar o menu.
                     mobileMenu.classList.add('translate-x-full');
-                    document.body.style.overflow = '';
-
-                    const targetId = link.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
+                    document.body.style.overflow = ''; // Restaura a rolagem do corpo.
+                    const targetId = link.getAttribute('href'); // Obtém o ID da seção alvo.
+                    const targetSection = document.querySelector(targetId); // Seleciona a seção.
                     if (targetSection) {
+                        // Pequeno atraso para permitir que a animação de fechar o menu ocorra antes da rolagem.
                         setTimeout(() => {
                             targetSection.scrollIntoView({
                                 behavior: 'smooth',
@@ -1432,92 +1094,92 @@
                 });
             });
 
-            /* --- Lógica para o Carrossel de Imagens do Álbum (Nova Seção Inscrições) --- */
+            // Lógica para o Carrossel de Álbum de Fotos (seção "Sua Jornada Começa Agora!").
             const albumCarouselSlidesContainer = document.getElementById('album-carousel-slides');
             const albumPrevBtn = document.getElementById('album-prev-btn');
             const albumNextBtn = document.getElementById('album-next-btn');
             const albumIndicatorsContainer = document.getElementById('album-indicators');
 
+            // Lista de URLs das imagens para o álbum de fotos.
             const albumImages = [
-                'assets/album/Album_foto1.jpg',
-                'assets/album/Album_foto2.jpg',
-                'assets/album/Album_foto3.jpg',
-                'assets/album/Album_foto4.jpg',
-                'assets/album/Album_foto5.jpg'
+                'assets/album/album_foto1.jpg',
+                'assets/album/album_foto2.jpg',
+                'assets/album/album_foto3.jpg',
+                'assets/album/album_foto4.jpg',
+                'assets/album/album_foto5.jpg'
             ];
 
-            let currentAlbumSlide = 0;
-            let albumInterval;
+            let currentAlbumSlide = 0; // Variável para rastrear o slide atual do álbum.
+            let albumInterval; // Variável para armazenar o ID do intervalo do slideshow automático.
 
+            // Função para criar dinamicamente os slides e os indicadores do carrossel do álbum.
             function createAlbumSlides() {
-                albumCarouselSlidesContainer.innerHTML = '';
-                albumIndicatorsContainer.innerHTML = '';
+                albumCarouselSlidesContainer.innerHTML = ''; // Limpa o contêiner de slides.
+                albumIndicatorsContainer.innerHTML = ''; // Limpa o contêiner de indicadores.
+                albumImages.forEach((src, index) => { // Itera sobre as imagens.
+                    const slideDiv = document.createElement('div'); // Cria um div para o slide.
+                    slideDiv.classList.add('album-slide'); // Adiciona a classe de estilo do slide.
+                    const img = document.createElement('img'); // Cria a tag de imagem.
+                    img.src = src; // Define a fonte da imagem.
+                    img.alt = `Momento do Intercâmbio ${index + 1}`; // Define o texto alternativo.
+                    slideDiv.appendChild(img); // Adiciona a imagem ao slide.
+                    albumCarouselSlidesContainer.appendChild(slideDiv); // Adiciona o slide ao contêiner de slides.
 
-                albumImages.forEach((src, index) => {
-                    const slideDiv = document.createElement('div');
-                    slideDiv.classList.add('album-slide');
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = `Momento do Intercâmbio ${index + 1}`;
-                    slideDiv.appendChild(img);
-                    albumCarouselSlidesContainer.appendChild(slideDiv);
-
-                    const indicatorBtn = document.createElement('button');
-                    indicatorBtn.classList.add('album-indicator');
+                    const indicatorBtn = document.createElement('button'); // Cria um botão para o indicador.
+                    indicatorBtn.classList.add('album-indicator'); // Adiciona a classe de estilo do indicador.
+                    // Adiciona um event listener para mudar para o slide correspondente ao clicar no indicador.
                     indicatorBtn.addEventListener('click', () => showAlbumSlide(index));
-                    albumIndicatorsContainer.appendChild(indicatorBtn);
+                    albumIndicatorsContainer.appendChild(indicatorBtn); // Adiciona o indicador ao contêiner.
                 });
             }
 
+            // Função para exibir um slide específico do carrossel do álbum.
             function showAlbumSlide(index) {
+                // Garante que o índice esteja dentro dos limites válidos para o array de imagens.
                 if (index >= albumImages.length) {
-                    index = 0;
+                    index = 0; // Volta para o primeiro slide se o índice exceder.
                 } else if (index < 0) {
-                    index = albumImages.length - 1;
+                    index = albumImages.length - 1; // Vai para o último slide se o índice for negativo.
                 }
-                currentAlbumSlide = index;
+                currentAlbumSlide = index; // Atualiza o slide atual.
+                // Move o contêiner de slides horizontalmente para mostrar o slide correto.
                 albumCarouselSlidesContainer.style.transform = `translateX(-${currentAlbumSlide * 100}%)`;
-                updateAlbumIndicators();
+                updateAlbumIndicators(); // Atualiza a aparência dos indicadores do álbum.
             }
 
+            // Função para atualizar a aparência dos indicadores do álbum, destacando o slide ativo.
             function updateAlbumIndicators() {
-                const indicators = albumIndicatorsContainer.querySelectorAll('.album-indicator');
+                const indicators = albumIndicatorsContainer.querySelectorAll('.album-indicator'); // Seleciona todos os indicadores.
                 indicators.forEach((indicator, index) => {
-                    if (index === currentAlbumSlide) {
-                        indicator.classList.add('active');
-                    } else {
-                        indicator.classList.remove('active');
-                    }
+                    indicator.classList.toggle('active', index === currentAlbumSlide); // Adiciona/remove a classe 'active'.
                 });
             }
 
-            function nextAlbumSlide() {
-                showAlbumSlide(currentAlbumSlide + 1);
-            }
+            // Função para navegar para o próximo slide no carrossel do álbum.
+            function nextAlbumSlide() { showAlbumSlide(currentAlbumSlide + 1); }
+            // Função para navegar para o slide anterior no carrossel do álbum.
+            function prevAlbumSlide() { showAlbumSlide(currentAlbumSlide - 1); }
 
-            function prevAlbumSlide() {
-                showAlbumSlide(currentAlbumSlide - 1);
-            }
-
+            // Função para iniciar o slideshow automático do álbum.
             function startAlbumSlideshow() {
-                if (albumInterval) {
-                    clearInterval(albumInterval);
-                }
-                albumInterval = setInterval(nextAlbumSlide, 3000);
+                if (albumInterval) clearInterval(albumInterval); // Limpa qualquer intervalo anterior para evitar múltiplos slideshows.
+                albumInterval = setInterval(nextAlbumSlide, 3000); // Inicia um novo intervalo que troca de slide a cada 3 segundos.
             }
 
+            // Adiciona event listeners aos botões de navegação do álbum.
             if (albumPrevBtn) albumPrevBtn.addEventListener('click', () => {
-                prevAlbumSlide();
-                startAlbumSlideshow();
+                prevAlbumSlide(); // Navega para o slide anterior.
+                startAlbumSlideshow(); // Reinicia o slideshow automático após a interação manual.
             });
             if (albumNextBtn) albumNextBtn.addEventListener('click', () => {
-                nextAlbumSlide();
-                startAlbumSlideshow();
+                nextAlbumSlide(); // Navega para o próximo slide.
+                startAlbumSlideshow(); // Reinicia o slideshow automático após a interação manual.
             });
 
-            createAlbumSlides();
-            showAlbumSlide(0);
-            startAlbumSlideshow();
+            // Chamadas iniciais para configurar o carrossel do álbum ao carregar a página.
+            createAlbumSlides(); // Cria os slides e indicadores.
+            showAlbumSlide(0); // Exibe o primeiro slide.
+            startAlbumSlideshow(); // Inicia o slideshow automático.
         });
     </script>
 </body>

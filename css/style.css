@@ -1,0 +1,361 @@
+/* Estilos Específicos do Hero Section */
+/* Aplica uma sombra ao texto do título e subtítulo para melhor legibilidade sobre a imagem de fundo */
+.text-shadow-hero {
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Estilos do Carrossel de Cidades */
+/* Estilo base para cada item (slide) do carrossel */
+.carousel-item {
+    position: absolute; /* Posiciona os itens de forma absoluta dentro do contêiner */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Inicialmente invisível */
+    pointer-events: none; /* Não permite interação quando invisível */
+    /* Transições para suavizar a entrada/saída e o ajuste de altura */
+    transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
+    max-height: 500px; /* Altura máxima padrão para o slide não expandido */
+    overflow: hidden; /* Oculta conteúdo que excede a altura máxima */
+    padding: 2rem; /* Espaçamento interno padrão */
+}
+
+/* Media query para telas pequenas (mobile) */
+@media (max-width: 767px) {
+    .carousel-item {
+        padding: 1.5rem 0.5rem; /* Ajusta o padding para telas menores */
+        max-height: none; /* Remove a altura máxima para que o conteúdo possa se expandir */
+        height: auto; /* Altura automática para se adaptar ao conteúdo */
+        min-height: 500px; /* Garante uma altura mínima para o slide */
+        display: flex;
+        flex-direction: column; /* Coloca os elementos em coluna no mobile */
+    }
+}
+
+/* Media query para telas médias (desktop) - reconfirma o padding */
+@media (min-width: 768px) {
+    .carousel-item {
+        padding: 2rem;
+    }
+}
+
+/* Overlay de fade para o conteúdo que é "ocultado" pelo botão "Saber Mais" */
+.fade-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px; /* Altura da área do fade */
+    /* Gradiente linear para criar o efeito de "fade out" para branco */
+    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none; /* Não impede a interação com elementos abaixo dele */
+    transition: opacity 0.5s ease-in-out; /* Transição suave da opacidade */
+}
+
+/* Quando o item do carrossel está expandido, o overlay de fade desaparece */
+.carousel-item.expanded .fade-overlay {
+    opacity: 0;
+}
+
+/* O item ativo do carrossel se torna visível */
+.carousel-item.active {
+    opacity: 1;
+    pointer-events: auto; /* Permite interação quando ativo */
+}
+
+/* Contêiner principal do carrossel de cidades */
+#cities-carousel-container {
+    position: relative;
+    height: 500px; /* Altura padrão do carrossel */
+    transition: height 0.7s ease-in-out; /* Transição suave para o ajuste de altura */
+    overflow: hidden; /* Garante que os slides que se movem não apareçam fora do contêiner */
+}
+
+/* Slides internos do carrossel (contêiner flexível para os itens) */
+#cities-carousel-slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Transição para a movimentação dos slides */
+}
+
+/* Layout do conteúdo dentro de cada item do carrossel */
+.carousel-item-content {
+    display: flex;
+    flex-direction: column; /* Padrão em coluna para mobile */
+    gap: 2rem; /* Espaçamento entre os elementos */
+    align-items: center; /* Alinhamento centralizado para mobile */
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0; /* Padding inicial zero, ajustado por media query */
+}
+
+/* Media query para telas pequenas (mobile) - ajustes no layout do conteúdo */
+@media (max-width: 767px) {
+    .carousel-item-content {
+        padding: 0.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        justify-content: flex-start; /* Alinha o conteúdo ao topo */
+        align-items: flex-start; /* Alinha o conteúdo à esquerda */
+        height: auto; /* Altura automática */
+    }
+
+    .carousel-item-content>div {
+        width: 100%; /* Faz com que os blocos de conteúdo ocupem 100% da largura */
+    }
+}
+
+/* Media query para telas médias (desktop) - layout em linha */
+@media (min-width: 768px) {
+    .carousel-item-content {
+        flex-direction: row; /* Coloca os elementos em linha no desktop */
+        align-items: flex-start; /* Alinha ao topo */
+        justify-content: space-between; /* Distribui o espaço entre os elementos */
+    }
+}
+
+/* Quando o item do carrossel está expandido, permite que ele tenha uma altura maior e rolagem interna */
+.carousel-item.expanded {
+    max-height: 2000px; /* Altura máxima maior para conteúdo expandido */
+    overflow-y: auto; /* Adiciona barra de rolagem vertical se o conteúdo exceder */
+}
+
+/* Slideshow de imagens da cidade dentro de cada item do carrossel */
+.city-images-slideshow {
+    position: relative;
+    width: 100%;
+    height: 250px; /* Altura fixa do slideshow de imagens */
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem; /* Margem superior para mobile */
+}
+
+/* Media query para telas médias (desktop) - remove margem superior */
+@media (min-width: 768px) {
+    .city-images-slideshow {
+        margin-top: 0;
+    }
+}
+
+/* Estilo para as imagens dentro do slideshow */
+.city-images-slideshow img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem cubra todo o espaço sem distorção */
+    opacity: 0; /* Inicialmente invisível */
+    transition: opacity 1s ease-in-out; /* Transição suave da opacidade */
+}
+
+/* A imagem ativa do slideshow se torna visível */
+.city-images-slideshow img.active-image {
+    opacity: 1;
+}
+
+/* Estilos dos botões de navegação do carrossel de Cidades */
+/* Aplicamos o padding e o background-color diretamente na classe dos botões */
+#prevBtn,
+#nextBtn {
+    position: absolute;
+    top: 50%; /* Centraliza verticalmente */
+    transform: translateY(-50%); /* Ajuste para centralização perfeita */
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    color: white; /* Cor do ícone */
+    border-radius: 9999px; /* Formato de círculo */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: background-color 0.3s, transform 0.3s;
+    /* Tamanho dos botões - um padding que funcione como um pequeno círculo */
+    width: 40px; /* Largura fixa */
+    height: 40px; /* Altura fixa */
+    display: flex; /* Para centralizar o ícone */
+    align-items: center; /* Centraliza ícone verticalmente */
+    justify-content: center; /* Centraliza ícone horizontalmente */
+    padding: 0; /* Remove padding interno extra, pois width/height já definem o tamanho */
+}
+
+/* Efeito hover para os botões de navegação */
+#prevBtn:hover,
+#nextBtn:hover {
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* Posição dos botões para desktop */
+#prevBtn {
+    left: -2.5rem; /* Posição à esquerda do carrossel */
+}
+
+#nextBtn {
+    right: -2.5rem; /* Posição à direita do carrossel */
+}
+
+/* Ajustes específicos para mobile - Botões de navegação do carrossel */
+@media (max-width: 767px) {
+    #prevBtn {
+        left: 0.5rem; /* Mais perto da borda da tela no mobile */
+    }
+
+    #nextBtn {
+        right: 0.5rem; /* Mais perto da borda da tela no mobile */
+    }
+
+    /* Posição dos indicadores do carrossel no mobile */
+    #carousel-indicators {
+        bottom: 1rem;
+    }
+}
+
+/* Estilo base para os botões "Saber Mais" / "Ver Menos" */
+.info-toggle-btn-base {
+    background-color: #8B5CF6;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+/* Efeito hover para os botões "Saber Mais" / "Ver Menos" */
+.info-toggle-btn-base:hover {
+    background-color: #7C3AED;
+}
+
+/* Posicionamento do botão "Saber Mais" inicial */
+.initial-more-info-btn {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+}
+
+/* Oculta o botão "Saber Mais" quando o carrossel está expandido */
+.carousel-item.expanded .initial-more-info-btn {
+    display: none;
+}
+
+/* Esconde o botão "Ver Menos" por padrão */
+.expanded-less-info-btn {
+    margin-top: 2rem;
+    display: none;
+}
+
+/* Exibe o botão "Ver Menos" quando o carrossel está expandido e centraliza-o */
+.carousel-item.expanded .expanded-less-info-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilos do Carrossel de Álbum de Fotos */
+#album-carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Largura máxima do carrossel do álbum */
+    height: 400px; /* Altura fixa do carrossel do álbum */
+    overflow: hidden;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 3rem; /* Centraliza e adiciona margem inferior */
+    background-color: #f0f0f0; /* Cor de fundo suave */
+}
+
+#album-carousel-slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s ease-in-out; /* Transição suave para a movimentação dos slides */
+}
+
+.album-slide {
+    flex-shrink: 0; /* Impede que os slides encolham */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.album-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta a imagem para cobrir o slide */
+    border-radius: 0.75rem; /* Borda arredondada para as imagens */
+}
+
+/* Botões de navegação do carrossel do álbum */
+.album-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+    color: white;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    z-index: 20;
+    transition: background-color 0.3s;
+}
+
+/* Efeito hover para os botões do álbum */
+.album-nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#album-prev-btn {
+    left: 1rem; /* Posição à esquerda */
+}
+
+#album-next-btn {
+    right: 1rem; /* Posição à direita */
+}
+
+/* Indicadores do carrossel do álbum (pontos) */
+#album-indicators {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem; /* Espaçamento entre os indicadores */
+    z-index: 20;
+}
+
+.album-indicator {
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.5); /* Cor padrão dos indicadores */
+    border-radius: 9999px; /* Formato circular */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Estilo para o indicador ativo do álbum */
+.album-indicator.active {
+    background-color: #FACC15; /* Cor do indicador ativo */
+}
+
+/* Media query para telas pequenas (mobile) - ajustes no álbum */
+@media (max-width: 767px) {
+    #album-carousel-container {
+        height: 300px; /* Altura reduzida para mobile */
+    }
+
+    .album-nav-btn {
+        padding: 0.5rem 0.3rem; /* Padding reduzido para mobile */
+        font-size: 0.9rem;
+    }
+
+    .album-nav-btn i {
+        font-size: 0.9rem;
+    }
+}
