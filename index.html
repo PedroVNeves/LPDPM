@@ -906,8 +906,6 @@
                         startCitySlideshow(slide); // Inicia o slideshow de imagens para o slide ativo.
                     } else { // Para os slides que não são o slide ativo.
                         slide.classList.remove('active'); // Remove a classe 'active'.
-                        // Oculta o slide após a transição de opacidade (1 segundo).
-                        setTimeout(() => { slide.style.display = 'none'; }, 1000);
                     }
                 });
                 updateIndicators(index); // Atualiza a aparência dos indicadores de navegação.
