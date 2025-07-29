@@ -1,401 +1,1187 @@
-/* Estilos Específicos do Hero Section */
-/* Aplica uma sombra ao texto do título e subtítulo para melhor legibilidade sobre a imagem de fundo */
-.text-shadow-hero {
-    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.7);
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-/* Estilos do Carrossel de Cidades */
-/* Estilo base para cada item (slide) do carrossel */
-.carousel-item {
-    position: absolute; /* Posiciona os itens de forma absoluta dentro do contêiner */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* Inicialmente invisível */
-    pointer-events: none; /* Não permite interação quando invisível */
-    /* Transições para suavizar a entrada/saída e o ajuste de altura */
-    transition: opacity 1s ease-in-out, max-height 0.7s ease-in-out;
-    max-height: 500px; /* Altura máxima padrão para o slide não expandido */
-    overflow: hidden; /* Oculta conteúdo que excede a altura máxima */
-    padding: 2rem; /* Espaçamento interno padrão */
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daqui Pra o Mundo</title>
 
-/* Media query para telas pequenas (mobile) */
-@media (max-width: 767px) {
-    .carousel-item {
-        padding: 1.5rem 0.5rem; /* Ajusta o padding para telas menores */
-        max-height: none; /* Remove a altura máxima para que o conteúdo possa se expandir */
-        height: auto; /* Altura automática para se adaptar ao conteúdo */
-        min-height: 500px; /* Garante uma altura mínima para o slide */
-        display: flex;
-        flex-direction: column; /* Coloca os elementos em coluna no mobile */
-    }
-}
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
-/* Media query para telas médias (desktop) - reconfirma o padding */
-@media (min-width: 768px) {
-    .carousel-item {
-        padding: 2rem;
-    }
-}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-/* Overlay de fade para o conteúdo que é "ocultado" pelo botão "Saber Mais" */
-.fade-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px; /* Altura da área do fade */
-    /* Gradiente linear para criar o efeito de "fade out" para branco */
-    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-    pointer-events: none; /* Não impede a interação com elementos abaixo dele */
-    transition: opacity 0.5s ease-in-out; /* Transição suave da opacidade */
-}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-/* Quando o item do carrossel está expandido, o overlay de fade desaparece */
-.carousel-item.expanded .fade-overlay {
-    opacity: 0;
-}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
-/* O item ativo do carrossel se torna visível */
-.carousel-item.active {
-    opacity: 1;
-    pointer-events: auto; /* Permite interação quando ativo */
-}
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-/* Contêiner principal do carrossel de cidades */
-#cities-carousel-container {
-    position: relative;
-    height: 500px; /* Altura padrão do carrossel */
-    transition: height 0.7s ease-in-out; /* Transição suave para o ajuste de altura */
-    overflow: hidden; /* Garante que os slides que se movem não apareçam fora do contêiner */
-}
+<body>
 
-/* Slides internos do carrossel (contêiner flexível para os itens) */
-#cities-carousel-slides {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    transition: transform 0.5s ease-in-out; /* Transição para a movimentação dos slides */
-}
+    <nav class="fixed top-0 w-full bg-black/50 text-white shadow-lg z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="#hero" class="flex items-center">
+                        <img src="assets/wolrd-icon.png" alt="Logo Daqui Pra o Mundo"
+                            class="w-12 h-12 rounded-full mr-2">
+                    </a>
+                    <div class="flex flex-row justify-center items-center space-x-2">
+                        <a href="#hero" class="text-2xl text-cyan-300 font-bold transition-colors duration-300">
+                            Daqui
+                        </a>
+                        <a href="#hero" class="text-2xl text-orange-500 font-bold transition-colors duration-300">
+                            Pra o
+                        </a>
+                        <a href="#hero" class="text-2xl text-green-400 font-bold transition-colors duration-300">
+                            Mundo
+                        </a>
+                    </div>
 
-/* Layout do conteúdo dentro de cada item do carrossel */
-.carousel-item-content {
-    display: flex;
-    flex-direction: column; /* Padrão em coluna para mobile */
-    gap: 2rem; /* Espaçamento entre os elementos */
-    align-items: center; /* Alinhamento centralizado para mobile */
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 0; /* Padding inicial zero, ajustado por media query */
-}
+                </div>
 
-/* Media query para telas pequenas (mobile) - ajustes no layout do conteúdo */
-@media (max-width: 767px) {
-    .carousel-item-content {
-        padding: 0.5rem;
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
-        justify-content: flex-start; /* Alinha o conteúdo ao topo */
-        align-items: flex-start; /* Alinha o conteúdo à esquerda */
-        height: auto; /* Altura automática */
-    }
+                <div class="hidden lg:flex space-x-6">
+                    <div class="relative group">
+                        <a href="#hero"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                            <i class="fas fa-home mr-2"></i>Início
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#about"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                            <i class="fas fa-user mr-2"></i>Sobre Nós
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#cities"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                            <i class="fas fa-city mr-2"></i>Cidades
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#enrollment"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                            <i class="fas fa-clock mr-2"></i>Inscrições
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#contact"
+                            class="relative z-10 block px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-purple-400 font-bold transition-all duration-300 shadow-lg group-hover:shadow-xl group-hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
+                            <i class="fas fa-envelope mr-2"></i>Contato
+                        </a>
+                    </div>
+                </div>
 
-    .carousel-item-content>div {
-        width: 100%; /* Faz com que os blocos de conteúdo ocupem 100% da largura */
-    }
-}
+                <div class="lg:hidden">
+                    <button id="menu-toggle" aria-label="Abrir menu de navegação"
+                        class="text-white focus:outline-none hover:text-yellow-400 transition-colors duration-300">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-/* Media query para telas médias (desktop) - layout em linha */
-@media (min-width: 768px) {
-    .carousel-item-content {
-        flex-direction: row; /* Coloca os elementos em linha no desktop */
-        align-items: flex-start; /* Alinha ao topo */
-        justify-content: space-between; /* Distribui o espaço entre os elementos */
-    }
-}
+        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu Principal"
+            class="fixed inset-0 bg-purple-900/95 transform translate-x-full transition-transform duration-300 ease-in-out z-40">
+            <div class="flex justify-end p-4">
+                <button id="close-menu" aria-label="Fechar menu de navegação"
+                    class="text-white focus:outline-none hover:text-yellow-400">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <nav class="flex flex-col items-center justify-center h-full space-y-8">
+                <a href="#hero"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-home mr-4"></i>Início
+                </a>
+                <a href="#about"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-user mr-4"></i>Sobre Nós
+                </a>
+                <a href="#cities"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-city mr-4"></i>Cidades
+                </a>
+                <a href="#enrollment"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-clock mr-4"></i>Inscrições
+                </a>
+                <a href="#contact"
+                    class="mobile-nav-link text-white text-3xl font-bold hover:text-yellow-400 transition-colors duration-300">
+                    <i class="fas fa-envelope mr-4"></i>Contato
+                </a>
+            </nav>
+        </div>
+    </nav>
 
-/* Quando o item do carrossel está expandido, permite que ele tenha uma altura maior e rolagem interna */
-.carousel-item.expanded {
-    max-height: 2000px; /* Altura máxima maior para conteúdo expandido */
-    overflow-y: auto; /* Adiciona barra de rolagem vertical se o conteúdo exceder */
-}
+    <section id="hero"
+        class="relative bg-black/30 bg-[url('assets/dpmhero.jpeg')] bg-cover bg-center h-screen flex flex-col items-center justify-center text-center text-white">
+        <h1 class="text-6xl md:text-7xl font-extrabold mb-4 text-shadow-hero" data-aos="fade-up"
+            data-aos-duration="1000">
+            Daqui Pra o Mundo
+        </h1>
+        <p class="text-xl md:text-2xl font-bold mb-8 max-w-2xl text-shadow-hero" data-aos="fade-up" data-aos-delay="300"
+            data-aos-duration="1000">
+            Venha conosco nesta viagem incrível.
+        </p>
+        <a href="#enrollment"
+            class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-8 rounded-full transition duration-300 inline-block mb-4"
+            data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
+            Inscreva-se
+        </a>
+        <a class="text-xl font-bold text-yellow-400 text-shadow-hero" data-aos="fade-up" data-aos-delay="600"
+            data-aos-duration="1000" target="_blank" href="https://www.instagram.com/daquipromundo25/">
+            Clique aqui e venha conhecer mais sobre nossas aventuras em nosso instagram.
+        </a>
+        <button id="scroll-down-button" aria-label="Rolar para baixo"
+            class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white hover:text-yellow-400">
+            <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
+        </button>
+    </section>
 
-/* Slideshow de imagens da cidade dentro de cada item do carrossel */
-.city-images-slideshow {
-    position: relative;
-    width: 100%;
-    height: 250px; /* Altura fixa do slideshow de imagens */
-    overflow: hidden;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 1rem; /* Margem superior para mobile */
-}
+    <section id="about"
+        class="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 py-16 flex items-center justify-center px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-5xl font-extrabold text-blue-800 mb-8" data-aos="fade-down" data-aos-duration="1000">
+                Daqui Pra o Mundo: Onde Alagoas Encontra o Mundo!
+            </h2>
+            <p class="text-xl text-gray-700 leading-relaxed mb-8" data-aos="fade-up" data-aos-delay="200"
+                data-aos-duration="1000">
+                O Daqui Pra o Mundo é um programa de intercâmbio internacional oferecido pelo Governo de Alagoas, que
+                leva estudantes da rede
+                estadual para experiências culturais e educacionais no exterior, com foco no aprimoramento do inglês
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
+                    data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-globe-americas text-6xl text-purple-600 mb-4 animate-pulse"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Fluência Global</h3>
+                    <p class="text-gray-600">Imersão total em novos idiomas, preparando nossos estudantes para os
+                        desafios e as oportunidades do século XXI.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
+                    data-aos="zoom-in" data-aos-delay="600">
+                    <i class="fas fa-book-reader text-6xl text-green-600 mb-4 animate-pulse"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Protagonismo Juvenil</h3>
+                    <p class="text-gray-600">Oferecemos a chance de explorar novos países, culturas e formas de pensar,
+                        direto das escolas de Alagoas para o mundo</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2"
+                    data-aos="zoom-in" data-aos-delay="800">
+                    <i class="fas fa-handshake text-6xl text-yellow-600 mb-4 animate-pulse"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Futuro Brilhante</h3>
+                    <p class="text-gray-600">Investimos no potencial de cada jovem, fomentando liderança, autonomia e
+                        cidadania global.</p>
+                </div>
+            </div>
+            <p class="text-xl text-gray-700 leading-relaxed font-medium" data-aos="fade-up" data-aos-delay="1000"
+                data-aos-duration="1000">
+                Se você é estudante da rede pública alagoana, prepare-se! O Daqui Pra o Mundo está aqui para
+                transformar seu sonho de conhecer o mundo em realidade. <br class="hidden md:inline">
+                Sua jornada internacional começa aqui, em Alagoas!
+            </p>
+        </div>
+    </section>
 
-/* Media query para telas médias (desktop) - remove margem superior */
-@media (min-width: 768px) {
-    .city-images-slideshow {
-        margin-top: 0;
-    }
-}
+    <section id="cities" class="min-h-screen bg-white py-16 flex items-center justify-center px-4">
+        <div class="container mx-auto max-w-6xl text-center">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-12" data-aos="fade-down" data-aos-duration="1000">
+                Nossos Destinos: O Mundo Espera Por Você!
+            </h2>
 
-/* Estilo para as imagens dentro do slideshow */
-.city-images-slideshow img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Garante que a imagem cubra todo o espaço sem distorção */
-    opacity: 0; /* Inicialmente invisível */
-    transition: opacity 1s ease-in-out; /* Transição suave da opacidade */
-}
+            <div id="cities-carousel-outer" class="relative w-full max-w-5xl mx-auto rounded-xl shadow-2xl"
+                data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                <div id="cities-carousel-container" class="relative w-full overflow-hidden">
+                    <div id="cities-carousel-slides" class="flex transition-transform duration-500 ease-in-out h-full">
+                        <div
+                            class="carousel-item flex-shrink-0 w-full bg-blue-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="w-full md:w-1/2 relative">
+                                    <h3 class="text-4xl font-bold text-blue-800 mb-4">Brighton, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
+                                        Conhecida como "Londres à beira-mar", Brighton é uma cidade vibrante e moderna,
+                                        famosa por sua atmosfera boêmia, vida noturna agitada e a icônica praia de
+                                        calhau. Ideal para quem busca um intercâmbio dinâmico e culturalmente rico, com
+                                        fácil acesso à capital.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
+                                        <li>Vibrante cena artística e musical</li>
+                                        <li>The Royal Pavilion e Brighton Pier</li>
+                                        <li>Excelente para aprimorar o inglês britânico</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
+                                        Carregando clima de Brighton...
+                                    </div>
+                                    <div class="fade-overlay"></div>
+                                    <button
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Brighton oferece uma mistura única de história e modernidade. Seus cafés
+                                            independentes, boutiques vintage e a energia acolhedora a tornam um lugar
+                                            perfeito para estudantes internacionais. Há sempre algo acontecendo, desde
+                                            festivais de arte até mercados de rua. A cidade é compacta e fácil de
+                                            explorar a
+                                            pé, com ótimas conexões de trem para outras partes do Reino Unido.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A vida estudantil em Brighton é efervescente. Com duas universidades
+                                            renomadas,
+                                            a cidade está sempre cheia de jovens, o que contribui para a atmosfera
+                                            vibrante.
+                                            Há uma grande variedade de opções de lazer, desde pubs tradicionais a casas
+                                            de
+                                            shows, galerias de arte e mercados de pulgas. A proximidade com a praia
+                                            permite
+                                            atividades como paddleboarding e voleibol de praia. A culinária é
+                                            diversificada,
+                                            com muitas opções vegetarianas e veganas. Eventos culturais como o Brighton
+                                            Fringe Festival e o Brighton Pride atraem visitantes do mundo todo,
+                                            oferecendo
+                                            experiências únicas. O sistema de transporte público é eficiente,
+                                            facilitando o
+                                            acesso a todas as partes da cidade e arredores, incluindo excursões de um
+                                            dia
+                                            para cidades históricas próximas e o Parque Nacional South Downs.
+                                        </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/brightonsquad/">
+                                            Clique aqui e conheça nossos intercambistas que irão para Brighton
+                                        </a>
+                                        <button
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/brighton/brighton_foto1.jpg" alt="Brighton Vista 1">
+                                        <img src="assets/brighton/brighton_foto2.jpg" alt="Brighton Vista 2">
+                                        <img src="assets/brighton/brighton_foto3.jpg" alt="Brighton Vista 3">
+                                        <img src="assets/brighton/brighton_foto4.jpg" alt="Brighton Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-/* A imagem ativa do slideshow se torna visível */
-.city-images-slideshow img.active-image {
-    opacity: 1;
-}
+                        <div
+                            class="carousel-item flex-shrink-0 w-full bg-green-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2 relative">
+                                    <h3 class="text-4xl font-bold text-green-800 mb-4">Worthing, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
+                                        Uma charmosa cidade costeira no sul da Inglaterra, Worthing é ideal para quem
+                                        busca
+                                        um ambiente mais tranquilo e seguro para estudar, sem abrir mão das belezas
+                                        naturais. Com uma orla marítima deslumbrante e um calçadão extenso, é perfeita
+                                        para
+                                        relaxar e aproveitar a brisa do mar.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
+                                        <li>Ambiente pacífico e seguro</li>
+                                        <li>Píer vitoriano e praias tranquilas</li>
+                                        <li>Comunidade acolhedora e familiar</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
+                                        Carregando clima de Worthing...
+                                    </div>
+                                    <div class="fade-overlay"></div>
+                                    <button
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Worthing oferece uma experiência de intercâmbio focada no estudo e na
+                                            qualidade
+                                            de
+                                            vida. Com menos distrações das grandes cidades, os estudantes podem se
+                                            concentrar
+                                            no aprendizado do inglês e desfrutar de um ritmo de vida mais calmo. A
+                                            cidade
+                                            tem
+                                            belos parques, museus locais e acesso fácil a cidades maiores como Brighton
+                                            para
+                                            passeios de fim de semana.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A vida em Worthing é marcada pela tranquilidade e pela segurança,
+                                            características ideais para um foco maior nos estudos. A cidade é perfeita
+                                            para
+                                            caminhadas e ciclismo ao longo da costa, com vistas panorâmicas que inspiram
+                                            a
+                                            mente. Há uma comunidade estudantil crescente, oferecendo eventos e
+                                            atividades
+                                            mais intimistas. O mercado local, com produtos frescos e artesanato, é um
+                                            ponto
+                                            de encontro. A proximidade com o South Downs National Park permite que os
+                                            alunos explorem a natureza e pratiquem trilhas. A gastronomia local inclui
+                                            pubs
+                                            tradicionais e restaurantes charmosos. Embora seja mais calma que Brighton,
+                                            Worthing tem uma boa rede de transportes que facilita o acesso a outras
+                                            cidades
+                                            costeiras e a Londres, oferecendo um equilíbrio perfeito entre estudo e
+                                            lazer.
+                                        </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/dearworthing?igsh=MXN2OHRmcG41YmNxMA==">
+                                            Clique aqui e conheça nossos intercambistas que irão para Worthing
+                                        </a>
+                                        <button
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/worthing/worthing_foto1.jpg" alt="Worthing Vista 1">
+                                        <img src="assets/worthing/worthing_foto2.jpg" alt="Worthing Vista 2">
+                                        <img src="assets/worthing/worthing_foto3.jpg" alt="Worthing Vista 3">
+                                        <img src="assets/worthing/worthing_foto4.jpg" alt="Worthing Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-/* Estilos dos botões de navegação do carrossel de Cidades */
-/* Aplicamos o padding e o background-color diretamente na classe dos botões */
-#prevBtn,
-#nextBtn {
-    position: absolute;
-    top: 50%; /* Centraliza verticalmente */
-    transform: translateY(-50%); /* Ajuste para centralização perfeita */
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
-    color: white; /* Cor do ícone */
-    border-radius: 9999px; /* Formato de círculo */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
-    transition: background-color 0.3s, transform 0.3s;
-    /* Tamanho dos botões - um padding que funcione como um pequeno círculo */
-    width: 40px; /* Largura fixa */
-    height: 40px; /* Altura fixa */
-    display: flex; /* Para centralizar o ícone */
-    align-items: center; /* Centraliza ícone verticalmente */
-    justify-content: center; /* Centraliza ícone horizontalmente */
-    padding: 0; /* Remove padding interno extra, pois width/height já definem o tamanho */
-}
+                        <div
+                            class="carousel-item flex-shrink-0 w-full bg-yellow-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2 relative">
+                                    <h3 class="text-4xl font-bold text-yellow-800 mb-4">Canterbury, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
+                                        Uma cidade histórica e universitária, Canterbury é mundialmente famosa por sua
+                                        majestosa Catedral, Patrimônio Mundial da UNESCO. Oferece um ambiente acadêmico
+                                        inspirador e uma rica imersão na história inglesa, ideal para quem aprecia a
+                                        cultura e a tradição.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
+                                        <li>Catedral de Canterbury e história medieval</li>
+                                        <li>Atmosfera universitária vibrante</li>
+                                        <li>Cidade compacta e fácil de explorar</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
+                                        Carregando clima de Canterbury...
+                                    </div>
+                                    <div class="fade-overlay"></div>
+                                    <button
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Estudar em Canterbury é como viver em um livro de história. As ruas de
+                                            paralelepípedos, edifícios antigos e a presença de estudantes de todo o
+                                            mundo
+                                            criam uma atmosfera única. Além da Catedral, você pode visitar as Ruínas da
+                                            Abadia
+                                            de Santo Agostinho, fazer passeios de barco pelo Rio Stour e explorar os
+                                            diversos
+                                            museus e galerias.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A experiência acadêmica em Canterbury é enriquecedora, com a Universidade de
+                                            Kent e
+                                            a Canterbury Christ Church University contribuindo para uma atmosfera jovem
+                                            e
+                                            internacional. A cidade oferece diversos eventos culturais, peças de teatro
+                                            e
+                                            exposições de arte. Os pubs históricos e as casas de chá são perfeitos para
+                                            socializar. Para os amantes da natureza, os arredores de Canterbury são
+                                            ideais
+                                            para
+                                            caminhadas e ciclismo. A localização estratégica de Canterbury também
+                                            facilita
+                                            viagens de um dia a Londres e outras cidades históricas no sudeste da
+                                            Inglaterra.
+                                            A
+                                            culinária local é variada, com opções que vão desde pratos tradicionais
+                                            britânicos
+                                            até cozinha internacional.
+                                        </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/cantercrew.uk?igsh=MXF4dXdtazk4eTB5Nw==">
+                                            Clique aqui e conheça nossos intercambistas que irão para Canterburry
+                                        </a>
+                                        <button
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/canterbury/canterbury_foto1.jpg" alt="Canterbury Vista 1">
+                                        <img src="assets/canterbury/canterbury_foto2.jpg" alt="Canterbury Vista 2">
+                                        <img src="assets/canterbury/canterbury_foto3.jpg" alt="Canterbury Vista 3">
+                                        <img src="assets/canterbury/canterbury_foto4.jpg" alt="Canterbury Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-/* Efeito hover para os botões de navegação */
-#prevBtn:hover,
-#nextBtn:hover {
-    background-color: rgba(0, 0, 0, 0.75);
-}
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-red-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2 relative">
+                                    <h3 class="text-4xl font-bold text-red-800 mb-4">Oxford, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
+                                        Lar da mais antiga universidade de língua inglesa, Oxford é um centro de
+                                        excelência
+                                        acadêmica e uma cidade de beleza arquitetônica ímpar. Mergulhe em um ambiente
+                                        intelectual estimulante, com bibliotecas históricas, colégios impressionantes e
+                                        uma
+                                        atmosfera que respira conhecimento.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
+                                        <li>Universidade de Oxford e legado acadêmico</li>
+                                        <li>Arquitetura gótica e jardins deslumbrantes</li>
+                                        <li>Museus e galerias de classe mundial</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
+                                        Carregando clima de Oxford...
+                                    </div>
+                                    <div class="fade-overlay"></div>
+                                    <button
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Para estudantes que buscam uma imersão profunda na cultura e no estudo,
+                                            Oxford
+                                            é
+                                            incomparável. Passeie pelos campi históricos, explore a Bodleian Library e
+                                            desfrute de punting (passeio de barco) no rio Cherwell. A cidade também
+                                            oferece
+                                            uma
+                                            vida cultural rica, com teatros, pubs tradicionais e eventos estudantis.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            Oxford é um paraíso para os amantes da história e do conhecimento, com seus
+                                            famosos
+                                            colégios, museus (como o Ashmolean Museum) e livrarias. A cidade é compacta
+                                            e
+                                            pode
+                                            ser facilmente explorada a pé ou de bicicleta. A vida estudantil é central,
+                                            com
+                                            inúmeras sociedades e clubes para participar, oferecendo oportunidades
+                                            únicas de
+                                            networking e desenvolvimento pessoal. Há muitos parques e jardins para
+                                            relaxar,
+                                            como
+                                            o University Parks e o Botanic Garden. Os pubs históricos, como o Eagle and
+                                            Child,
+                                            frequentado por C.S. Lewis e J.R.R. Tolkien, proporcionam uma experiência
+                                            autêntica.
+                                            Oxford também é um excelente ponto de partida para explorar a região de
+                                            Cotswolds e
+                                            outras cidades históricas.
+                                        </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/oxford.owls?igsh=dTEydmN0ZHB4OGds">
+                                            Clique aqui e conheça nossos intercambistas que irão para Oxford
+                                        </a>
+                                        <button
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/oxford/oxford_foto1.jpg" alt="Oxford Vista 1">
+                                        <img src="assets/oxford/oxford_foto2.jpg" alt="Oxford Vista 2">
+                                        <img src="assets/oxford/oxford_foto3.jpg" alt="Oxford Vista 3">
+                                        <img src="assets/oxford/oxford_foto4.jpg" alt="Oxford Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-/* Posição dos botões para desktop */
-#prevBtn {
-    left: -2.5rem; /* Posição à esquerda do carrossel */
-}
+                        <div
+                            class="carousel-item flex-shrink-0 w-full p-8 bg-purple-100 items-center justify-center gap-8 text-left h-full">
+                            <div class="carousel-item-content h-full">
+                                <div class="md:w-1/2 relative">
+                                    <h3 class="text-4xl font-bold text-purple-800 mb-4">Bournemouth, Reino Unido</h3>
+                                    <p class="text-lg text-gray-700 leading-relaxed text-content">
+                                        Uma das cidades costeiras mais populares do Reino Unido, Bournemouth é famosa
+                                        por
+                                        suas
+                                        praias de areia dourada e seus exuberantes jardins. Oferece uma combinação
+                                        perfeita
+                                        de
+                                        vida acadêmica ativa e um estilo de vida descontraído à beira-mar.
+                                    </p>
+                                    <ul class="text-gray-600 mt-4 list-disc list-inside text-content">
+                                        <li>Sete milhas de praias premiadas</li>
+                                        <li>Parques e jardins vitorianos</li>
+                                        <li>Atividades aquáticas e vida noturna</li>
+                                    </ul>
+                                    <div class="weather-info mt-4 text-gray-800 font-semibold text-content">
+                                        Carregando clima de Bournemouth...
+                                    </div>
+                                    <div class="fade-overlay"></div>
+                                    <button
+                                        class="info-toggle-btn-base initial-more-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                        Saber Mais
+                                    </button>
+                                    <div class="more-info mt-4 hidden">
+                                        <p class="text-md text-gray-600">
+                                            Bournemouth é um destino vibrante para estudantes, combinando excelentes
+                                            escolhas de
+                                            inglês com uma atmosfera de férias. Além das praias, você pode explorar o
+                                            Oceanário, passear pelo píer e desfrutar de uma vasta gama de restaurantes e
+                                            lojas. A vida noturna é animada, com muitos pubs e clubes.
+                                        </p>
+                                        <p class="text-md text-gray-600 mt-2">
+                                            A cidade de Bournemouth é perfeita para estudantes que adoram atividades ao
+                                            ar
+                                            livre
+                                            e um estilo de vida descontraído. Suas praias são ideais para esportes
+                                            aquáticos
+                                            como surfe, paddleboarding e caiaque. Os extensos jardins e parques oferecem
+                                            espaços
+                                            verdes para relaxar e estudar. Bournemouth tem uma vida noturna animada, com
+                                            muitos
+                                            bares, clubes e restaurantes, e uma cena cultural crescente com teatros e
+                                            cinemas. A
+                                            University of Bournemouth atrai uma grande população estudantil, criando um
+                                            ambiente dinâmico e multicultural. A localização de Bournemouth na costa sul
+                                            da
+                                            Inglaterra também permite fácil acesso a atrações naturais como a Costa
+                                            Jurássica,
+                                            Patrimônio Mundial da UNESCO, e outras cidades costeiras charmosas.
+                                        </p>
+                                        <a class="text-lg font-bold text-purple-600" target="_blank"
+                                            href="https://www.instagram.com/bournemouthg5/">
+                                            Clique aqui e conheça nossos intercambistas que irão para Bournemouth
+                                        </a>
+                                        <button
+                                            class="info-toggle-btn-base expanded-less-info-btn bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-full transition duration-300">
+                                            Ver Menos
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="city-images-slideshow">
+                                        <img src="assets/bournemouth/bournemouth_foto1.jpg" alt="Bournemouth Vista 1">
+                                        <img src="assets/bournemouth/bournemouth_foto2.jpg" alt="Bournemouth Vista 2">
+                                        <img src="assets/bournemouth/bournemouth_foto3.jpg" alt="Bournemouth Vista 3">
+                                        <img src="assets/bournemouth/bournemouth_foto4.jpg" alt="Bournemouth Vista 4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-#nextBtn {
-    right: -2.5rem; /* Posição à direita do carrossel */
-}
+                <button id="prevBtn" aria-label="Slide anterior" class="carousel-nav-btn-base p-3 -left-16 md:-left-20">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <button id="nextBtn" aria-label="Próximo slide"
+                    class="carousel-nav-btn-base p-3 -right-16 md:-right-20">
+                    <i class="fas fa-chevron-right text-xl"></i>
+                </button>
 
-/* Ajustes específicos para mobile - Botões de navegação do carrossel */
-@media (max-width: 767px) {
-    #prevBtn {
-        left: 0.5rem; /* Mais perto da borda da tela no mobile */
-    }
+                <div id="carousel-indicators"
+                    class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                </div>
+            </div>
+        </div>
+    </section>
 
-    #nextBtn {
-        right: 0.5rem; /* Mais perto da borda da tela no mobile */
-    }
+    <section id="enrollment" class="bg-gray-100 py-16 px-4 text-center">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-12" data-aos="fade-down" data-aos-duration="1000">
+                Sua Jornada Começa Agora!
+            </h2>
 
-    /* Posição dos indicadores do carrossel no mobile */
-    #carousel-indicators {
-        bottom: 1rem;
-    }
-}
+            <div id="album-carousel-container" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="1000">
+                <div id="album-carousel-slides">
+                </div>
+                <button id="album-prev-btn" aria-label="Slide anterior do álbum" class="album-nav-btn">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <button id="album-next-btn" aria-label="Próximo slide do álbum" class="album-nav-btn">
+                    <i class="fas fa-chevron-right text-xl"></i>
+                </button>
+                <div id="album-indicators"></div>
+            </div>
 
-/* Estilo base para os botões "Saber Mais" / "Ver Menos" */
-.info-toggle-btn-base {
-    background-color: #8B5CF6;
-    color: white;
-    font-weight: bold;
-    padding: 0.5rem 1.5rem;
-    border-radius: 9999px;
-    transition: background-color 0.3s;
-    margin-top: 1rem;
-    cursor: pointer;
-}
+            <a href="https://selecao.educacao.al.gov.br/edital-seduc-n-0192024-daqui-pra-o-mundo"
+                class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-10 rounded-full text-2xl transition duration-300 transform hover:scale-105 shadow-lg inline-block"
+                data-aos="fade-up" data-aos-duration="1000">
+                Inscreva-se e faça parte dessa jornada!
+            </a>
+        </div>
+    </section>
 
-/* Efeito hover para os botões "Saber Mais" / "Ver Menos" */
-.info-toggle-btn-base:hover {
-    background-color: #7C3AED;
-}
+    <section id="contact" class="bg-gradient-to-b from-white to-blue-50 py-16 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-5xl font-extrabold text-gray-800 mb-12" data-aos="fade-down" data-aos-duration="1000">
+                Fale Conosco e Siga a Jornada!
+            </h2>
+            <p class="text-xl text-gray-700 leading-relaxed mb-10" data-aos="fade-up" data-aos-delay="200"
+                data-aos-duration="1000">
+                Conecte-se com o programa Daqui Pra o Mundo e com as comunidades de intercambistas!
+                Estamos aqui para tirar suas dúvidas e compartilhar as aventuras.
+            </p>
 
-/* Posicionamento do botão "Saber Mais" inicial */
-.initial-more-info-btn {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 5;
-}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                <a href="https://www.instagram.com/daquipromundo25/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-purple-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-1 lg:order-1"
+                    data-aos="zoom-in" data-aos-delay="300" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-purple-600 mb-4 group-hover:text-purple-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Instagram Oficial</h3>
+                    <p class="text-gray-600">@daquipromundo25</p>
+                </a>
 
-/* Oculta o botão "Saber Mais" quando o carrossel está expandido */
-.carousel-item.expanded .initial-more-info-btn {
-    display: none;
-}
+                <a href="https://www.instagram.com/educacaoal/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-blue-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-2 lg:order-2"
+                    data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-blue-600 mb-4 group-hover:text-blue-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Educação AL</h3>
+                    <p class="text-gray-600">@educacaoal</p>
+                </a>
 
-/* Esconde o botão "Ver Menos" por padrão */
-.expanded-less-info-btn {
-    margin-top: 2rem;
-    display: none;
-}
+                <a href="https://www.instagram.com/governodealagoas/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-green-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-3 lg:order-3"
+                    data-aos="zoom-in" data-aos-delay="500" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-green-600 mb-4 group-hover:text-green-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Governo de Alagoas</h3>
+                    <p class="text-gray-600">@governodealagoas</p>
+                </a>
 
-/* Exibe o botão "Ver Menos" quando o carrossel está expandido e centraliza-o */
-.carousel-item.expanded .expanded-less-info-btn {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+                <a href="mailto:daquipraomundo@educ.al.gov.br" target="_blank"
+                    class="block p-6 bg-yellow-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-4 lg:order-5"
+                    data-aos="zoom-in" data-aos-delay="700" data-aos-duration="1000">
+                    <i
+                        class="fas fa-envelope text-5xl text-yellow-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Email do Programa</h3>
+                    <p class="text-gray-600">daquipraomundo@educ.al.gov.br</p>
+                </a>
 
-/* Estilos do Carrossel de Álbum de Fotos */
-#album-carousel-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px; /* Largura máxima do carrossel do álbum */
-    height: 400px; /* Altura fixa do carrossel do álbum */
-    overflow: hidden;
-    border-radius: 0.75rem;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    margin: 0 auto 3rem; /* Centraliza e adiciona margem inferior */
-    background-color: #f0f0f0; /* Cor de fundo suave */
-}
+                <a href="https://www.instagram.com/brightonsquad/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-5 lg:order-4"
+                    data-aos="zoom-in" data-aos-delay="600" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Brighton Squad</h3>
+                    <p class="text-gray-600">@brightonsquad</p>
+                </a>
 
-#album-carousel-slides {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s ease-in-out; /* Transição suave para a movimentação dos slides */
-}
+                <a href="https://www.instagram.com/dearworthing?igsh=MXN2OHRmcG41YmNxMA==" target="_blank"
+                    rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-6 lg:order-6"
+                    data-aos="zoom-in" data-aos-delay="700" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Dear Worthing</h3>
+                    <p class="text-gray-600">@dearworthing</p>
+                </a>
 
-.album-slide {
-    flex-shrink: 0; /* Impede que os slides encolham */
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+                <a href="https://www.instagram.com/cantercrew.uk?igsh=MXF4dXdtazk4eTB5Nw==" target="_blank"
+                    rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-7 lg:order-7"
+                    data-aos="zoom-in" data-aos-delay="800" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Canter Crew UK</h3>
+                    <p class="text-gray-600">@cantercrew.uk</p>
+                </a>
 
-.album-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ajusta a imagem para cobrir o slide */
-    border-radius: 0.75rem; /* Borda arredondada para as imagens */
-}
+                <a href="https://www.instagram.com/oxford.owls?igsh=dTEydmN0ZHB4OGds" target="_blank"
+                    rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-8 lg:order-8"
+                    data-aos="zoom-in" data-aos-delay="900" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Oxford Owls</h3>
+                    <p class="text-gray-600">@oxford.owls</p>
+                </a>
 
-/* Botões de navegação do carrossel do álbum */
-.album-nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
-    color: white;
-    padding: 0.75rem 0.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    z-index: 20;
-    transition: background-color 0.3s;
-}
+                <a href="https://www.instagram.com/bournemouthg5/" target="_blank" rel="noopener noreferrer"
+                    class="block p-6 bg-gray-100 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group order-9 lg:order-9"
+                    data-aos="zoom-in" data-aos-delay="1000" data-aos-duration="1000">
+                    <i
+                        class="fab fa-instagram text-5xl text-gray-600 mb-4 group-hover:text-gray-700 transition-colors"></i>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Bournemouth G5</h3>
+                    <p class="text-gray-600">@bournemouthg5</p>
+                </a>
+            </div>
+        </div>
+    </section>
 
-/* Efeito hover para os botões do álbum */
-.album-nav-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
+    <footer class="bg-gray-800 text-white py-8 px-4 text-center">
+        <div class="container mx-auto max-w-6xl">
+            <p class="text-lg mb-4">&copy; 2025 Daqui Pra o Mundo. Todos os direitos reservados.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#hero" class="hover:text-yellow-400 transition-colors duration-300">Início</a>
+                <a href="#about" class="hover:text-yellow-400 transition-colors duration-300">Sobre Nós</a>
+                <a href="#cities" class="hover:text-yellow-400 transition-colors duration-300">Cidades</a>
+                <a href="#enrollment" class="hover:text-yellow-400 transition-colors duration-300">Inscrições</a>
+                <a href="#contact" class="hover:text-yellow-400 transition-colors duration-300">Contato</a>
+            </div>
+        </div>
+    </footer>
 
-#album-prev-btn {
-    left: 1rem; /* Posição à esquerda */
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init(); // Inicializa a biblioteca AOS para que as animações baseadas em 'data-aos' funcionem.
 
-#album-next-btn {
-    right: 1rem; /* Posição à direita */
-}
+        // Event listener para garantir que o script só execute após o DOM estar completamente carregado.
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica para o botão de rolagem para baixo na seção Hero.
+            const scrollDownButton = document.getElementById('scroll-down-button');
+            if (scrollDownButton) { // Verifica se o botão existe no DOM.
+                scrollDownButton.addEventListener('click', () => {
+                    // Rola a página suavemente até a seção 'about'.
+                    document.getElementById('about').scrollIntoView({
+                        behavior: 'smooth' // Habilita a rolagem suave.
+                    });
+                });
+            }
 
-/* Indicadores do carrossel do álbum (pontos) */
-#album-indicators {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 0.5rem; /* Espaçamento entre os indicadores */
-    z-index: 20;
-}
+            // Lógica para rolagem suave em todos os links da barra de navegação (desktop e mobile).
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault(); // Previne o comportamento padrão de salto do link.
+                    const targetId = this.getAttribute('href'); // Obtém o 'href' do link, que é o ID da seção alvo.
+                    const targetSection = document.querySelector(targetId); // Seleciona o elemento da seção alvo.
+                    if (targetSection) { // Verifica se a seção alvo existe.
+                        // Rola a página suavemente para a seção alvo.
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth', // Habilita a rolagem suave.
+                            block: 'start' // Alinha o topo da seção com o topo da viewport.
+                        });
+                    }
+                });
+            });
 
-.album-indicator {
-    width: 0.75rem;
-    height: 0.75rem;
-    background-color: rgba(255, 255, 255, 0.5); /* Cor padrão dos indicadores */
-    border-radius: 9999px; /* Formato circular */
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+            // Lógica para mudar a cor da barra de navegação (navbar) ao rolar a página.
+            const navbar = document.getElementById('navbar');
+            if (navbar) { // Verifica se a navbar existe no DOM.
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) { // Se a rolagem vertical for maior que 50 pixels...
+                        // Adiciona classes para tornar a navbar roxa e com sombra forte.
+                        navbar.classList.add('bg-purple-800', 'shadow-xl');
+                        // Remove as classes originais de cor e sombra.
+                        navbar.classList.remove('bg-black/50', 'shadow-lg');
+                    } else {
+                        // Se a rolagem estiver no topo, remove as classes roxas.
+                        navbar.classList.remove('bg-purple-800', 'shadow-xl');
+                        // Restaura as classes originais de cor preta transparente e sombra padrão.
+                        navbar.classList.add('bg-black/50', 'shadow-lg');
+                    }
+                });
+            }
 
-/* Estilo para o indicador ativo do álbum */
-.album-indicator.active {
-    background-color: #FACC15; /* Cor do indicador ativo */
-}
+            // Lógica para o Carrossel de Cidades (seção "Nossos Destinos").
+            const carouselOuter = document.getElementById('cities-carousel-outer');
+            const carouselContainer = document.getElementById('cities-carousel-container');
+            const carouselSlides = document.getElementById('cities-carousel-slides');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const indicatorsContainer = document.getElementById('carousel-indicators');
+            const slides = document.querySelectorAll('.carousel-item');
+            let currentSlide = 0; // Variável para rastrear o índice do slide atualmente visível.
 
-/* Media query para telas pequenas (mobile) - ajustes no álbum */
-@media (max-width: 767px) {
-    #album-carousel-container {
-        height: 300px; /* Altura reduzida para mobile */
-    }
+            // Chave da API OpenWeatherMap. **MUITO IMPORTANTE:** Substitua '573fc6a6041cf7914368b00f0f5b4fb9' pela sua chave real da API.
+            // Para obter uma chave gratuita, visite openweathermap.org.
+            const OPENWEATHER_API_KEY = '573fc6a6041cf7914368b00f0f5b4fb9';
 
-    .album-nav-btn {
-        padding: 0.5rem 0.3rem; /* Padding reduzido para mobile */
-        font-size: 0.9rem;
-    }
+            // Objeto contendo as coordenadas geográficas (latitude e longitude) para cada cidade, usadas para a requisição da API do tempo.
+            const cityCoordinates = {
+                'Brighton': { lat: 50.8225, lon: -0.1372 },
+                'Worthing': { lat: 50.8143, lon: -0.3703 },
+                'Canterbury': { lat: 51.2798, lon: 1.0776 },
+                'Oxford': { lat: 51.7520, lon: -1.2577 },
+                'Bournemouth': { lat: 50.7192, lon: -1.8797 }
+            };
 
-    .album-nav-btn i {
-        font-size: 0.9rem;
-    }
-}
+            // Objeto para armazenar dados de estado (como o ID do intervalo) para o slideshow de imagens de cada cidade,
+            // permitindo parar e iniciar os slideshows individualmente.
+            const citySlideshowData = {};
 
-/* No seu arquivo style.css, adicione os seguintes estilos se necessário, embora Tailwind seja prioritário: */
+            // Função assíncrona para buscar a previsão do tempo de uma cidade usando a API OpenWeatherMap.
+            async function fetchWeather(cityName, element) {
+                // Verifica se a chave da API está configurada.
+                if (!OPENWEATHER_API_KEY) {
+                    element.innerHTML = 'Previsão do tempo: Chave API não configurada.';
+                    console.warn('AVISO: A chave da API OpenWeatherMap não está configurada ou está vazia. Obtenha uma em openweathermap.org e substitua no código.');
+                    return;
+                }
+                const coords = cityCoordinates[cityName]; // Obtém as coordenadas da cidade.
+                if (!coords) { // Verifica se as coordenadas foram encontradas.
+                    element.innerHTML = 'Coordenadas da cidade não encontradas.';
+                    return;
+                }
+                // Constrói a URL da API com as coordenadas, chave e unidades/idioma desejados.
+                const url = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=pt_br`;
+                try {
+                    const response = await fetch(url); // Faz a requisição HTTP.
+                    // Lança um erro se a resposta não for bem-sucedida (status HTTP 2xx).
+                    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                    const data = await response.json(); // Converte a resposta para JSON.
+                    const { temp } = data.main; // Extrai a temperatura.
+                    const { description, icon: iconCode } = data.weather[0]; // Extrai a descrição do clima e o código do ícone.
+                    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Constrói a URL do ícone do clima.
+                    // Atualiza o elemento HTML com a temperatura, descrição e o ícone.
+                    element.innerHTML = `Previsão do tempo: ${temp.toFixed(0)}°C, ${description} <img src="${iconUrl}" alt="${description}" class="inline-block w-8 h-8 -mt-2">`;
+                } catch (error) {
+                    console.error('Erro ao buscar previsão do tempo:', error); // Registra o erro no console.
+                    element.innerHTML = 'Previsão do tempo indisponível.'; // Exibe mensagem de erro na página.
+                }
+            }
 
-/* Estilos gerais para as caixas de passo, se precisar de ajustes finos além do Tailwind */
-#pre-enrollment .p-8 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
+            // Função para iniciar o slideshow de imagens de uma cidade específica dentro de um slide do carrossel.
+            function startCitySlideshow(slideElement) {
+                const slideshowContainer = slideElement.querySelector('.city-images-slideshow');
+                if (!slideshowContainer) return; // Sai se o contêiner do slideshow não for encontrado.
+                const images = slideshowContainer.querySelectorAll('img');
+                if (images.length === 0) return; // Sai se não houver imagens.
+                // Obtém ou inicializa os dados do slideshow para o slide atual.
+                const data = citySlideshowData[slideElement.id] || { intervalId: null, currentImageIndex: 0 };
+                citySlideshowData[slideElement.id] = data;
 
-#pre-enrollment .p-8 ul {
-    width: 100%; /* Garante que a lista ocupe a largura total dentro do padding */
-    padding-left: 1.5rem; /* Ajuste para o padding da lista */
-}
+                // Função interna para mostrar uma imagem específica do slideshow.
+                function showImage(index) {
+                    images.forEach((img, i) => {
+                        img.classList.toggle('active-image', i === index); // Adiciona/remove a classe 'active-image'.
+                    });
+                }
+                showImage(data.currentImageIndex); // Exibe a imagem atual.
+                if (data.intervalId) clearInterval(data.intervalId); // Limpa qualquer intervalo anterior para evitar duplicação.
+                // Inicia um novo intervalo para trocar as imagens.
+                data.intervalId = setInterval(() => {
+                    data.currentImageIndex = (data.currentImageIndex + 1) % images.length; // Avança para a próxima imagem (loop).
+                    showImage(data.currentImageIndex); // Exibe a nova imagem.
+                }, 4000); // Troca de imagem a cada 4 segundos.
+            }
 
-/* Animação para os números dos passos (opcional, se quiser algo sutil) */
-#pre-enrollment .rounded-full.h-16.w-16 {
-    animation: pulse-border 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-}
+            // Função para parar o slideshow de imagens de uma cidade.
+            function stopCitySlideshow(slideElement) {
+                // Verifica se há um intervalo ativo para o slide e o limpa.
+                if (citySlideshowData[slideElement.id]?.intervalId) {
+                    clearInterval(citySlideshowData[slideElement.id].intervalId);
+                    citySlideshowData[slideElement.id].intervalId = null; // Reseta o ID do intervalo.
+                }
+            }
 
-@keyframes pulse-border {
-    0%, 100% {
-        border-color: var(--tw-border-opacity, 1) #a78bfa; /* purple-400 */
-    }
-    50% {
-        border-color: var(--tw-border-opacity, 1) #c4b5fd; /* purple-300, slightly lighter */
-    }
-}
+            // Função principal para exibir um slide específico do carrossel de cidades.
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    stopCitySlideshow(slide); // Para o slideshow de imagens do slide que está sendo ocultado.
+                    // Reseta o estado "expandido" e os botões "Saber Mais"/"Ver Menos" para todos os slides.
+                    const initialBtn = slide.querySelector('.initial-more-info-btn');
+                    const expandedBtn = slide.querySelector('.expanded-less-info-btn');
+                    const moreInfoDiv = slide.querySelector('.more-info');
+                    const fadeOverlay = slide.querySelector('.fade-overlay');
 
-/* Ajustes responsivos para o texto dentro dos passos */
-@media (max-width: 768px) {
-    #pre-enrollment .text-left {
-        text-align: center; /* Centraliza o texto em telas menores */
-    }
-    #pre-enrollment .p-8 ul {
-        padding-left: 0; /* Remove padding extra da lista em telas pequenas */
-        list-style-position: inside; /* Mantém os marcadores dentro do texto */
-    }
-}
+                    if (initialBtn) initialBtn.style.display = 'block'; // Garante que o botão inicial esteja visível.
+                    if (expandedBtn) expandedBtn.style.display = 'none'; // Garante que o botão expandido esteja oculto.
+                    if (moreInfoDiv) moreInfoDiv.classList.add('hidden'); // Oculta o conteúdo adicional.
+                    if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Restaura a opacidade do overlay.
+                    slide.classList.remove('expanded'); // Remove a classe 'expanded'.
+
+                    if (i === index) { // Se o slide atual for o slide que deve ser exibido.
+                        slide.style.left = `${i * 100}%`; // Define a posição horizontal (redundante com transform do pai, mas mantido).
+                        slide.style.display = 'flex'; // Garante que o slide ativo seja exibido com flexbox.
+                        // Pequeno atraso para aplicar a classe 'active' para transições de opacidade.
+                        setTimeout(() => { slide.classList.add('active'); }, 10);
+
+                        // Busca e exibe o clima da cidade correspondente ao slide.
+                        const cityName = slide.querySelector('h3').textContent.split(',')[0].trim();
+                        const weatherElement = slide.querySelector('.weather-info');
+                        fetchWeather(cityName, weatherElement);
+                        startCitySlideshow(slide); // Inicia o slideshow de imagens para o slide ativo.
+                    } else { // Para os slides que não são o slide ativo.
+                        slide.classList.remove('active'); // Remove a classe 'active'.
+                    }
+                });
+                updateIndicators(index); // Atualiza a aparência dos indicadores de navegação.
+                carouselSlides.style.transform = `translateX(-${index * 100}%)`; // Move o contêiner de slides horizontalmente.
+                adjustCarouselContainerHeight(slides[index], false); // Ajusta a altura do contêiner do carrossel.
+            }
+
+            // Função para navegar para o próximo slide no carrossel de cidades.
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length; // Incrementa o índice do slide, voltando ao início se chegar ao fim.
+                showSlide(currentSlide); // Exibe o próximo slide.
+            }
+
+            // Função para navegar para o slide anterior no carrossel de cidades.
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length; // Decrementa o índice, voltando ao fim se for menor que 0.
+                showSlide(currentSlide); // Exibe o slide anterior.
+            }
+
+            // Função para criar dinamicamente os indicadores (pontos) de navegação do carrossel de cidades.
+            function createIndicators() {
+                indicatorsContainer.innerHTML = ''; // Limpa quaisquer indicadores existentes.
+                slides.forEach((slide, i) => {
+                    slide.id = `city-slide-${i}`; // Atribui um ID único a cada slide para referência.
+                    const indicator = document.createElement('button'); // Cria um novo botão para o indicador.
+                    // Adiciona classes Tailwind para estilizar o indicador (tamanho, forma, cor padrão, transição).
+                    indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-400', 'hover:bg-gray-200', 'transition-colors', 'duration-300');
+                    // Ativa o indicador correspondente ao slide inicial.
+                    indicator.classList.toggle('bg-yellow-400', i === currentSlide);
+                    indicator.classList.toggle('hover:bg-yellow-400', i === currentSlide);
+                    // Adiciona um event listener para mudar para o slide correspondente ao clicar no indicador.
+                    indicator.addEventListener('click', () => showSlide(i));
+                    indicatorsContainer.appendChild(indicator); // Adiciona o indicador ao contêiner de indicadores.
+                });
+            }
+
+            // Função para atualizar a aparência dos indicadores, destacando o slide ativo.
+            function updateIndicators(activeIndex) {
+                const indicators = indicatorsContainer.querySelectorAll('button'); // Seleciona todos os botões indicadores.
+                indicators.forEach((indicator, i) => {
+                    // Remove as classes de ativo dos indicadores anteriores.
+                    indicator.classList.remove('bg-yellow-400', 'hover:bg-yellow-400');
+                    // Adiciona as classes de cor padrão.
+                    indicator.classList.add('bg-gray-400', 'hover:bg-gray-200');
+                    // Adiciona as classes de ativo ao indicador do slide atualmente visível.
+                    indicator.classList.toggle('bg-yellow-400', i === activeIndex);
+                    indicator.classList.toggle('hover:bg-yellow-400', i === activeIndex);
+                });
+            }
+
+            // Função para ajustar dinamicamente a altura do contêiner do carrossel de cidades com base no conteúdo do slide ativo.
+            // Isso é importante para evitar barras de rolagem desnecessárias e ajustar a visualização ao expandir/contrair conteúdo.
+            function adjustCarouselContainerHeight(activeSlide, isExpanding = null) {
+                // Pequeno atraso para garantir que o DOM esteja renderizado e os cálculos de altura sejam precisos.
+                setTimeout(() => {
+                    let newHeight;
+                    const contentDiv = activeSlide.querySelector('.carousel-item-content'); // Obtém o div de conteúdo do slide.
+                    const initialMinHeight = 500; // Define uma altura mínima padrão para o carrossel.
+
+                    if (isExpanding === true) { // Se a função foi chamada para expandir o conteúdo (botão "Saber Mais" clicado).
+                        newHeight = activeSlide.scrollHeight; // Define a nova altura como a altura total do conteúdo do slide.
+                    } else if (isExpanding === false) { // Se a função foi chamada para contrair o conteúdo (botão "Ver Menos" clicado).
+                        let visibleContentHeight = 0;
+                        // Calcula a altura dos elementos que devem estar visíveis no estado não expandido.
+                        const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
+                        mainContentElements.forEach(el => {
+                            if (el.offsetParent !== null) { // Verifica se o elemento está visível (não oculto por 'display: none').
+                                visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0); // Soma a altura e a margem inferior.
+                            }
+                        });
+                        const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
+                        if (initialBtn && initialBtn.offsetParent !== null) {
+                            visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop || 0);
+                        }
+                        // Adiciona o padding vertical do 'carousel-item' ao cálculo da altura.
+                        const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
+                        const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
+                        visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
+                        newHeight = Math.max(initialMinHeight, visibleContentHeight); // Garante que a altura não seja menor que a mínima.
+                    } else { // Se 'isExpanding' for nulo, a função é chamada no estado atual (e.g., após navegação de slide).
+                        const moreInfoDiv = activeSlide.querySelector('.more-info');
+                        const isCurrentlyExpanded = !moreInfoDiv.classList.contains('hidden'); // Verifica se o slide está atualmente expandido.
+                        if (isCurrentlyExpanded) { // Se já estiver expandido, mantém a altura total do conteúdo.
+                            newHeight = activeSlide.scrollHeight;
+                        } else { // Se não estiver expandido, calcula a altura apenas do conteúdo visível inicial.
+                            let visibleContentHeight = 0;
+                            const mainContentElements = contentDiv.querySelectorAll('h3, p.text-lg, ul, .weather-info');
+                            mainContentElements.forEach(el => {
+                                if (el.offsetParent !== null) {
+                                    visibleContentHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom || 0);
+                                }
+                            });
+                            const initialBtn = activeSlide.querySelector('.initial-more-info-btn');
+                            if (initialBtn && initialBtn.offsetParent !== null) {
+                                visibleContentHeight += initialBtn.offsetHeight + parseFloat(getComputedStyle(initialBtn).marginTop || 0);
+                            }
+                            const carouselItemPaddingTop = parseFloat(getComputedStyle(activeSlide).paddingTop || 0);
+                            const carouselItemPaddingBottom = parseFloat(getComputedStyle(activeSlide).paddingBottom || 0);
+                            visibleContentHeight += carouselItemPaddingTop + carouselItemPaddingBottom;
+                            newHeight = Math.max(initialMinHeight, visibleContentHeight);
+                        }
+                    }
+                    // Aplica a nova altura ao contêiner do carrossel e à sua altura mínima.
+                    carouselContainer.style.height = `${newHeight}px`;
+                    carouselContainer.style.minHeight = `${newHeight}px`;
+                }, 100); // Um pequeno atraso para permitir que o navegador recalcule o layout.
+            }
+
+            // Lógica para alternar a exibição do conteúdo adicional e dos botões "Saber Mais" / "Ver Menos".
+            document.querySelectorAll('.carousel-item').forEach(slide => {
+                const initialMoreBtn = slide.querySelector('.initial-more-info-btn'); // Botão "Saber Mais".
+                const expandedLessBtn = slide.querySelector('.expanded-less-info-btn'); // Botão "Ver Menos".
+                const moreInfoDiv = slide.querySelector('.more-info'); // Div com o conteúdo adicional.
+                const fadeOverlay = slide.querySelector('.fade-overlay'); // Overlay de fade.
+
+                if (initialMoreBtn) { // Se o botão "Saber Mais" existe.
+                    initialMoreBtn.addEventListener('click', () => {
+                        slide.classList.add('expanded'); // Adiciona a classe 'expanded' ao slide.
+                        moreInfoDiv.classList.remove('hidden'); // Remove a classe 'hidden' para mostrar o conteúdo adicional.
+                        initialMoreBtn.style.display = 'none'; // Oculta o botão "Saber Mais".
+                        if (expandedLessBtn) expandedLessBtn.style.display = 'block'; // Mostra o botão "Ver Menos".
+                        if (fadeOverlay) fadeOverlay.style.opacity = '0'; // Faz o overlay de fade desaparecer.
+                        adjustCarouselContainerHeight(slide, true); // Ajusta a altura do contêiner, indicando que está expandindo.
+                    });
+                }
+                if (expandedLessBtn) { // Se o botão "Ver Menos" existe.
+                    expandedLessBtn.addEventListener('click', () => {
+                        slide.classList.remove('expanded'); // Remove a classe 'expanded' do slide.
+                        moreInfoDiv.classList.add('hidden'); // Adiciona a classe 'hidden' para ocultar o conteúdo adicional.
+                        if (initialMoreBtn) initialMoreBtn.style.display = 'block'; // Mostra o botão "Saber Mais".
+                        expandedLessBtn.style.display = 'none'; // Oculta o botão "Ver Menos".
+                        if (fadeOverlay) fadeOverlay.style.opacity = '1'; // Restaura o overlay de fade.
+                        adjustCarouselContainerHeight(slide, false); // Ajusta a altura do contêiner, indicando que está contraindo.
+                    });
+                }
+            });
+
+            // Adiciona event listeners aos botões de navegação do carrossel de cidades para chamar as funções de navegação.
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            // Chamadas iniciais para configurar o carrossel de cidades ao carregar a página.
+            createIndicators(); // Cria os indicadores.
+            showSlide(currentSlide); // Exibe o primeiro slide.
+
+            // Lógica para o Menu Mobile (Hamburguer).
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuButton = document.getElementById('menu-toggle');
+            const closeMenuButton = document.getElementById('close-menu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            if (mobileMenuButton) { // Se o botão de menu mobile existe.
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.remove('translate-x-full'); // Remove a classe que mantém o menu fora da tela.
+                    mobileMenu.classList.add('translate-x-0'); // Adiciona a classe que move o menu para dentro da tela.
+                    document.body.style.overflow = 'hidden'; // Impede a rolagem do corpo da página quando o menu está aberto.
+                });
+            }
+            if (closeMenuButton) { // Se o botão de fechar menu existe.
+                closeMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.remove('translate-x-0'); // Remove a classe que mantém o menu na tela.
+                    mobileMenu.classList.add('translate-x-full'); // Move o menu para fora da tela.
+                    document.body.style.overflow = ''; // Restaura a rolagem do corpo da página.
+                });
+            }
+            // Adiciona event listeners para fechar o menu mobile ao clicar em um de seus links.
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Previne o comportamento padrão do link.
+                    mobileMenu.classList.remove('translate-x-0'); // Inicia a animação de fechar o menu.
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = ''; // Restaura a rolagem do corpo.
+                    const targetId = link.getAttribute('href'); // Obtém o ID da seção alvo.
+                    const targetSection = document.querySelector(targetId); // Seleciona a seção.
+                    if (targetSection) {
+                        // Pequeno atraso para permitir que a animação de fechar o menu ocorra antes da rolagem.
+                        setTimeout(() => {
+                            targetSection.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 300);
+                    }
+                });
+            });
+
+            // Lógica para o Carrossel de Álbum de Fotos (seção "Sua Jornada Começa Agora!").
+            const albumCarouselSlidesContainer = document.getElementById('album-carousel-slides');
+            const albumPrevBtn = document.getElementById('album-prev-btn');
+            const albumNextBtn = document.getElementById('album-next-btn');
+            const albumIndicatorsContainer = document.getElementById('album-indicators');
+
+            // Lista de URLs das imagens para o álbum de fotos.
+            const albumImages = [
+                'assets/album/album_foto1.jpg',
+                'assets/album/album_foto2.jpg',
+                'assets/album/album_foto3.jpg',
+                'assets/album/album_foto4.jpg',
+                'assets/album/album_foto5.jpg'
+            ];
+
+            let currentAlbumSlide = 0; // Variável para rastrear o slide atual do álbum.
+            let albumInterval; // Variável para armazenar o ID do intervalo do slideshow automático.
+
+            // Função para criar dinamicamente os slides e os indicadores do carrossel do álbum.
+            function createAlbumSlides() {
+                albumCarouselSlidesContainer.innerHTML = ''; // Limpa o contêiner de slides.
+                albumIndicatorsContainer.innerHTML = ''; // Limpa o contêiner de indicadores.
+                albumImages.forEach((src, index) => { // Itera sobre as imagens.
+                    const slideDiv = document.createElement('div'); // Cria um div para o slide.
+                    slideDiv.classList.add('album-slide'); // Adiciona a classe de estilo do slide.
+                    const img = document.createElement('img'); // Cria a tag de imagem.
+                    img.src = src; // Define a fonte da imagem.
+                    img.alt = `Momento do Intercâmbio ${index + 1}`; // Define o texto alternativo.
+                    slideDiv.appendChild(img); // Adiciona a imagem ao slide.
+                    albumCarouselSlidesContainer.appendChild(slideDiv); // Adiciona o slide ao contêiner de slides.
+
+                    const indicatorBtn = document.createElement('button'); // Cria um botão para o indicador.
+                    indicatorBtn.classList.add('album-indicator'); // Adiciona a classe de estilo do indicador.
+                    // Adiciona um event listener para mudar para o slide correspondente ao clicar no indicador.
+                    indicatorBtn.addEventListener('click', () => showAlbumSlide(index));
+                    albumIndicatorsContainer.appendChild(indicatorBtn); // Adiciona o indicador ao contêiner.
+                });
+            }
+
+            // Função para exibir um slide específico do carrossel do álbum.
+            function showAlbumSlide(index) {
+                // Garante que o índice esteja dentro dos limites válidos para o array de imagens.
+                if (index >= albumImages.length) {
+                    index = 0; // Volta para o primeiro slide se o índice exceder.
+                } else if (index < 0) {
+                    index = albumImages.length - 1; // Vai para o último slide se o índice for negativo.
+                }
+                currentAlbumSlide = index; // Atualiza o slide atual.
+                // Move o contêiner de slides horizontalmente para mostrar o slide correto.
+                albumCarouselSlidesContainer.style.transform = `translateX(-${currentAlbumSlide * 100}%)`;
+                updateAlbumIndicators(); // Atualiza a aparência dos indicadores do álbum.
+            }
+
+            // Função para atualizar a aparência dos indicadores do álbum, destacando o slide ativo.
+            function updateAlbumIndicators() {
+                const indicators = albumIndicatorsContainer.querySelectorAll('.album-indicator'); // Seleciona todos os indicadores.
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentAlbumSlide); // Adiciona/remove a classe 'active'.
+                });
+            }
+
+            // Função para navegar para o próximo slide no carrossel do álbum.
+            function nextAlbumSlide() { showAlbumSlide(currentAlbumSlide + 1); }
+            // Função para navegar para o slide anterior no carrossel do álbum.
+            function prevAlbumSlide() { showAlbumSlide(currentAlbumSlide - 1); }
+
+            // Função para iniciar o slideshow automático do álbum.
+            function startAlbumSlideshow() {
+                if (albumInterval) clearInterval(albumInterval); // Limpa qualquer intervalo anterior para evitar múltiplos slideshows.
+                albumInterval = setInterval(nextAlbumSlide, 3000); // Inicia um novo intervalo que troca de slide a cada 3 segundos.
+            }
+
+            // Adiciona event listeners aos botões de navegação do álbum.
+            if (albumPrevBtn) albumPrevBtn.addEventListener('click', () => {
+                prevAlbumSlide(); // Navega para o slide anterior.
+                startAlbumSlideshow(); // Reinicia o slideshow automático após a interação manual.
+            });
+            if (albumNextBtn) albumNextBtn.addEventListener('click', () => {
+                nextAlbumSlide(); // Navega para o próximo slide.
+                startAlbumSlideshow(); // Reinicia o slideshow automático após a interação manual.
+            });
+
+            // Chamadas iniciais para configurar o carrossel do álbum ao carregar a página.
+            createAlbumSlides(); // Cria os slides e indicadores.
+            showAlbumSlide(0); // Exibe o primeiro slide.
+            startAlbumSlideshow(); // Inicia o slideshow automático.
+        });
+    </script>
+</body>
+
+</html>
