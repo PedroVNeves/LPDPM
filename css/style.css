@@ -359,3 +359,41 @@
         font-size: 0.9rem;
     }
 }
+
+/* Estilos gerais para as caixas de passo, se precisar de ajustes finos além do Tailwind */
+#pre-enrollment .p-8 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#pre-enrollment .p-8 ul {
+    width: 100%; /* Garante que a lista ocupe a largura total dentro do padding */
+    padding-left: 1.5rem; /* Ajuste para o padding da lista */
+}
+
+/* Animação para os números dos passos (opcional, se quiser algo sutil) */
+#pre-enrollment .rounded-full.h-16.w-16 {
+    animation: pulse-border 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulse-border {
+    0%, 100% {
+        border-color: var(--tw-border-opacity, 1) #a78bfa; /* purple-400 */
+    }
+    50% {
+        border-color: var(--tw-border-opacity, 1) #c4b5fd; /* purple-300, slightly lighter */
+    }
+}
+
+/* Ajustes responsivos para o texto dentro dos passos */
+@media (max-width: 768px) {
+    #pre-enrollment .text-left {
+        text-align: center; /* Centraliza o texto em telas menores */
+    }
+    #pre-enrollment .p-8 ul {
+        padding-left: 0; /* Remove padding extra da lista em telas pequenas */
+        list-style-position: inside; /* Mantém os marcadores dentro do texto */
+    }
+}
